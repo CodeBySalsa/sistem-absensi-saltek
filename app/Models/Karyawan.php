@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Karyawan extends Model
 {
+    use HasFactory;
+
     /**
-     * guarded digunakan agar semua kolom bisa diisi secara massal.
+     * guarded digunakan agar semua kolom bisa diisi secara massal (Mass Assignment).
      */
     protected $guarded = [];
 
     /**
-     * Menghubungkan Karyawan ke tabel User (untuk login).
+     * Relasi ke User: Satu Karyawan terhubung ke satu akun User (untuk login).
      */
     public function user(): BelongsTo
     {
@@ -22,7 +25,7 @@ class Karyawan extends Model
     }
 
     /**
-     * Menghubungkan Karyawan ke banyak data Absensi.
+     * Relasi ke Absensi: Satu Karyawan bisa memiliki banyak data Absensi.
      */
     public function absensis(): HasMany
     {
