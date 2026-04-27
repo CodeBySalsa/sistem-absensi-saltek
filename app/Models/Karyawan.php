@@ -18,10 +18,11 @@ class Karyawan extends Model
 
     /**
      * Relasi ke User: Satu Karyawan terhubung ke satu akun User (untuk login).
+     * Kita tambahkan 'user_id' agar lebih spesifik mencari foreign key-nya.
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -29,6 +30,6 @@ class Karyawan extends Model
      */
     public function absensis(): HasMany
     {
-        return $this->hasMany(Absensi::class);
+        return $this->hasMany(Absensi::class, 'karyawan_id');
     }
 }

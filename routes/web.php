@@ -1,23 +1,36 @@
 <?php
 
-use App\Http\Controllers\KaryawanController;
-use App\Http\Controllers\AbsensiController; // Import Controller Absensi
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KaryawanController; 
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-/**
- * Rute untuk Fitur Karyawan
- */
-Route::get('/karyawan', [KaryawanController::class, 'index']);
+// KARYAWAN & MONITORING (Semua harus login)
+Route::middleware(['auth', 'verified'])->group(function () {
+    
+    // 1. Dashboard Utama
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-/**
- * Rute untuk Fitur Absensi
- */
-// Menampilkan halaman atau daftar absensi
-Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
+    // 2. Fitur Absensi
+    Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
+    Route::post('/absensi', [AbsensiController::class, 'store'])->name('absensi.store');
+    Route::put('/absensi', [AbsensiController::class, 'update'])->name('absensi.update');
 
-// Menjalankan fungsi simpan absen saat tombol diklik
-Route::post('/absen-masuk', [AbsensiController::class, 'store'])->name('absen.masuk');
+    // 3. FITUR MANAJEMEN KARYAWAN (Admin)
+    // Tambahkan baris index di bawah ini supaya daftar karyawan bisa terbuka
+    Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
+    Route::get('/karyawan/create', [KaryawanController::class, 'create'])->name('karyawan.create');
+    Route::post('/karyawan', [KaryawanController::class, 'store'])->name('karyawan.store');
+
+    // 4. Profile User
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
