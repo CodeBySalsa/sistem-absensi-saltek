@@ -4,17 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
 use App\Models\User;
+use App\Models\Absensi; // Tambahkan ini
 use Illuminate\Http\Request;
+use Carbon\Carbon; // Tambahkan ini
 
 class KaryawanController extends Controller
 {
     public function index()
     {
-        // Mengambil semua data karyawan dari database
-        $karyawans = Karyawan::with('user')->get();
+        $hariIni = Carbon::today()->format('Y-m-d');
 
-        // Mengirim data ke tampilan (view)
-        return view('karyawan.index', compact('karyawans'));
+        // --- LOGIKA STATISTIK UNTUK ADMIN ---
+        
+        // 1. Total seluruh anggota yang terdaftar
+        $totalKaryawan = Karyawan::count();
+        
+        // 2. Jumlah yang sudah absen masuk atau selesai hari ini
+        $hadirHariIni = Absensi::whereDate('tanggal', $hariIni)
+                            ->whereIn('status', ['Hadir', 'Selesai'])
+                            ->count();
+                            
+        // 3. Jumlah yang mengirim laporan Izin atau Sakit hari ini
+        $izinSakit = Absensi::whereDate('tanggal', $hariIni)
+                            ->whereIn('status', ['Izin', 'Sakit'])
+                            ->count();
+
+        // Mengambil semua data karyawan dari database untuk tabel
+        $karyawans = Karyawan::with('user')->latest()->get();
+
+        // Mengirim semua data ke tampilan
+        return view('karyawan.index', compact(
+            'karyawans', 
+            'totalKaryawan', 
+            'hadirHariIni', 
+            'izinSakit'
+        ));
     }
 
     // Fungsi untuk menampilkan halaman tambah karyawan
@@ -38,13 +62,13 @@ class KaryawanController extends Controller
         return redirect()->route('karyawan.index')->with('success', 'Data karyawan berhasil ditambahkan!');
     }
 
-    // --- BAGIAN BARU: EDIT, UPDATE, DESTROY ---
+    // --- BAGIAN EDIT, UPDATE, DESTROY ---
 
     // Fungsi untuk menampilkan form edit
     public function edit($id)
     {
         $karyawan = Karyawan::findOrFail($id);
-        $users = User::all(); // Diambil untuk jika ingin mengganti akun user yang terhubung
+        $users = User::all(); 
         return view('karyawan.edit', compact('karyawan', 'users'));
     }
 

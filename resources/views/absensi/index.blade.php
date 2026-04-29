@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Absensi Digital - PT Saltek Dumpang Jaya</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
 </head>
 <body class="bg-slate-100 font-sans">
 
@@ -27,7 +31,9 @@
             </form>
         </div>
 
-        <div class="bg-white rounded-3xl shadow-xl p-8 text-center border border-slate-200">
+        <div class="bg-white rounded-3xl shadow-xl p-8 text-center border border-slate-200 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+            
             <div class="mb-6">
                 <span class="text-sm font-semibold text-blue-600 uppercase tracking-widest italic">Status Anda:</span>
                 <h2 class="text-xl font-bold text-slate-800 mt-1 uppercase tracking-tight">{{ Auth::user()->name }}</h2>
@@ -58,7 +64,7 @@
 
             @if(!$karyawan)
                 <div class="bg-yellow-50 text-yellow-700 p-4 rounded-2xl text-sm border border-yellow-200 font-medium">
-                    ⚠️ Akun kamu (ID: {{ Auth::user()->id }}) belum terhubung ke data Karyawan. Selesaikan di TablePlus.
+                    ⚠️ Akun kamu belum terhubung ke data Karyawan. Hubungi Admin.
                 </div>
             @elseif(!$absenHariIni)
                 <form action="{{ route('absensi.store') }}" method="POST">
@@ -69,7 +75,7 @@
                 </form>
             @elseif($absenHariIni && !$absenHariIni->jam_pulang)
                 @if($jamSekarang >= 17)
-                    <form action="{{ route('absensi.update') }}" method="POST">
+                    <form action="{{ route('absensi.update', $absenHariIni->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-5 rounded-2xl shadow-lg shadow-orange-200 transition-all active:scale-95 text-lg">
@@ -95,22 +101,27 @@
         <div class="mt-10 mb-10">
             <h3 class="font-bold text-slate-700 mb-4 px-1 flex items-center">
                 <span class="w-2 h-6 bg-blue-600 rounded-full mr-3"></span>
-                Riwayat Absensi Hari Ini
+                Riwayat Aktivitas Terakhir
             </h3>
             
             <div class="space-y-3">
                 @forelse($absensis as $absen)
-                <div class="bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border border-slate-100 hover:border-blue-200 transition-all group">
+                @php
+                    $isYesterday = $absen->tanggal < date('Y-m-d');
+                    $noPulang = !$absen->jam_pulang && $isYesterday;
+                @endphp
+                <div class="bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border {{ $noPulang ? 'border-red-100' : 'border-slate-100' }} hover:border-blue-200 transition-all group">
                     <div class="flex items-center">
-                        <div class="h-10 w-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-sm shadow-sm group-hover:scale-110 transition-transform">
-                            {{ strtoupper(substr(trim($absen->karyawan->nama_lengkap ?? $absen->karyawan->user->name ?? 'K'), 0, 1)) }}
+                        <div class="h-10 w-10 rounded-2xl {{ $noPulang ? 'bg-red-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }} flex items-center justify-center text-white font-black text-sm shadow-sm group-hover:scale-110 transition-transform">
+                            {{ strtoupper(substr(trim($absen->karyawan->nama_lengkap ?? 'K'), 0, 1)) }}
                         </div>
                         
                         <div class="ml-4">
-                            <p class="font-black text-slate-800 tracking-tight leading-none">
+                            <p class="font-black text-slate-800 tracking-tight leading-none text-sm mb-1">
                                 {{ $absen->karyawan->nama_lengkap ?? 'User Baru' }}
                             </p>
-                            <div class="flex gap-2 mt-2">
+                            <p class="text-[9px] text-slate-400 font-bold mb-2 uppercase">{{ \Carbon\Carbon::parse($absen->tanggal)->translatedFormat('d F Y') }}</p>
+                            <div class="flex gap-2">
                                 <span class="text-[9px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md font-bold italic">
                                     IN: {{ $absen->jam_masuk }}
                                 </span>
@@ -124,14 +135,24 @@
                     </div>
 
                     <div class="text-right">
-                        <span class="{{ $absen->jam_pulang ? 'bg-blue-600 text-white shadow-blue-100' : 'bg-green-500 text-white shadow-green-100' }} shadow-md text-[9px] px-3 py-1.5 rounded-xl font-black uppercase tracking-tighter">
-                            {{ $absen->jam_pulang ? 'SELESAI' : 'HADIR' }}
-                        </span>
+                        @if($absen->jam_pulang)
+                            <span class="bg-blue-600 text-white shadow-md shadow-blue-100 text-[8px] px-3 py-1.5 rounded-xl font-black uppercase tracking-tighter">
+                                SELESAI
+                            </span>
+                        @elseif($noPulang)
+                            <span class="bg-red-50 text-red-600 border border-red-100 text-[8px] px-3 py-1.5 rounded-xl font-black uppercase tracking-tighter">
+                                TANPA KET. PULANG
+                            </span>
+                        @else
+                            <span class="bg-green-500 text-white shadow-md shadow-green-100 text-[8px] px-3 py-1.5 rounded-xl font-black uppercase tracking-tighter">
+                                HADIR
+                            </span>
+                        @endif
                     </div>
                 </div>
                 @empty
                 <div class="text-center bg-slate-50 border border-dashed border-slate-200 rounded-3xl py-10">
-                    <p class="text-slate-400 text-sm italic font-medium">Belum ada aktivitas hari ini.</p>
+                    <p class="text-slate-400 text-sm italic font-medium">Belum ada aktivitas.</p>
                 </div>
                 @endforelse
             </div>

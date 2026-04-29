@@ -15,10 +15,17 @@ class AbsensiController extends Controller
      */
     public function index()
     {
-        // Mengambil semua data absensi untuk ditampilkan di tabel rekap
-        $absensis = Absensi::with('karyawan')->latest()->get();
+        $hariIni = Carbon::today()->format('Y-m-d');
+
+        // Otomatis menutup sesi yang "menggantung" dari hari kemarin
+        Absensi::where('tanggal', '<', $hariIni)
+                ->whereNull('jam_pulang')
+                ->where('status', 'Hadir')
+                ->update(['status' => 'Selesai']);
+
+        // Mengambil data absensi dengan relasi user dan karyawan untuk rekap
+        $absensis = Absensi::with(['karyawan', 'user'])->latest()->get();
         
-        // Ambil data absen user login hari ini untuk pengecekan di view
         $karyawan = Auth::user()->karyawan;
         $absenHariIni = null;
         if ($karyawan) {
@@ -35,7 +42,6 @@ class AbsensiController extends Controller
      */
     public function store(Request $request)
     {
-        // MENGAMBIL DATA BERDASARKAN USER YANG LOGIN
         $karyawan = Auth::user()->karyawan;
 
         if (!$karyawan) {
@@ -44,7 +50,7 @@ class AbsensiController extends Controller
 
         $hariIni = Carbon::today()->format('Y-m-d');
 
-        // 1. Cek apakah karyawan sudah absen hari ini
+        // Cek apakah karyawan sudah absen hari ini
         $sudahAbsen = Absensi::where('karyawan_id', $karyawan->id)
                              ->whereDate('tanggal', $hariIni)
                              ->exists();
@@ -53,8 +59,9 @@ class AbsensiController extends Controller
             return redirect()->back()->with('error', 'Opps! Kamu sudah melakukan absen masuk hari ini.');
         }
 
-        // 2. Simpan data absen ke database
+        // Simpan data absen ke database
         Absensi::create([
+            'user_id'     => Auth::id(), // BARIS PENTING: Agar nama tidak muncul "Data Kosong"
             'karyawan_id' => $karyawan->id,
             'tanggal'     => $hariIni,
             'jam_masuk'   => Carbon::now()->format('H:i:s'),
@@ -69,28 +76,28 @@ class AbsensiController extends Controller
      */
     public function update(Request $request)
     {
-        // MENGAMBIL DATA BERDASARKAN USER YANG LOGIN
         $karyawan = Auth::user()->karyawan;
         $hariIni = Carbon::today()->format('Y-m-d');
 
-        // 1. Validasi: Cek apakah sekarang sudah jam 5 sore (17:00)
+        // Validasi: Kantor PT Saltek tutup jam 17:00
         if (Carbon::now()->hour < 17) {
-            return redirect()->back()->with('error', 'Belum waktunya pulang! Kantor PT Saltek tutup jam 17:00.');
+            return redirect()->back()->with('error', 'Belum waktunya pulang! Tombol pulang aktif jam 17:00.');
         }
 
-        // 2. Cari data absen masuk user ini hari ini yang jam pulangnya masih kosong
+        // Cari data absen hari ini yang belum pulang
         $absensi = Absensi::where('karyawan_id', $karyawan->id)
                           ->whereDate('tanggal', $hariIni)
                           ->whereNull('jam_pulang')
                           ->first();
 
         if (!$absensi) {
-            return redirect()->back()->with('error', 'Data absen masuk tidak ditemukan atau kamu sudah absen pulang.');
+            return redirect()->back()->with('error', 'Data absen tidak ditemukan atau kamu sudah absen pulang.');
         }
 
-        // 3. Update kolom jam_pulang
+        // Update jam_pulang dan set status jadi Selesai
         $absensi->update([
-            'jam_pulang' => Carbon::now()->format('H:i:s')
+            'jam_pulang' => Carbon::now()->format('H:i:s'),
+            'status'     => 'Selesai'
         ]);
 
         return redirect()->back()->with('success', 'Hati-hati di jalan! Absen pulang berhasil dicatat.');

@@ -18,7 +18,7 @@ class Karyawan extends Model
 
     /**
      * Relasi ke User: Satu Karyawan terhubung ke satu akun User (untuk login).
-     * Kita tambahkan 'user_id' agar lebih spesifik mencari foreign key-nya.
+     * Foreign key 'user_id' menghubungkan data profil ke tabel users.
      */
     public function user(): BelongsTo
     {
@@ -27,6 +27,7 @@ class Karyawan extends Model
 
     /**
      * Relasi ke Absensi: Satu Karyawan bisa memiliki banyak data Absensi.
+     * Ini digunakan untuk menghitung total hadir, izin, dan sakit di dashboard.
      */
     public function absensis(): HasMany
     {
