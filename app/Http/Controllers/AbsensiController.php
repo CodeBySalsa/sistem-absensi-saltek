@@ -31,7 +31,7 @@ class AbsensiController extends Controller
     }
 
     /**
-     * Menangani Absen Masuk (Hadir)
+     * Menangani Absen Masuk (Hadir) dengan Koordinat GPS
      */
     public function store(Request $request)
     {
@@ -50,14 +50,23 @@ class AbsensiController extends Controller
             return back()->with('error', 'Anda sudah melakukan absensi atau pengajuan hari ini.');
         }
 
+        // LOGIC: Cek Keterlambatan (Batas 08:30)
+        $jamSekarang = date('H:i');
+        $batasWaktu = '08:30';
+        $statusKeterangan = ($jamSekarang > $batasWaktu) ? 'Terlambat Masuk' : 'Tepat Waktu';
+
+        // Simpan Data Absensi termasuk koordinat dari Modal
         Absensi::create([
             'karyawan_id' => $user->karyawan->id,
             'tanggal' => date('Y-m-d'),
             'jam_masuk' => date('H:i:s'),
-            'status' => 'Hadir'
+            'status' => 'Hadir',
+            'latitude' => $request->latitude,   // Menangkap data dari modal
+            'longitude' => $request->longitude, // Menangkap data dari modal
+            'keterangan' => $statusKeterangan 
         ]);
 
-        return back()->with('success', 'Selamat bekerja! Berhasil absen masuk.');
+        return redirect()->route('dashboard')->with('success', 'Selamat bekerja! Berhasil absen masuk (' . $statusKeterangan . ').');
     }
 
     /**
@@ -77,7 +86,7 @@ class AbsensiController extends Controller
     }
 
     /**
-     * Menangani Pengajuan Izin/Sakit dari Dashboard atau Panel Absensi
+     * Menangani Pengajuan Izin/Sakit
      */
     public function izinSakit(Request $request)
     {
@@ -93,7 +102,7 @@ class AbsensiController extends Controller
             'keterangan' => 'required|string|max:255',
         ]);
 
-        // Cek apakah hari ini sudah ada data (mencegah double input)
+        // Cek apakah hari ini sudah ada data
         $sudahInput = Absensi::where('karyawan_id', $user->karyawan->id)
                             ->where('tanggal', date('Y-m-d'))
                             ->first();
@@ -108,10 +117,9 @@ class AbsensiController extends Controller
             'tanggal' => date('Y-m-d'),
             'status' => $request->status,
             'keterangan' => $request->keterangan,
-            'jam_masuk' => null, // Pastikan jam masuk kosong untuk izin/sakit
+            'jam_masuk' => date('H:i:s'), 
         ]);
 
-        // Pesan sukses ini yang akan ditangkap SweetAlert di View
-        return back()->with('success', 'Pengajuan ' . $request->status . ' berhasil diproses.');
+        return redirect()->route('dashboard')->with('success', 'Pengajuan ' . $request->status . ' berhasil diproses.');
     }
 }

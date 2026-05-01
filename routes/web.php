@@ -13,15 +13,24 @@ Route::get('/', function () {
 // GROUP 1: KARYAWAN & MONITORING (Akses Umum setelah Login)
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    // 1. Dashboard Utama
+    // 1. Dashboard Utama (Monitoring)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Fitur Izin/Sakit dari Dashboard
+    Route::post('/dashboard/izin-sakit', [AbsensiController::class, 'izinSakit'])->name('absensi.izinSakit');
 
-    // 2. Fitur Absensi
+    // 2. Fitur Absensi (Panel Modal & Utama)
     Route::prefix('absensi')->name('absensi.')->group(function () {
         Route::get('/', [AbsensiController::class, 'index'])->name('index');
-        Route::post('/masuk', [AbsensiController::class, 'store'])->name('store');
-        Route::put('/pulang/{id}', [AbsensiController::class, 'update'])->name('update');
-        Route::post('/izin-sakit', [AbsensiController::class, 'izinSakit'])->name('izinSakit');
+        
+        // Simpan Absensi Masuk (Digunakan oleh tombol di Modal)
+        Route::post('/store', [AbsensiController::class, 'store'])->name('store');
+        
+        // Update Absensi Pulang
+        Route::put('/update/{id}', [AbsensiController::class, 'update'])->name('update');
+        
+        // Jalur tambahan untuk Izin/Sakit
+        Route::post('/izin-sakit-panel', [AbsensiController::class, 'izinSakit'])->name('izinSakitPanel');
     });
 
     // 3. Profile User
@@ -30,10 +39,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// GROUP 2: KHUSUS ADMIN (Manajemen Karyawan)
+// GROUP 2: KHUSUS ADMIN (Manajemen Karyawan PT Saltek)
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('karyawan', KaryawanController::class);
-    // Resource route di atas otomatis mencakup: index, create, store, edit, update, destroy
 });
 
 require __DIR__.'/auth.php';

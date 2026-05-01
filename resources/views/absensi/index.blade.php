@@ -12,7 +12,6 @@
     
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        /* Style untuk Peta agar rapi di atas card */
         #map { 
             height: 180px; 
             width: 100%;
@@ -57,16 +56,16 @@
                 <p class="text-xs text-slate-400 mt-1 font-medium" id="date">-</p>
             </div>
 
-            {{-- TAMPILAN PETA DI ATAS TOMBOL --}}
+            {{-- TAMPILAN PETA --}}
             <div id="map"></div>
 
-            {{-- INDIKATOR JARAK (Tambahan) --}}
+            {{-- INDIKATOR JARAK --}}
             <div id="distance-info" class="mb-4 p-2 rounded-xl bg-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-widest">
                 🛰️ Mencari Lokasi GPS...
             </div>
 
             @if(session('success'))
-                <div class="bg-green-100 text-green-700 p-3 rounded-xl mb-4 text-sm font-medium border border-green-200 animate-bounce">
+                <div class="bg-green-100 text-green-700 p-3 rounded-xl mb-4 text-sm font-medium border border-green-200">
                     {{ session('success') }}
                 </div>
             @endif
@@ -80,12 +79,12 @@
             <div class="space-y-4">
                 @if(!$karyawan)
                     <div class="bg-yellow-50 text-yellow-700 p-4 rounded-2xl text-sm border border-yellow-200 font-medium">
-                        ⚠️ Akun kamu belum terhubung ke data Karyawan. Hubungi Admin.
+                        ⚠️ Akun belum terhubung ke data Karyawan.
                     </div>
                 @elseif(!$absenHariIni)
                     <form action="{{ route('absensi.store') }}" method="POST">
                         @csrf
-                        <button type="submit" id="btn-absen" disabled class="w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all active:scale-95 text-lg">
+                        <button type="submit" id="btn-absen" disabled class="w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all text-lg">
                             ABSEN MASUK SEKARANG
                         </button>
                     </form>
@@ -93,25 +92,19 @@
                     <div class="bg-amber-50 border border-amber-100 p-5 rounded-2xl text-center">
                         <p class="text-amber-700 font-bold text-sm italic">✓ Status Hari Ini: {{ $absenHariIni->status }}</p>
                         <p class="text-amber-500 text-[10px] mt-1 uppercase tracking-widest font-black">
-                            Ket: {{ $absenHariIni->keterangan ?? 'Tanpa keterangan tambahan' }}
+                            Ket: {{ $absenHariIni->keterangan ?? 'Izin diproses' }}
                         </p>
                     </div>
                 @elseif(!$absenHariIni->jam_pulang)
-                    @if($jamSekarang >= 17)
-                        <form action="{{ route('absensi.update', $absenHariIni->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" id="btn-absen" disabled class="w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all active:scale-95 text-lg">
-                                ABSEN PULANG SEKARANG
-                            </button>
-                        </form>
-                    @else
-                        <div class="bg-blue-50 border border-blue-100 p-5 rounded-2xl text-center">
-                            <p class="text-blue-700 font-bold text-sm italic">✓ Anda Sudah Absen Masuk</p>
-                            <p class="text-blue-500 text-[10px] mt-1 uppercase tracking-widest font-black">
-                                Tombol Pulang Aktif Jam 17:00
-                            </p>
-                        </div>
+                    <form action="{{ route('absensi.update', $absenHariIni->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" id="btn-absen" disabled class="w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all text-lg">
+                            ABSEN PULANG SEKARANG
+                        </button>
+                    </form>
+                    @if($jamSekarang < 17)
+                        <p class="text-[9px] text-blue-500 font-bold mt-2 italic">* Tombol pulang idealnya aktif jam 17:00</p>
                     @endif
                 @else
                     <div class="bg-slate-100 text-slate-500 py-5 rounded-2xl font-bold border border-slate-200 flex flex-col items-center">
@@ -120,86 +113,65 @@
                     </div>
                 @endif
             </div>
-            <p class="text-[8px] text-slate-400 mt-4 italic">* Pastikan Anda berada dalam radius 20m dari kantor PT Saltek.</p>
+            <p class="text-[8px] text-slate-400 mt-4 italic">* Radius aman: 20m dari kantor PT Saltek.</p>
         </div>
 
         <div class="mt-10 mb-10">
             <h3 class="font-bold text-slate-700 mb-4 px-1 flex items-center">
                 <span class="w-2 h-6 bg-blue-600 rounded-full mr-3"></span>
-                Riwayat Aktivitas Terakhir
+                Riwayat Hari Ini
             </h3>
             
             <div class="space-y-3">
-                @forelse($absensis as $absen)
-                <div class="bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border border-slate-100 hover:border-blue-200 transition-all group">
+                @forelse($absensis->where('tanggal', date('Y-m-d')) as $absen)
+                <div class="bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border border-slate-100">
                     <div class="flex items-center">
                         <div class="h-10 w-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-sm">
                             {{ strtoupper(substr($absen->karyawan->nama_lengkap ?? 'K', 0, 1)) }}
                         </div>
-                        
                         <div class="ml-4">
-                            <p class="font-black text-slate-800 text-sm mb-1">
-                                {{ $absen->karyawan->nama_lengkap ?? 'User Baru' }}
-                            </p>
+                            <p class="font-black text-slate-800 text-sm mb-1">{{ $absen->karyawan->nama_lengkap }}</p>
                             <div class="flex gap-2">
-                                <span class="text-[9px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md font-bold">
-                                    IN: {{ $absen->jam_masuk ?? '--:--' }}
-                                </span>
+                                <span class="text-[9px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md font-bold">IN: {{ $absen->jam_masuk ?? '--:--' }}</span>
                                 @if($absen->jam_pulang)
-                                <span class="text-[9px] bg-orange-50 text-orange-600 px-2 py-0.5 rounded-md font-bold">
-                                    OUT: {{ $absen->jam_pulang }}
-                                </span>
+                                <span class="text-[9px] bg-orange-50 text-orange-600 px-2 py-0.5 rounded-md font-bold">OUT: {{ $absen->jam_pulang }}</span>
                                 @endif
                             </div>
                         </div>
                     </div>
-                    <div class="text-right">
-                        <span class="text-[8px] px-3 py-1.5 rounded-xl font-black uppercase {{ $absen->status == 'Hadir' ? 'bg-green-500 text-white' : 'bg-amber-100 text-amber-600' }}">
-                            {{ $absen->status }}
-                        </span>
-                    </div>
+                    <span class="text-[8px] px-3 py-1.5 rounded-xl font-black uppercase {{ $absen->status == 'Hadir' ? 'bg-green-500 text-white' : 'bg-amber-100 text-amber-600' }}">
+                        {{ $absen->status }}
+                    </span>
                 </div>
                 @empty
                 <div class="text-center bg-slate-50 border border-dashed border-slate-200 rounded-3xl py-10">
-                    <p class="text-slate-400 text-sm italic font-medium">Belum ada aktivitas.</p>
+                    <p class="text-slate-400 text-sm italic font-medium">Belum ada absen masuk.</p>
                 </div>
                 @endforelse
             </div>
         </div>
     </div>
 
-    {{-- Script Leaflet untuk Peta --}}
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 1. Logika Jam Digital (Asli dari Kamu)
         function updateClock() {
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID', { hour12: false });
-            document.getElementById('date').innerText = now.toLocaleDateString('id-ID', options);
+            document.getElementById('date').innerText = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 2. Logika Geofencing & Map (Tambahan)
-        const KANTOR_LAT = 3.5952; // Koordinat PT Saltek
+        // KOORDINAT KANTOR PT SALTEK (Sesuaikan jika titiknya bergeser)
+        const KANTOR_LAT = 3.5952; 
         const KANTOR_LNG = 98.6722;
-        const RADIUS_MAKS = 20; // 20 Meter
+        const RADIUS_MAKS = 20; 
 
-        // Inisialisasi Peta
         const map = L.map('map', { zoomControl: false }).setView([KANTOR_LAT, KANTOR_LNG], 18);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-        // Tambah Lingkaran Area Kantor (Geofence)
-        L.circle([KANTOR_LAT, KANTOR_LNG], {
-            color: '#2563eb',
-            fillColor: '#3b82f6',
-            fillOpacity: 0.2,
-            radius: RADIUS_MAKS
-        }).addTo(map);
-
-        // Tambah Marker Kantor
-        L.marker([KANTOR_LAT, KANTOR_LNG]).addTo(map).bindPopup("Kantor PT Saltek").openPopup();
+        L.circle([KANTOR_LAT, KANTOR_LNG], { color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 0.2, radius: RADIUS_MAKS }).addTo(map);
+        L.marker([KANTOR_LAT, KANTOR_LNG]).addTo(map).bindPopup("Kantor PT Saltek");
 
         let userMarker;
 
@@ -222,28 +194,23 @@
                 const btn = document.getElementById('btn-absen');
                 const info = document.getElementById('distance-info');
 
-                // Update Marker Posisi User di Map (Warna Merah)
                 if (userMarker) map.removeLayer(userMarker);
-                userMarker = L.circleMarker([uLat, uLng], {
-                    radius: 7, color: 'white', fillColor: '#ef4444', fillOpacity: 1, weight: 2
-                }).addTo(map);
-                map.panTo([uLat, uLng]); // Peta mengikuti posisi user
-
+                userMarker = L.circleMarker([uLat, uLng], { radius: 7, color: 'white', fillColor: '#ef4444', fillOpacity: 1, weight: 2 }).addTo(map);
+                
                 if (btn) {
                     if (jarak <= RADIUS_MAKS) {
                         btn.disabled = false;
-                        // Kembalikan warna asli sesuai status (Masuk atau Pulang)
                         if (btn.innerText.includes('MASUK')) {
-                            btn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-2xl shadow-lg shadow-blue-200 transition-all active:scale-95 text-lg";
+                            btn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-2xl shadow-lg transition-all active:scale-95 text-lg";
                         } else {
-                            btn.className = "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-5 rounded-2xl shadow-lg shadow-orange-200 transition-all active:scale-95 text-lg";
+                            btn.className = "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-5 rounded-2xl shadow-lg transition-all active:scale-95 text-lg";
                         }
                         info.innerText = `📍 Lokasi Sesuai ✅ (${Math.round(jarak)}m)`;
                         info.className = "mb-4 p-2 rounded-xl bg-green-100 text-green-600 text-[10px] font-bold uppercase tracking-widest";
                     } else {
                         btn.disabled = true;
                         btn.className = "w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all text-lg";
-                        info.innerText = `📍 Jarak: ${Math.round(jarak)}m dari kantor (Luar Area)`;
+                        info.innerText = `📍 Jarak: ${Math.round(jarak)}m (Luar Area)`;
                         info.className = "mb-4 p-2 rounded-xl bg-red-50 text-red-500 text-[10px] font-bold uppercase tracking-widest";
                     }
                 }
