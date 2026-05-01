@@ -25,40 +25,46 @@ class DashboardController extends Controller
         $izinSakit = 0;
         $recentActivities = collect(); 
         $rekapBulanan = collect(); 
+        $absensis = collect(); // Untuk daftar riwayat di halaman absensi karyawan
 
         // 2. Logika untuk User (Karyawan)
         if ($user->karyawan) {
+            // Menghitung total hadir untuk statistik di dashboard user
             $totalHadir = Absensi::where('karyawan_id', $user->karyawan->id)
                                 ->whereMonth('tanggal', $bulanIni)
                                 ->whereYear('tanggal', $tahunIni)
                                 ->whereIn('status', ['Hadir', 'Selesai'])
                                 ->count();
+
+            // Mengambil semua riwayat absensi milik user ini untuk ditampilkan di panel absensi
+            $absensis = Absensi::where('karyawan_id', $user->karyawan->id)
+                                ->latest()
+                                ->get();
         }
 
         // 3. Logika Khusus Admin
         if ($user->role == 'admin') {
+            // Total seluruh karyawan yang terdaftar
             $totalKaryawan = Karyawan::count();
 
+            // Hitung yang hadir atau sudah pulang hari ini
             $hadirHariIni = Absensi::whereDate('tanggal', $hariIni)
                                     ->whereIn('status', ['Hadir', 'Selesai'])
                                     ->count();
 
+            // Hitung yang izin atau sakit hari ini
             $izinSakit = Absensi::whereDate('tanggal', $hariIni)
                                 ->whereIn('status', ['Izin', 'Sakit'])
                                 ->count();
 
-            // Ambil aktivitas terbaru dengan relasi karyawan
+            // Ambil 5 aktivitas terbaru dengan relasi karyawan untuk tabel admin
             $recentActivities = Absensi::with('karyawan')
                                     ->whereDate('tanggal', $hariIni)
                                     ->latest()
                                     ->take(5)
                                     ->get();
 
-            /**
-             * REKAP BULANAN: 
-             * Menghapus select() manual agar Laravel otomatis mengambil semua kolom 
-             * termasuk 'nama' dari tabel karyawans.
-             */
+            // REKAP BULANAN: Menghitung statistik setiap karyawan di bulan berjalan
             $rekapBulanan = Karyawan::withCount([
                     'absensis as total_hadir' => function ($query) use ($bulanIni, $tahunIni) {
                         $query->whereIn('status', ['Hadir', 'Selesai'])
@@ -78,13 +84,15 @@ class DashboardController extends Controller
                 ])->get();
         }
 
+        // Mengirimkan semua data ke view dashboard
         return view('dashboard', compact(
             'totalHadir', 
             'totalKaryawan', 
             'hadirHariIni', 
             'izinSakit', 
             'recentActivities',
-            'rekapBulanan'
+            'rekapBulanan',
+            'absensis'
         ));
     }
 }

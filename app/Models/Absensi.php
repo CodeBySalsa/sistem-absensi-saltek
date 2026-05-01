@@ -12,18 +12,24 @@ class Absensi extends Model
 
     /**
      * Tabel yang terhubung dengan model ini.
-     * Secara default Laravel akan mencari tabel 'absensis'.
      */
     protected $table = 'absensis';
 
     /**
-     * guarded digunakan agar semua kolom bisa diisi secara massal (Mass Assignment).
+     * fillable menentukan kolom mana saja yang boleh diisi secara massal.
+     * Ini lebih aman daripada $guarded untuk aplikasi produksi.
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'karyawan_id',
+        'tanggal',
+        'jam_masuk',
+        'jam_pulang',
+        'status',
+        'keterangan', // Pastikan kolom ini ada untuk menampung alasan Izin/Sakit
+    ];
 
     /**
      * Menghubungkan data Absensi ke User.
-     * Digunakan untuk mengambil data akun dari tabel users.
      */
     public function user(): BelongsTo
     {
@@ -33,10 +39,12 @@ class Absensi extends Model
     /**
      * Menghubungkan data Absensi ke Karyawan.
      * RELASI PENTING: Inilah yang menarik data 'nama' ke tabel Dashboard.
-     * Pastikan kolom 'karyawan_id' di tabel absensi berisi ID yang ada di tabel karyawans.
+     * withDefault() ditambahkan agar tidak error jika data karyawan terhapus.
      */
     public function karyawan(): BelongsTo
     {
-        return $this->belongsTo(Karyawan::class, 'karyawan_id');
+        return $this->belongsTo(Karyawan::class, 'karyawan_id')->withDefault([
+            'nama_lengkap' => 'Karyawan Tidak Ditemukan'
+        ]);
     }
 }

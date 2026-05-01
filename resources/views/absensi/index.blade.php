@@ -6,8 +6,21 @@
     <title>Absensi Digital - PT Saltek Dumpang Jaya</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    {{-- Leaflet CSS untuk Peta --}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* Style untuk Peta agar rapi di atas card */
+        #map { 
+            height: 180px; 
+            width: 100%;
+            border-radius: 1.5rem; 
+            margin-bottom: 1.5rem;
+            z-index: 1;
+            border: 1px solid #e2e8f0;
+        }
     </style>
 </head>
 <body class="bg-slate-100 font-sans">
@@ -44,15 +57,17 @@
                 <p class="text-xs text-slate-400 mt-1 font-medium" id="date">-</p>
             </div>
 
+            {{-- TAMPILAN PETA DI ATAS TOMBOL --}}
+            <div id="map"></div>
+
+            {{-- INDIKATOR JARAK (Tambahan) --}}
+            <div id="distance-info" class="mb-4 p-2 rounded-xl bg-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-widest">
+                🛰️ Mencari Lokasi GPS...
+            </div>
+
             @if(session('success'))
                 <div class="bg-green-100 text-green-700 p-3 rounded-xl mb-4 text-sm font-medium border border-green-200 animate-bounce">
                     {{ session('success') }}
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="bg-red-100 text-red-700 p-3 rounded-xl mb-4 text-sm font-medium border border-red-200">
-                    {{ session('error') }}
                 </div>
             @endif
 
@@ -62,40 +77,50 @@
                 $jamSekarang = (int)date('H');
             @endphp
 
-            @if(!$karyawan)
-                <div class="bg-yellow-50 text-yellow-700 p-4 rounded-2xl text-sm border border-yellow-200 font-medium">
-                    ⚠️ Akun kamu belum terhubung ke data Karyawan. Hubungi Admin.
-                </div>
-            @elseif(!$absenHariIni)
-                <form action="{{ route('absensi.store') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-2xl shadow-lg shadow-blue-200 transition-all active:scale-95 text-lg">
-                        ABSEN MASUK SEKARANG
-                    </button>
-                </form>
-            @elseif($absenHariIni && !$absenHariIni->jam_pulang)
-                @if($jamSekarang >= 17)
-                    <form action="{{ route('absensi.update', $absenHariIni->id) }}" method="POST">
+            <div class="space-y-4">
+                @if(!$karyawan)
+                    <div class="bg-yellow-50 text-yellow-700 p-4 rounded-2xl text-sm border border-yellow-200 font-medium">
+                        ⚠️ Akun kamu belum terhubung ke data Karyawan. Hubungi Admin.
+                    </div>
+                @elseif(!$absenHariIni)
+                    <form action="{{ route('absensi.store') }}" method="POST">
                         @csrf
-                        @method('PUT')
-                        <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-5 rounded-2xl shadow-lg shadow-orange-200 transition-all active:scale-95 text-lg">
-                            ABSEN PULANG SEKARANG
+                        <button type="submit" id="btn-absen" disabled class="w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all active:scale-95 text-lg">
+                            ABSEN MASUK SEKARANG
                         </button>
                     </form>
-                @else
-                    <div class="bg-blue-50 border border-blue-100 p-5 rounded-2xl text-center">
-                        <p class="text-blue-700 font-bold text-sm italic">✓ Anda Sudah Absen Masuk</p>
-                        <p class="text-blue-500 text-[10px] mt-1 uppercase tracking-widest font-black">
-                            Tombol Pulang Aktif Jam 17:00
+                @elseif(in_array($absenHariIni->status, ['Izin', 'Sakit']))
+                    <div class="bg-amber-50 border border-amber-100 p-5 rounded-2xl text-center">
+                        <p class="text-amber-700 font-bold text-sm italic">✓ Status Hari Ini: {{ $absenHariIni->status }}</p>
+                        <p class="text-amber-500 text-[10px] mt-1 uppercase tracking-widest font-black">
+                            Ket: {{ $absenHariIni->keterangan ?? 'Tanpa keterangan tambahan' }}
                         </p>
                     </div>
+                @elseif(!$absenHariIni->jam_pulang)
+                    @if($jamSekarang >= 17)
+                        <form action="{{ route('absensi.update', $absenHariIni->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" id="btn-absen" disabled class="w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all active:scale-95 text-lg">
+                                ABSEN PULANG SEKARANG
+                            </button>
+                        </form>
+                    @else
+                        <div class="bg-blue-50 border border-blue-100 p-5 rounded-2xl text-center">
+                            <p class="text-blue-700 font-bold text-sm italic">✓ Anda Sudah Absen Masuk</p>
+                            <p class="text-blue-500 text-[10px] mt-1 uppercase tracking-widest font-black">
+                                Tombol Pulang Aktif Jam 17:00
+                            </p>
+                        </div>
+                    @endif
+                @else
+                    <div class="bg-slate-100 text-slate-500 py-5 rounded-2xl font-bold border border-slate-200 flex flex-col items-center">
+                        <span class="text-2xl mb-1">✅</span>
+                        TUGAS HARI INI SELESAI
+                    </div>
                 @endif
-            @else
-                <div class="bg-slate-100 text-slate-500 py-5 rounded-2xl font-bold border border-slate-200 flex flex-col items-center">
-                    <span class="text-2xl mb-1">✅</span>
-                    TUGAS HARI INI SELESAI
-                </div>
-            @endif
+            </div>
+            <p class="text-[8px] text-slate-400 mt-4 italic">* Pastikan Anda berada dalam radius 20m dari kantor PT Saltek.</p>
         </div>
 
         <div class="mt-10 mb-10">
@@ -106,48 +131,32 @@
             
             <div class="space-y-3">
                 @forelse($absensis as $absen)
-                @php
-                    $isYesterday = $absen->tanggal < date('Y-m-d');
-                    $noPulang = !$absen->jam_pulang && $isYesterday;
-                @endphp
-                <div class="bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border {{ $noPulang ? 'border-red-100' : 'border-slate-100' }} hover:border-blue-200 transition-all group">
+                <div class="bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border border-slate-100 hover:border-blue-200 transition-all group">
                     <div class="flex items-center">
-                        <div class="h-10 w-10 rounded-2xl {{ $noPulang ? 'bg-red-500' : 'bg-gradient-to-br from-blue-500 to-indigo-600' }} flex items-center justify-center text-white font-black text-sm shadow-sm group-hover:scale-110 transition-transform">
-                            {{ strtoupper(substr(trim($absen->karyawan->nama_lengkap ?? 'K'), 0, 1)) }}
+                        <div class="h-10 w-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-sm">
+                            {{ strtoupper(substr($absen->karyawan->nama_lengkap ?? 'K', 0, 1)) }}
                         </div>
                         
                         <div class="ml-4">
-                            <p class="font-black text-slate-800 tracking-tight leading-none text-sm mb-1">
+                            <p class="font-black text-slate-800 text-sm mb-1">
                                 {{ $absen->karyawan->nama_lengkap ?? 'User Baru' }}
                             </p>
-                            <p class="text-[9px] text-slate-400 font-bold mb-2 uppercase">{{ \Carbon\Carbon::parse($absen->tanggal)->translatedFormat('d F Y') }}</p>
                             <div class="flex gap-2">
-                                <span class="text-[9px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md font-bold italic">
-                                    IN: {{ $absen->jam_masuk }}
+                                <span class="text-[9px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md font-bold">
+                                    IN: {{ $absen->jam_masuk ?? '--:--' }}
                                 </span>
                                 @if($absen->jam_pulang)
-                                <span class="text-[9px] bg-orange-50 text-orange-600 px-2 py-0.5 rounded-md font-bold italic">
+                                <span class="text-[9px] bg-orange-50 text-orange-600 px-2 py-0.5 rounded-md font-bold">
                                     OUT: {{ $absen->jam_pulang }}
                                 </span>
                                 @endif
                             </div>
                         </div>
                     </div>
-
                     <div class="text-right">
-                        @if($absen->jam_pulang)
-                            <span class="bg-blue-600 text-white shadow-md shadow-blue-100 text-[8px] px-3 py-1.5 rounded-xl font-black uppercase tracking-tighter">
-                                SELESAI
-                            </span>
-                        @elseif($noPulang)
-                            <span class="bg-red-50 text-red-600 border border-red-100 text-[8px] px-3 py-1.5 rounded-xl font-black uppercase tracking-tighter">
-                                TANPA KET. PULANG
-                            </span>
-                        @else
-                            <span class="bg-green-500 text-white shadow-md shadow-green-100 text-[8px] px-3 py-1.5 rounded-xl font-black uppercase tracking-tighter">
-                                HADIR
-                            </span>
-                        @endif
+                        <span class="text-[8px] px-3 py-1.5 rounded-xl font-black uppercase {{ $absen->status == 'Hadir' ? 'bg-green-500 text-white' : 'bg-amber-100 text-amber-600' }}">
+                            {{ $absen->status }}
+                        </span>
                     </div>
                 </div>
                 @empty
@@ -159,20 +168,89 @@
         </div>
     </div>
 
+    {{-- Script Leaflet untuk Peta --}}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // 1. Logika Jam Digital (Asli dari Kamu)
         function updateClock() {
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            
-            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID', { hour12: false });
             document.getElementById('date').innerText = now.toLocaleDateString('id-ID', options);
         }
         setInterval(updateClock, 1000);
         updateClock();
+
+        // 2. Logika Geofencing & Map (Tambahan)
+        const KANTOR_LAT = 3.5952; // Koordinat PT Saltek
+        const KANTOR_LNG = 98.6722;
+        const RADIUS_MAKS = 20; // 20 Meter
+
+        // Inisialisasi Peta
+        const map = L.map('map', { zoomControl: false }).setView([KANTOR_LAT, KANTOR_LNG], 18);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Tambah Lingkaran Area Kantor (Geofence)
+        L.circle([KANTOR_LAT, KANTOR_LNG], {
+            color: '#2563eb',
+            fillColor: '#3b82f6',
+            fillOpacity: 0.2,
+            radius: RADIUS_MAKS
+        }).addTo(map);
+
+        // Tambah Marker Kantor
+        L.marker([KANTOR_LAT, KANTOR_LNG]).addTo(map).bindPopup("Kantor PT Saltek").openPopup();
+
+        let userMarker;
+
+        function hitungJarak(lat1, lon1, lat2, lon2) {
+            const R = 6371e3;
+            const p1 = lat1 * Math.PI/180;
+            const p2 = lat2 * Math.PI/180;
+            const dp = (lat2-lat1) * Math.PI/180;
+            const dl = (lon2-lon1) * Math.PI/180;
+            const a = Math.sin(dp/2) * Math.sin(dp/2) + Math.cos(p1) * Math.cos(p2) * Math.sin(dl/2) * Math.sin(dl/2);
+            return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+        }
+
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(function(pos) {
+                const uLat = pos.coords.latitude;
+                const uLng = pos.coords.longitude;
+                const jarak = hitungJarak(uLat, uLng, KANTOR_LAT, KANTOR_LNG);
+                
+                const btn = document.getElementById('btn-absen');
+                const info = document.getElementById('distance-info');
+
+                // Update Marker Posisi User di Map (Warna Merah)
+                if (userMarker) map.removeLayer(userMarker);
+                userMarker = L.circleMarker([uLat, uLng], {
+                    radius: 7, color: 'white', fillColor: '#ef4444', fillOpacity: 1, weight: 2
+                }).addTo(map);
+                map.panTo([uLat, uLng]); // Peta mengikuti posisi user
+
+                if (btn) {
+                    if (jarak <= RADIUS_MAKS) {
+                        btn.disabled = false;
+                        // Kembalikan warna asli sesuai status (Masuk atau Pulang)
+                        if (btn.innerText.includes('MASUK')) {
+                            btn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-2xl shadow-lg shadow-blue-200 transition-all active:scale-95 text-lg";
+                        } else {
+                            btn.className = "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-5 rounded-2xl shadow-lg shadow-orange-200 transition-all active:scale-95 text-lg";
+                        }
+                        info.innerText = `📍 Lokasi Sesuai ✅ (${Math.round(jarak)}m)`;
+                        info.className = "mb-4 p-2 rounded-xl bg-green-100 text-green-600 text-[10px] font-bold uppercase tracking-widest";
+                    } else {
+                        btn.disabled = true;
+                        btn.className = "w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all text-lg";
+                        info.innerText = `📍 Jarak: ${Math.round(jarak)}m dari kantor (Luar Area)`;
+                        info.className = "mb-4 p-2 rounded-xl bg-red-50 text-red-500 text-[10px] font-bold uppercase tracking-widest";
+                    }
+                }
+            }, function(err) {
+                document.getElementById('distance-info').innerText = "❌ GPS Error: Berikan izin lokasi";
+            }, { enableHighAccuracy: true });
+        }
     </script>
 </body>
 </html>
