@@ -179,8 +179,8 @@
                             <tbody class="divide-y divide-slate-50">
                                 @forelse($recentActivities as $activity)
                                 <tr>
-                                    {{-- PERBAIKAN DI SINI: Menggunakan relasi karyawan --}}
                                     <td class="px-6 py-4 text-sm font-bold text-slate-700">
+                                        {{-- MEMANGGIL RELASI KARYAWAN --}}
                                         {{ $activity->karyawan->nama_lengkap ?? 'Nama Tidak Terdaftar' }}
                                     </td>
                                     <td class="px-6 py-4 text-sm font-mono text-slate-500">{{ $activity->jam_masuk }}</td>
@@ -220,9 +220,9 @@
                             <tbody class="divide-y divide-slate-50">
                                 @forelse($rekapBulanan as $rekap)
                                 <tr class="hover:bg-slate-50/50 transition-colors">
-                                    {{-- PERBAIKAN DI SINI: Menggunakan relasi karyawan --}}
                                     <td class="px-6 py-4 text-sm font-bold text-slate-700">
-                                        {{ $rekap->karyawan->nama_lengkap ?? 'Nama Tidak Terdaftar' }}
+                                        {{-- LANGSUNG MEMANGGIL NAMA_LENGKAP DARI OBJEK KARYAWAN --}}
+                                        {{ $rekap->nama_lengkap ?? 'Nama Tidak Terdaftar' }}
                                     </td>
                                     <td class="px-6 py-4 text-center font-mono font-bold text-green-600">{{ $rekap->total_hadir }}</td>
                                     <td class="px-6 py-4 text-center font-mono font-bold text-amber-600">{{ $rekap->total_izin }}</td>
