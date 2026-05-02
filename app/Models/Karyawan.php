@@ -13,12 +13,13 @@ class Karyawan extends Model
 
     /**
      * guarded digunakan agar semua kolom bisa diisi secara massal (Mass Assignment).
+     * Berdasarkan image_49e2a1.png, tabel ini memiliki kolom: 
+     * nip, nama_lengkap, jabatan, no_hp, dan user_id.
      */
     protected $guarded = [];
 
     /**
      * Relasi ke User: Satu Karyawan terhubung ke satu akun User (untuk login).
-     * Foreign key 'user_id' menghubungkan data profil ke tabel users.
      */
     public function user(): BelongsTo
     {
@@ -26,10 +27,11 @@ class Karyawan extends Model
     }
 
     /**
-     * Relasi ke Absensi: Satu Karyawan bisa memiliki banyak data Absensi.
-     * Ini digunakan untuk menghitung total hadir, izin, dan sakit di dashboard.
+     * Relasi ke Absensi: Satu Karyawan memiliki banyak data Absensi.
+     * Nama fungsi diubah menjadi 'absensi' agar sinkron dengan 
+     * DashboardController yang menggunakan withCount(['absensi']).
      */
-    public function absensis(): HasMany
+    public function absensi(): HasMany
     {
         return $this->hasMany(Absensi::class, 'karyawan_id');
     }

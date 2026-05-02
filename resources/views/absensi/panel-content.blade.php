@@ -27,7 +27,7 @@
                 </form>
             @else
                 <div class="bg-green-500/20 border border-green-400/30 rounded-2xl py-4">
-                    <p class="text-xs font-bold text-green-200 uppercase tracking-widest">✅ Absensi Berhasil</p>
+                    <p class="text-xs font-bold text-green-200 uppercase tracking-widest">✅ Absensi Berhasil Dikirim</p>
                 </div>
             @endif
         </div>
@@ -35,7 +35,7 @@
 
     <!-- Map Section -->
     <div class="bg-white rounded-[2rem] p-2 shadow-sm border border-slate-100">
-        <div id="map" style="height: 200px; width: 100%; border-radius: 1.5rem;"></div>
+        <div id="map" style="height: 200px; width: 100%; border-radius: 1.5rem; z-index: 1;"></div>
         <div id="distance-info" class="mt-3 p-3 rounded-xl bg-slate-50 text-center">
             <p id="status-text" class="text-xs font-bold text-slate-700 italic">🛰️ Menghubungkan GPS...</p>
         </div>
@@ -43,31 +43,100 @@
 </div>
 
 <script>
+    // 1. Fungsi Jam & Tanggal Digital
     function updateModalClock() {
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        if(document.getElementById('modal-clock')) {
-            document.getElementById('modal-clock').innerText = now.toLocaleTimeString('en-GB');
-            document.getElementById('modal-date').innerText = now.toLocaleDateString('id-ID', options);
+        
+        const clockElement = document.getElementById('modal-clock');
+        const dateElement = document.getElementById('modal-date');
+
+        if(clockElement) {
+            clockElement.innerText = now.toLocaleTimeString('en-GB');
+        }
+        if(dateElement) {
+            dateElement.innerText = now.toLocaleDateString('id-ID', options);
         }
     }
     setInterval(updateModalClock, 1000);
     updateModalClock();
 
+    // 2. Logika Map & Geolocation
+    let map, marker;
+
+    function initMap() {
+        const statusText = document.getElementById('status-text');
+        
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+
+                    document.getElementById('lat').value = userLat;
+                    document.getElementById('lng').value = userLng;
+
+                    if (!map) {
+                        map = L.map('map').setView([userLat, userLng], 17);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '© OpenStreetMap'
+                        }).addTo(map);
+                        
+                        marker = L.marker([userLat, userLng]).addTo(map)
+                            .bindPopup("Lokasi Anda")
+                            .openPopup();
+                    } else {
+                        map.setView([userLat, userLng], 17);
+                        marker.setLatLng([userLat, userLng]);
+                    }
+
+                    statusText.innerText = "🛰️ GPS Terkunci (Lokasi Akurat)";
+                    statusText.className = "text-xs font-bold text-green-600 italic";
+                },
+                function(error) {
+                    let pesan = "❌ Gagal mengambil lokasi.";
+                    if (error.code == 1) pesan = "❌ Akses GPS Ditolak!";
+                    statusText.innerText = pesan;
+                    statusText.className = "text-xs font-bold text-red-600 italic";
+                },
+                { enableHighAccuracy: true }
+            );
+        }
+    }
+
+    // Jalankan initMap saat file di-include
+    setTimeout(initMap, 500);
+
+    // 3. Fungsi Submit
     function submitAbsensi() {
-        if (!document.getElementById('lat').value) {
-            Swal.fire('GPS Belum Siap', 'Tunggu lokasi terkunci', 'warning');
+        const lat = document.getElementById('lat').value;
+        if (!lat) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'GPS Belum Siap',
+                text: 'Tunggu sebentar sampai lokasi terdeteksi di peta.',
+                confirmButtonColor: '#3b82f6'
+            });
             return;
         }
+
         Swal.fire({
             title: 'Kirim Presensi?',
-            text: "Lokasi Anda akan dicatat",
+            text: "Lokasi Anda saat ini akan dicatat ke sistem PT Saltek.",
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#1e40af',
-            confirmButtonText: 'Ya, Kirim'
+            confirmButtonText: 'Ya, Kirim',
+            cancelButtonText: 'Batal'
         }).then((result) => {
-            if (result.isConfirmed) document.getElementById('formAbsensi').submit();
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Mengirim...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+                document.getElementById('formAbsensi').submit();
+            }
         });
     }
 </script>

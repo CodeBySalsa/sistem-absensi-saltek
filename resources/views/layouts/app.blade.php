@@ -14,16 +14,18 @@
         <!-- Scripts & Styles -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
-        {{-- Tambahkan baris ini agar style custom di dashboard bisa terbaca --}}
+        <!-- SweetAlert2 (Untuk Notifikasi Absen) -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         @stack('styles')
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-50"> {{-- Diubah ke gray-50 agar dashboard terlihat lebih bersih --}}
+        <div class="min-h-screen bg-gray-50">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white shadow-sm border-b border-gray-100"> {{-- Ditambah border halus --}}
+                <header class="bg-white shadow-sm border-b border-gray-100">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -36,7 +38,6 @@
             </main>
         </div>
 
-        {{-- Tambahkan baris ini untuk script tambahan --}}
         @stack('scripts')
     </body>
 </html>

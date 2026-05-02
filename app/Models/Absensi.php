@@ -10,22 +10,21 @@ class Absensi extends Model
 {
     use HasFactory;
 
-    /**
-     * Tabel yang terhubung dengan model ini.
-     */
     protected $table = 'absensis';
 
     /**
-     * fillable menentukan kolom mana saja yang boleh diisi secara massal.
-     * Ini lebih aman daripada $guarded untuk aplikasi produksi.
+     * Pastikan semua kolom yang dikirim dari controller terdaftar di sini.
      */
     protected $fillable = [
         'karyawan_id',
+        'user_id',     
         'tanggal',
         'jam_masuk',
         'jam_pulang',
         'status',
-        'keterangan', // Pastikan kolom ini ada untuk menampung alasan Izin/Sakit
+        'latitude',    // Penting untuk fitur GPS PT Saltek
+        'longitude',   // Penting untuk fitur GPS PT Saltek
+        'keterangan',
     ];
 
     /**
@@ -38,13 +37,13 @@ class Absensi extends Model
 
     /**
      * Menghubungkan data Absensi ke Karyawan.
-     * RELASI PENTING: Inilah yang menarik data 'nama' ke tabel Dashboard.
-     * withDefault() ditambahkan agar tidak error jika data karyawan terhapus.
+     * Digunakan untuk menampilkan nama di Dashboard Aktivitas Terbaru.
      */
     public function karyawan(): BelongsTo
     {
+        // Jika di database kamu menggunakan 'nama_lengkap', gunakan itu di withDefault
         return $this->belongsTo(Karyawan::class, 'karyawan_id')->withDefault([
-            'nama_lengkap' => 'Karyawan Tidak Ditemukan'
+            'nama_lengkap' => 'Data Karyawan Terhapus'
         ]);
     }
 }

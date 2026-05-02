@@ -156,9 +156,88 @@
                 </div>
             </div>
 
-            {{-- Table Admin Sections (Sudah ada di kode asli kamu) --}}
+            {{-- Table Admin Sections --}}
             @if(Auth::user()->role == 'admin')
-                {{-- ... Bagian Table Aktivitas Terbaru & Rekap Bulanan ... --}}
+            <div class="grid grid-cols-1 gap-6">
+                {{-- Aktivitas Absensi Terbaru --}}
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+                        <h3 class="font-black text-slate-800 uppercase tracking-tight flex items-center gap-2">
+                            <span>⚡</span> Aktivitas Absensi Terbaru
+                        </h3>
+                        <span class="text-[10px] bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-bold uppercase">Batas Waktu: 08:30</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50/50">
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Karyawan</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Jam Masuk</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-50">
+                                @forelse($recentActivities as $activity)
+                                <tr>
+                                    {{-- PERBAIKAN DI SINI: Menggunakan relasi karyawan --}}
+                                    <td class="px-6 py-4 text-sm font-bold text-slate-700">
+                                        {{ $activity->karyawan->nama_lengkap ?? 'Nama Tidak Terdaftar' }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm font-mono text-slate-500">{{ $activity->jam_masuk }}</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-3 py-1 rounded-lg text-[10px] font-black uppercase {{ $activity->status == 'Hadir' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' }}">
+                                            {{ $activity->status }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="px-6 py-10 text-center text-slate-400 italic text-sm">Belum ada aktivitas absensi hari ini.</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {{-- Rekapitulasi Seluruh Karyawan --}}
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-6 border-b border-slate-50">
+                        <h3 class="font-black text-slate-800 uppercase tracking-tight flex items-center gap-2">
+                            <span>📊</span> Rekapitulasi Seluruh Karyawan ({{ $namaBulan }})
+                        </h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50/50">
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama Karyawan</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Hadir</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Izin</th>
+                                    <th class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Sakit</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-50">
+                                @forelse($rekapBulanan as $rekap)
+                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                    {{-- PERBAIKAN DI SINI: Menggunakan relasi karyawan --}}
+                                    <td class="px-6 py-4 text-sm font-bold text-slate-700">
+                                        {{ $rekap->karyawan->nama_lengkap ?? 'Nama Tidak Terdaftar' }}
+                                    </td>
+                                    <td class="px-6 py-4 text-center font-mono font-bold text-green-600">{{ $rekap->total_hadir }}</td>
+                                    <td class="px-6 py-4 text-center font-mono font-bold text-amber-600">{{ $rekap->total_izin }}</td>
+                                    <td class="px-6 py-4 text-center font-mono font-bold text-rose-600">{{ $rekap->total_sakit }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="px-6 py-10 text-center text-slate-400 italic text-sm">Data rekapitulasi belum tersedia.</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             @endif
 
         </div>
@@ -176,7 +255,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
                 <div class="p-6">
-                    @include('absensi.panel-content') {{-- Pastikan buat file resources/views/absensi/panel-content.blade.php --}}
+                    @include('absensi.panel-content')
                 </div>
             </div>
         </div>
@@ -184,6 +263,17 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // Notifikasi Berhasil
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+
         // Modal Logic
         function openAbsensiModal() {
             const modal = document.getElementById('absensiModal');
@@ -193,7 +283,6 @@
                 content.classList.remove('translate-y-full');
                 content.classList.add('translate-y-0');
             }, 10);
-            // Re-render map inside modal
             if (typeof initMap === 'function') setTimeout(initMap, 600);
         }
 
@@ -206,7 +295,7 @@
             }, 500);
         }
 
-        // FUNGSI COUNTDOWN & CLOCK (Sama seperti kode asli)
+        // FUNGSI COUNTDOWN & CLOCK
         function startCountdown() {
             const target = new Date();
             target.setHours(8, 30, 0);
@@ -227,7 +316,10 @@
 
         function updateClock() {
             const now = new Date();
-            document.getElementById('realtime-clock').innerText = `🕒 ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            const clockEl = document.getElementById('realtime-clock');
+            if(clockEl) {
+                clockEl.innerText = `🕒 ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            }
         }
 
         setInterval(updateClock, 1000);

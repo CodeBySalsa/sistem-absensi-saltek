@@ -41,6 +41,15 @@ class AbsensiController extends Controller
             return back()->with('error', 'Data karyawan tidak ditemukan.');
         }
 
+        // Tambahan Validasi: Memastikan data GPS terkirim dari modal
+        $request->validate([
+            'latitude' => 'required',
+            'longitude' => 'required',
+        ], [
+            'latitude.required' => 'Lokasi GPS belum terdeteksi.',
+            'longitude.required' => 'Lokasi GPS belum terdeteksi.',
+        ]);
+
         // Cek apakah hari ini sudah ada data (Hadir/Izin/Sakit)
         $sudahInput = Absensi::where('karyawan_id', $user->karyawan->id)
                             ->where('tanggal', date('Y-m-d'))
@@ -74,7 +83,12 @@ class AbsensiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $absensi = Absensi::findOrFail($id);
+        $user = Auth::user();
+        
+        // Tambahan Keamanan: Memastikan absensi yang diupdate adalah milik user yang sedang login
+        $absensi = Absensi::where('id', $id)
+                          ->where('karyawan_id', $user->karyawan->id)
+                          ->firstOrFail();
         
         // Update jam pulang dan ubah status menjadi Selesai
         $absensi->update([
@@ -111,7 +125,7 @@ class AbsensiController extends Controller
             return back()->with('error', 'Gagal! Anda sudah mengisi kehadiran hari ini.');
         }
 
-        // Simpan data
+        // Simpan data pengajuan
         Absensi::create([
             'karyawan_id' => $user->karyawan->id,
             'tanggal' => date('Y-m-d'),

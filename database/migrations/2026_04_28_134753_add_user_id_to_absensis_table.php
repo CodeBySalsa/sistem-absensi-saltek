@@ -12,13 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('absensis', function (Blueprint $table) {
-            // Menambah kolom user_id sebagai foreign key
-            // Kita letakkan setelah kolom 'id' agar struktur tabel rapi
-            $table->foreignId('user_id')
-                  ->after('id')
-                  ->nullable() 
-                  ->constrained()
-                  ->onDelete('cascade');
+            // 1. Tambahkan user_id (Opsional, jika ingin double tracking)
+            if (!Schema::hasColumn('absensis', 'user_id')) {
+                $table->foreignId('user_id')
+                      ->after('id')
+                      ->nullable() 
+                      ->constrained()
+                      ->onDelete('cascade');
+            }
+
+            // 2. TAMBAHKAN KOLOM GPS (Penting untuk fitur Map)
+            // Menggunakan string agar lebih fleksibel menangkap koordinat dari browser
+            $table->string('latitude')->after('status')->nullable();
+            $table->string('longitude')->after('latitude')->nullable();
         });
     }
 
@@ -28,9 +34,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('absensis', function (Blueprint $table) {
-            // Menghapus constraint dan kolom jika migration di-rollback
             $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
+            $table->dropColumn(['user_id', 'latitude', 'longitude']);
         });
     }
 };
