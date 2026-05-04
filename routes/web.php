@@ -16,7 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // 1. Dashboard Utama (Monitoring)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    // Fitur Izin/Sakit dari Dashboard (DIARAHKAN KE DashboardController SESUAI KODE SEBELUMNYA)
+    // Fitur Izin/Sakit dari Dashboard
     Route::post('/dashboard/izin-sakit', [DashboardController::class, 'izinSakit'])->name('absensi.izinSakit');
 
     // 2. Fitur Absensi (Panel Modal & Utama)
@@ -24,10 +24,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [AbsensiController::class, 'index'])->name('index');
         
         // Simpan Absensi Masuk (Digunakan oleh tombol di Modal)
-        // Pastikan di AbsensiController@store sudah ada logika jam 08:30 untuk status 'Terlambat'
         Route::post('/store', [AbsensiController::class, 'store'])->name('store');
         
-        // Update Absensi Pulang
+        // --- TAMBAHAN ROUTE UNTUK ABSEN PULANG ---
+        // Route ini yang tadi menyebabkan error "Route [absensi.pulang] not defined"
+        Route::post('/pulang', [AbsensiController::class, 'pulang'])->name('pulang');
+        
+        // Update Absensi (untuk keperluan edit/admin)
         Route::put('/update/{id}', [AbsensiController::class, 'update'])->name('update');
     });
 
