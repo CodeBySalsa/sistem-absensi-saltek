@@ -41,7 +41,7 @@ class AbsensiController extends Controller
             return back()->with('error', 'Data karyawan tidak ditemukan.');
         }
 
-        // Tambahan Validasi: Memastikan data GPS terkirim dari modal
+        // Validasi: Memastikan data GPS terkirim dari modal
         $request->validate([
             'latitude' => 'required',
             'longitude' => 'required',
@@ -50,7 +50,7 @@ class AbsensiController extends Controller
             'longitude.required' => 'Lokasi GPS belum terdeteksi.',
         ]);
 
-        // Cek apakah hari ini sudah ada data (Hadir/Izin/Sakit)
+        // Cek apakah hari ini sudah ada data (Hadir/Izin/Sakit/Terlambat)
         $sudahInput = Absensi::where('karyawan_id', $user->karyawan->id)
                             ->where('tanggal', date('Y-m-d'))
                             ->first();
@@ -59,23 +59,27 @@ class AbsensiController extends Controller
             return back()->with('error', 'Anda sudah melakukan absensi atau pengajuan hari ini.');
         }
 
-        // LOGIC: Cek Keterlambatan (Batas 08:30)
+        // --- LOGIC SINKRONISASI DASHBOARD ---
         $jamSekarang = date('H:i');
         $batasWaktu = '08:30';
-        $statusKeterangan = ($jamSekarang > $batasWaktu) ? 'Terlambat Masuk' : 'Tepat Waktu';
+        
+        // Jika lewat 08:30, status utama menjadi 'Terlambat' agar indikator di dashboard berubah
+        $statusFinal = ($jamSekarang > $batasWaktu) ? 'Terlambat' : 'Hadir';
+        $keteranganSistem = ($jamSekarang > $batasWaktu) ? 'Terlambat Masuk' : 'Tepat Waktu';
 
-        // Simpan Data Absensi termasuk koordinat dari Modal
+        // Simpan Data Absensi
         Absensi::create([
             'karyawan_id' => $user->karyawan->id,
+            'user_id' => $user->id,
             'tanggal' => date('Y-m-d'),
             'jam_masuk' => date('H:i:s'),
-            'status' => 'Hadir',
-            'latitude' => $request->latitude,   // Menangkap data dari modal
-            'longitude' => $request->longitude, // Menangkap data dari modal
-            'keterangan' => $statusKeterangan 
+            'status' => $statusFinal, // Menggunakan status Hadir atau Terlambat
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'keterangan' => $keteranganSistem 
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Selamat bekerja! Berhasil absen masuk (' . $statusKeterangan . ').');
+        return redirect()->route('dashboard')->with('success', 'Selamat bekerja! Berhasil absen masuk (' . $keteranganSistem . ').');
     }
 
     /**
@@ -85,7 +89,7 @@ class AbsensiController extends Controller
     {
         $user = Auth::user();
         
-        // Tambahan Keamanan: Memastikan absensi yang diupdate adalah milik user yang sedang login
+        // Memastikan absensi yang diupdate adalah milik user yang sedang login
         $absensi = Absensi::where('id', $id)
                           ->where('karyawan_id', $user->karyawan->id)
                           ->firstOrFail();
@@ -100,7 +104,7 @@ class AbsensiController extends Controller
     }
 
     /**
-     * Menangani Pengajuan Izin/Sakit
+     * Menangani Pengajuan Izin/Sakit (Backup jika dipanggil dari controller ini)
      */
     public function izinSakit(Request $request)
     {
@@ -110,13 +114,11 @@ class AbsensiController extends Controller
             return back()->with('error', 'Data karyawan tidak ditemukan.');
         }
 
-        // Validasi input
         $request->validate([
             'status' => 'required|in:Izin,Sakit',
             'keterangan' => 'required|string|max:255',
         ]);
 
-        // Cek apakah hari ini sudah ada data
         $sudahInput = Absensi::where('karyawan_id', $user->karyawan->id)
                             ->where('tanggal', date('Y-m-d'))
                             ->first();
@@ -125,9 +127,9 @@ class AbsensiController extends Controller
             return back()->with('error', 'Gagal! Anda sudah mengisi kehadiran hari ini.');
         }
 
-        // Simpan data pengajuan
         Absensi::create([
             'karyawan_id' => $user->karyawan->id,
+            'user_id' => $user->id,
             'tanggal' => date('Y-m-d'),
             'status' => $request->status,
             'keterangan' => $request->keterangan,

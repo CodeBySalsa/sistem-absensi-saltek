@@ -16,21 +16,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // 1. Dashboard Utama (Monitoring)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    // Fitur Izin/Sakit dari Dashboard
-    Route::post('/dashboard/izin-sakit', [AbsensiController::class, 'izinSakit'])->name('absensi.izinSakit');
+    // Fitur Izin/Sakit dari Dashboard (DIARAHKAN KE DashboardController SESUAI KODE SEBELUMNYA)
+    Route::post('/dashboard/izin-sakit', [DashboardController::class, 'izinSakit'])->name('absensi.izinSakit');
 
     // 2. Fitur Absensi (Panel Modal & Utama)
     Route::prefix('absensi')->name('absensi.')->group(function () {
         Route::get('/', [AbsensiController::class, 'index'])->name('index');
         
         // Simpan Absensi Masuk (Digunakan oleh tombol di Modal)
+        // Pastikan di AbsensiController@store sudah ada logika jam 08:30 untuk status 'Terlambat'
         Route::post('/store', [AbsensiController::class, 'store'])->name('store');
         
         // Update Absensi Pulang
         Route::put('/update/{id}', [AbsensiController::class, 'update'])->name('update');
-        
-        // Jalur tambahan untuk Izin/Sakit
-        Route::post('/izin-sakit-panel', [AbsensiController::class, 'izinSakit'])->name('izinSakitPanel');
     });
 
     // 3. Profile User

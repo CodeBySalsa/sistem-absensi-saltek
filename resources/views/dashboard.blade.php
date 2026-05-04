@@ -5,15 +5,15 @@
                 {{ __('Dashboard Monitoring - PT Saltek') }}
             </h2>
             <div class="flex items-center gap-3">
-                {{-- Countdown Area (Warna Merah Sesuai Gambar) --}}
+                {{-- Countdown Area --}}
                 <div id="countdown-area" class="text-xs font-bold text-white bg-slate-900 px-4 py-2 rounded-xl shadow-lg border border-slate-700">
                     <span class="opacity-80 uppercase tracking-widest mr-1 text-[10px]">Batas Absen:</span>
                     <span id="timer" class="font-mono text-rose-500">--:--:--</span>
                 </div>
                 
-                {{-- Realtime Clock (Biru Lembut) --}}
+                {{-- Realtime Clock --}}
                 <div id="realtime-clock" class="text-sm font-black text-indigo-600 bg-white px-4 py-2 rounded-xl border border-slate-100 shadow-sm">
-                    {{-- Jam otomatis muncul di sini --}}
+                    --:--:--
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
     <div class="py-10 bg-slate-50/50 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            {{-- 1. HERO BANNER (Personal Portal) --}}
+            {{-- 1. HERO BANNER --}}
             @if(Auth::user()->role !== 'admin')
             <div class="mb-8 custom-gradient rounded-[2.5rem] p-10 text-white shadow-2xl shadow-indigo-200 relative overflow-hidden transition-all hover:scale-[1.01]">
                 <div class="relative z-10">
@@ -53,7 +53,7 @@
             <div class="bg-white p-8 rounded-[2rem] shadow-xl shadow-slate-200/50 border border-white mb-6">
                 <div class="flex items-center gap-6">
                     <div class="relative">
-                        @if($cekAbsensi && ($cekAbsensi->status == 'Hadir' || $cekAbsensi->status == 'Selesai'))
+                        @if($cekAbsensi && ($cekAbsensi->status == 'Hadir' || $cekAbsensi->status == 'Selesai' || $cekAbsensi->status == 'Terlambat'))
                             <div class="w-16 h-16 bg-emerald-500 rounded-2xl shadow-lg shadow-emerald-200 flex items-center justify-center text-2xl text-white">✅</div>
                         @elseif(now()->format('H:i') > '08:30')
                             <div class="w-16 h-16 bg-rose-500 rounded-2xl shadow-lg shadow-rose-200 flex items-center justify-center text-2xl text-white animate-pulse">❌</div>
@@ -64,8 +64,12 @@
                     <div>
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-1 italic">Status Real-time Anda</p>
                         <h3 class="text-2xl font-black text-slate-800 tracking-tight uppercase">
-                            @if($cekAbsensi && ($cekAbsensi->status == 'Hadir' || $cekAbsensi->status == 'Selesai'))
-                                Presensi Berhasil Dikirim
+                            @if($cekAbsensi)
+                                @if($cekAbsensi->status == 'Hadir' || $cekAbsensi->status == 'Selesai' || $cekAbsensi->status == 'Terlambat')
+                                    Presensi Berhasil Dikirim ({{ $cekAbsensi->status }})
+                                @else
+                                    Status: {{ $cekAbsensi->status }}
+                                @endif
                             @elseif(now()->format('H:i') > '08:30')
                                 Batas Waktu Terlewati (Terlambat)
                             @else
@@ -123,6 +127,7 @@
 
             {{-- 5. USER INTERACTIVE CARDS --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                {{-- Card Total Hadir --}}
                 <div class="bg-white rounded-[2rem] p-8 shadow-lg border-b-4 border-indigo-500 flex flex-col justify-between transition-transform hover:scale-[1.02]">
                     <div class="flex items-center justify-between">
                         <div>
@@ -134,13 +139,12 @@
                     <p class="text-[10px] text-indigo-400 mt-6 font-bold italic">* Terhitung masa KKN di PT Saltek</p>
                 </div>
 
+                {{-- Card Form Izin / Sakit (DIPERBAIKI) --}}
                 <div class="bg-white rounded-[2rem] p-8 shadow-lg border-b-4 border-amber-500">
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Form Izin / Sakit</p>
-                    @if($cekAbsensi)
-                        <div class="bg-slate-50 rounded-2xl p-4 text-center border border-slate-100">
-                            <span class="text-2xl italic font-black text-amber-600 uppercase">{{ $cekAbsensi->status }}</span>
-                        </div>
-                    @else
+                    
+                    {{-- Jika belum ada absensi SAMA SEKALI, tampilkan form --}}
+                    @if(!$cekAbsensi)
                         <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="space-y-2">
                             @csrf
                             <input type="hidden" name="status" id="status_input">
@@ -150,9 +154,21 @@
                                 <button type="button" onclick="konfirmasiStatus('Sakit')" class="bg-rose-500 text-white font-black py-3 rounded-xl text-[10px] uppercase shadow-md active:scale-95">🤒 Sakit</button>
                             </div>
                         </form>
+                    {{-- Jika status sudah Izin atau Sakit --}}
+                    @elseif($cekAbsensi->status == 'Izin' || $cekAbsensi->status == 'Sakit')
+                        <div class="bg-amber-50 rounded-2xl p-4 text-center border border-amber-100">
+                            <span class="text-2xl italic font-black text-amber-600 uppercase">{{ $cekAbsensi->status }}</span>
+                            <p class="text-[9px] text-amber-400 font-bold mt-1 uppercase tracking-tighter">Permohonan Terkirim</p>
+                        </div>
+                    {{-- Jika status Hadir/Selesai/Terlambat, form hilang (agar tidak dobel data) --}}
+                    @else
+                        <div class="bg-slate-50 rounded-2xl p-4 text-center border border-slate-100">
+                            <span class="text-[10px] font-bold text-slate-300 uppercase italic tracking-widest">Form Tidak Tersedia</span>
+                        </div>
                     @endif
                 </div>
 
+                {{-- Panel Absensi Utama --}}
                 <div class="relative group cursor-pointer" onclick="openAbsensiModal()">
                     <div class="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-[2.2rem] blur opacity-25 group-hover:opacity-40 transition"></div>
                     <div class="relative bg-white h-full rounded-[2.2rem] p-8 flex flex-col items-center justify-center border border-slate-100">
@@ -163,10 +179,9 @@
                 </div>
             </div>
 
-            {{-- 6. ADMIN TABLES (VERSI LENGKAP) --}}
+            {{-- 6. ADMIN TABLES --}}
             @if(Auth::user()->role == 'admin')
             <div class="grid grid-cols-1 gap-8">
-                {{-- Aktivitas Terbaru --}}
                 <div class="bg-white rounded-[2rem] shadow-xl border border-slate-50 overflow-hidden">
                     <div class="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
                         <h3 class="font-black text-slate-800 uppercase tracking-tight flex items-center gap-2 text-lg">
@@ -188,7 +203,7 @@
                                     <td class="px-8 py-5 text-sm font-bold text-slate-700">{{ $activity->karyawan->nama_lengkap ?? 'Unknown' }}</td>
                                     <td class="px-8 py-5 text-sm font-mono text-slate-500">{{ $activity->jam_masuk }}</td>
                                     <td class="px-8 py-5">
-                                        <span class="px-3 py-1 rounded-lg text-[10px] font-black uppercase {{ $activity->status == 'Hadir' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
+                                        <span class="px-3 py-1 rounded-lg text-[10px] font-black uppercase {{ $activity->status == 'Hadir' ? 'bg-emerald-100 text-emerald-700' : ($activity->status == 'Terlambat' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-700') }}">
                                             {{ $activity->status }}
                                         </span>
                                     </td>
@@ -200,40 +215,8 @@
                         </table>
                     </div>
                 </div>
-
-                {{-- Rekap Bulanan --}}
-                <div class="bg-white rounded-[2rem] shadow-xl border border-slate-50 overflow-hidden mb-10">
-                    <div class="p-8 border-b border-slate-50 bg-slate-50/30">
-                        <h3 class="font-black text-slate-800 uppercase tracking-tight text-lg">📊 Rekapitulasi ({{ $namaBulan }})</h3>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead>
-                                <tr class="border-b border-slate-100">
-                                    <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama</th>
-                                    <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">H</th>
-                                    <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">I</th>
-                                    <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">S</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-50">
-                                @forelse($rekapBulanan as $rekap)
-                                <tr>
-                                    <td class="px-8 py-5 text-sm font-bold text-slate-700">{{ $rekap->nama_lengkap }}</td>
-                                    <td class="px-8 py-5 text-center font-mono font-bold text-emerald-600">{{ $rekap->total_hadir }}</td>
-                                    <td class="px-8 py-5 text-center font-mono font-bold text-amber-600">{{ $rekap->total_izin }}</td>
-                                    <td class="px-8 py-5 text-center font-mono font-bold text-rose-600">{{ $rekap->total_sakit }}</td>
-                                </tr>
-                                @empty
-                                <tr><td colspan="4" class="px-8 py-10 text-center text-slate-400 italic">Data kosong.</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
             @endif
-
         </div>
     </div>
 
@@ -251,7 +234,80 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Copy semua script JavaScript dari kode awalmu (Timer, Clock, Modal Logic, KonfirmasiStatus) ke sini.
-        // Pastikan tidak ada yang tertinggal.
+        // 1. REALTIME CLOCK FUNCTION
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('realtime-clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 2. COUNTDOWN TIMER FUNCTION (Batas 08:30)
+        function updateCountdown() {
+            const now = new Date();
+            const deadline = new Date();
+            deadline.setHours(8, 30, 0);
+
+            const diff = deadline - now;
+            const timerElement = document.getElementById('timer');
+
+            if (diff > 0) {
+                const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const m = Math.floor((diff / (1000 * 60)) % 60);
+                const s = Math.floor((diff / 1000) % 60);
+                timerElement.textContent = 
+                    `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            } else {
+                timerElement.textContent = "00:00:00";
+                timerElement.classList.replace('text-rose-500', 'text-slate-500');
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // 3. MODAL LOGIC
+        function openAbsensiModal() {
+            const modal = document.getElementById('absensiModal');
+            const content = document.getElementById('modalContent');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('translate-y-full');
+            }, 10);
+        }
+
+        function closeAbsensiModal() {
+            const modal = document.getElementById('absensiModal');
+            const content = document.getElementById('modalContent');
+            content.classList.add('translate-y-full');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 500);
+        }
+
+        // 4. KONFIRMASI STATUS
+        function konfirmasiStatus(status) {
+            const keterangan = document.getElementById('keterangan_input').value;
+            if(!keterangan) {
+                Swal.fire('Oops!', 'Berikan alasan singkat terlebih dahulu.', 'warning');
+                return;
+            }
+
+            Swal.fire({
+                title: `Kirim Status ${status}?`,
+                text: "Data yang sudah dikirim tidak dapat diubah hari ini.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#4f46e5',
+                confirmButtonText: 'Ya, Kirim!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('status_input').value = status;
+                    document.getElementById('formIzinSakit').submit();
+                }
+            });
+        }
     </script>
 </x-app-layout>

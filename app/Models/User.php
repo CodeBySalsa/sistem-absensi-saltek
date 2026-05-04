@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\HasOne; // Tambahkan ini
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role'])] // Tambahkan 'role' jika kamu menggunakannya untuk filter Admin
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -20,7 +20,8 @@ class User extends Authenticatable
 
     /**
      * Hubungan ke model Karyawan
-     * Satu User memiliki satu data Karyawan
+     * Satu User memiliki satu data profil Karyawan (One-to-One)
+     * Relasi ini krusial agar perintah Auth::user()->karyawan bisa berjalan.
      */
     public function karyawan(): HasOne
     {

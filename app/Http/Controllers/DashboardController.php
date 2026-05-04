@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Set locale ke Bahasa Indonesia
+        // Set locale ke Bahasa Indonesia agar nama bulan dan hari sesuai
         Carbon::setLocale('id');
         
         $sekarang = Carbon::now();
@@ -37,16 +37,16 @@ class DashboardController extends Controller
         if ($user->karyawan) {
             $karyawanId = $user->karyawan->id;
 
-            // Ambil status absen user hari ini
+            // Ambil status absen user hari ini untuk indikator dashboard
             $cekAbsensi = Absensi::where('karyawan_id', $karyawanId)
                                 ->whereDate('tanggal', $hariIni)
                                 ->first();
 
-            // Total hadir bulan ini
+            // Total hadir bulan ini (Termasuk status Hadir, Selesai, dan Terlambat)
             $totalHadir = Absensi::where('karyawan_id', $karyawanId)
                                 ->whereMonth('tanggal', $bulanIni)
                                 ->whereYear('tanggal', $tahunIni)
-                                ->whereIn('status', ['Hadir', 'Selesai'])
+                                ->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
                                 ->count();
 
             // 10 riwayat terbaru milik user
@@ -62,7 +62,7 @@ class DashboardController extends Controller
 
             // Statistik Hari Ini
             $hadirHariIni = Absensi::whereDate('tanggal', $hariIni)
-                                    ->whereIn('status', ['Hadir', 'Selesai'])
+                                    ->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
                                     ->count();
 
             $izinSakit = Absensi::whereDate('tanggal', $hariIni)
@@ -77,11 +77,11 @@ class DashboardController extends Controller
                                     ->get();
 
             // REKAPITULASI STATISTIK (Menampilkan semua karyawan)
-            // PERBAIKAN: Mengambil 'nama_lengkap' dan memuat relasi 'karyawan' agar konsisten dengan Blade
             $rekapBulanan = Karyawan::select('id', 'nama_lengkap') 
                 ->withCount([
                     'absensi as total_hadir' => function ($query) use ($bulanIni, $tahunIni) {
-                        $query->whereIn('status', ['Hadir', 'Selesai'])
+                        // Menghitung status Hadir, Selesai, dan Terlambat sebagai kehadiran
+                        $query->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
                               ->whereMonth('tanggal', $bulanIni)
                               ->whereYear('tanggal', $tahunIni);
                     },
@@ -113,6 +113,9 @@ class DashboardController extends Controller
         ));
     }
 
+    /**
+     * Fitur Izin dan Sakit dari Dashboard
+     */
     public function izinSakit(Request $request)
     {
         $request->validate([

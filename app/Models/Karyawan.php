@@ -12,24 +12,32 @@ class Karyawan extends Model
     use HasFactory;
 
     /**
-     * guarded digunakan agar semua kolom bisa diisi secara massal (Mass Assignment).
-     * Berdasarkan image_49e2a1.png, tabel ini memiliki kolom: 
-     * nip, nama_lengkap, jabatan, no_hp, dan user_id.
+     * Nama tabel di database.
+     */
+    protected $table = 'karyawans';
+
+    /**
+     * Menggunakan guarded kosong agar semua kolom (nip, nama_lengkap, jabatan, no_hp, user_id)
+     * bisa diisi secara massal sesuai kebutuhan sistem PT Saltek.
      */
     protected $guarded = [];
 
     /**
-     * Relasi ke User: Satu Karyawan terhubung ke satu akun User (untuk login).
+     * Relasi ke User: Menghubungkan profil karyawan dengan akun login.
+     * Ditambahkan withDefault agar aplikasi tidak error jika user terkait hilang.
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')->withDefault([
+            'name' => 'Akun Tidak Ditemukan',
+            'email' => '-'
+        ]);
     }
 
     /**
-     * Relasi ke Absensi: Satu Karyawan memiliki banyak data Absensi.
-     * Nama fungsi diubah menjadi 'absensi' agar sinkron dengan 
-     * DashboardController yang menggunakan withCount(['absensi']).
+     * Relasi ke Absensi (PENTING):
+     * Satu Karyawan memiliki banyak data Absensi.
+     * Digunakan oleh DashboardController untuk fitur withCount (Total Hadir, Izin, Sakit).
      */
     public function absensi(): HasMany
     {
