@@ -1,19 +1,26 @@
 <div class="p-2">
     <!-- PEMBUNGKUS SCROLL: Agar modal bisa di-scroll ke atas/bawah -->
-    <div class="max-h-[75vh] overflow-y-auto pr-1 custom-scrollbar">
+    <div class="max-h-[80vh] overflow-y-auto pr-1 custom-scrollbar">
         
-        <!-- Card Utama dengan Gradasi Biru -->
-        <div class="bg-gradient-to-br from-blue-600 via-indigo-700 to-indigo-900 rounded-[2.5rem] shadow-xl p-8 text-white relative overflow-hidden mb-6 border border-white/10">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+        <!-- Card Utama dengan Gradasi Biru yang Dipercantik -->
+        <div class="bg-gradient-to-br from-indigo-600 via-blue-700 to-slate-900 rounded-[2.5rem] shadow-2xl p-8 text-white relative overflow-hidden mb-6 border border-white/10">
+            <!-- Dekorasi Cahaya -->
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl"></div>
             
             <div class="text-center relative z-10">
-                <span class="text-[10px] font-black text-blue-200 uppercase tracking-[0.3em] mb-2 block">PT Saltek Dumpang Jaya</span>
-                <h2 class="text-2xl font-black tracking-tighter mb-6 uppercase">Presensi Digital</h2>
+                <div class="flex items-center justify-center gap-2 mb-2">
+                    <span class="w-2 h-2 bg-blue-300 rounded-full animate-pulse"></span>
+                    <span class="text-[10px] font-black text-blue-100 uppercase tracking-[0.4em]">PT Saltek Dumpang Jaya</span>
+                </div>
+                <h2 class="text-3xl font-black tracking-tighter mb-6 uppercase italic">Presensi Digital</h2>
 
-                <!-- Digital Clock -->
-                <div class="bg-white/10 backdrop-blur-md rounded-3xl py-6 mb-6 border border-white/20 shadow-inner">
-                    <div id="modal-clock" class="text-5xl font-mono font-bold tracking-tighter text-white">00:00:00</div>
-                    <p class="text-[10px] text-blue-100 mt-2 uppercase font-black tracking-widest" id="modal-date">Memuat Tanggal...</p>
+                <!-- Digital Clock Box -->
+                <div class="bg-white/10 backdrop-blur-xl rounded-[2rem] py-8 mb-6 border border-white/20 shadow-[inset_0_2px_10px_rgba(255,255,255,0.1)]">
+                    <div id="modal-clock" class="text-6xl font-mono font-bold tracking-tighter text-white drop-shadow-lg">00:00:00</div>
+                    <div class="flex items-center justify-center gap-2 mt-2">
+                        <span class="text-[11px] text-blue-100 uppercase font-black tracking-widest" id="modal-date">Memuat Tanggal...</span>
+                    </div>
                 </div>
 
                 <!-- Logika Tombol Absen -->
@@ -24,8 +31,9 @@
                             <input type="hidden" name="latitude" class="lat-input">
                             <input type="hidden" name="longitude" class="lng-input">
                             
-                            <button type="button" onclick="submitAbsensi('masuk')" id="btn-absen" class="w-full bg-white text-indigo-900 font-black py-4 rounded-2xl shadow-lg hover:bg-blue-50 transition-all active:scale-95 flex items-center justify-center gap-3 uppercase tracking-wider text-sm">
-                                <span>Kirim Kehadiran</span> 🚀
+                            <button type="button" onclick="submitAbsensi('masuk')" id="btn-absen" class="w-full bg-white text-indigo-900 font-black py-5 rounded-2xl shadow-[0_10px_20px_rgba(0,0,0,0.2)] hover:bg-indigo-50 transition-all active:scale-95 flex items-center justify-center gap-3 uppercase tracking-[0.1em] text-sm group">
+                                <span class="group-hover:translate-x-1 transition-transform">Kirim Kehadiran</span> 
+                                <span class="text-xl group-hover:animate-bounce">🚀</span>
                             </button>
                         </form>
                     @elseif($cekAbsensi->status == 'Hadir' || $cekAbsensi->status == 'Terlambat')
@@ -35,10 +43,15 @@
                         @endphp
 
                         @if($jamSekarang < $jamPulang)
-                            <div class="bg-green-500/20 border border-green-400/30 rounded-2xl py-4 mb-2">
-                                <p class="text-xs font-bold text-green-200 uppercase tracking-widest">✅ Absen {{ $cekAbsensi->status }} Berhasil</p>
+                            <div class="bg-emerald-500/20 backdrop-blur-md border border-emerald-400/40 rounded-2xl py-5 mb-3">
+                                <p class="text-sm font-black text-emerald-300 uppercase tracking-widest flex items-center justify-center gap-2">
+                                    <span class="text-lg">✅</span> Absen {{ $cekAbsensi->status }} Berhasil
+                                </p>
                             </div>
-                            <p class="text-[9px] text-blue-200 uppercase font-bold tracking-tighter italic">* Tombol pulang aktif otomatis pukul {{ $jamPulang }}</p>
+                            <div class="flex items-center justify-center gap-1.5 opacity-70">
+                                <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-ping"></span>
+                                <p class="text-[10px] text-blue-100 uppercase font-bold tracking-tighter italic">Tombol pulang aktif pukul {{ $jamPulang }}</p>
+                            </div>
                         @else
                             <form id="formPulang" action="{{ route('absensi.pulang', $cekAbsensi->id) }}" method="POST">
                                 @csrf
@@ -46,45 +59,57 @@
                                 <input type="hidden" name="latitude" class="lat-input">
                                 <input type="hidden" name="longitude" class="lng-input">
 
-                                <button type="button" onclick="submitAbsensi('pulang')" class="w-full bg-orange-500 text-white font-black py-4 rounded-2xl shadow-lg hover:bg-orange-600 transition-all active:scale-95 flex items-center justify-center gap-3 uppercase tracking-wider text-sm">
-                                    <span>Absen Pulang</span> 🏠
+                                <button type="button" onclick="submitAbsensi('pulang')" class="w-full bg-gradient-to-r from-orange-500 to-rose-500 text-white font-black py-5 rounded-2xl shadow-lg hover:shadow-orange-500/40 transition-all active:scale-95 flex items-center justify-center gap-3 uppercase tracking-[0.1em] text-sm group">
+                                    <span class="group-hover:-translate-y-1 transition-transform">Absen Pulang</span>
+                                    <span class="text-xl group-hover:rotate-12 transition-transform">🏠</span>
                                 </button>
                             </form>
                         @endif
                     @elseif($cekAbsensi->status == 'Selesai')
-                        <div class="bg-slate-500/20 border border-slate-400/30 rounded-2xl py-4">
-                            <p class="text-xs font-bold text-slate-200 uppercase tracking-widest">✨ Tugas Selesai. Selamat Istirahat!</p>
+                        <div class="bg-slate-500/30 backdrop-blur-md border border-slate-400/30 rounded-2xl py-6">
+                            <p class="text-sm font-black text-slate-200 uppercase tracking-widest flex items-center justify-center gap-2">
+                                <span class="text-xl">✨</span> Tugas Selesai. Selamat Istirahat!
+                            </p>
                         </div>
                     @else
-                        <div class="bg-amber-500/20 border border-amber-400/30 rounded-2xl py-4">
-                            <p class="text-xs font-bold text-amber-200 uppercase tracking-widest">ℹ️ Status: {{ $cekAbsensi->status }}</p>
+                        <div class="bg-amber-500/30 backdrop-blur-md border border-amber-400/30 rounded-2xl py-5">
+                            <p class="text-sm font-black text-amber-200 uppercase tracking-widest flex items-center justify-center gap-2">
+                                <span class="text-lg">ℹ️</span> Status: {{ $cekAbsensi->status }}
+                            </p>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
 
-        <!-- Map Section -->
-        <div class="bg-white rounded-[2rem] p-2 shadow-sm border border-slate-100 mb-4">
-            <div id="map" style="height: 220px; width: 100%; border-radius: 1.5rem; z-index: 1;"></div>
-            <div id="distance-info" class="mt-3 p-3 rounded-xl bg-slate-50 text-center">
-                <p id="status-text" class="text-xs font-bold text-slate-700 italic">🛰️ Menghubungkan GPS...</p>
+        <!-- Map Section yang Lebih Luas -->
+        <div class="bg-white rounded-[2.5rem] p-3 shadow-xl border border-slate-100 mb-6">
+            <div class="flex items-center justify-between px-4 mb-3">
+                <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Live Tracking Lokasi</h4>
+                <div id="status-badge" class="px-2 py-1 bg-slate-100 rounded-full text-[9px] font-bold text-slate-400 uppercase tracking-tighter">GPS Connecting...</div>
+            </div>
+            <div id="map" style="height: 260px; width: 100%; border-radius: 1.8rem; z-index: 1; border: 1px solid #f1f5f9;"></div>
+            <div id="distance-info" class="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 text-center shadow-inner">
+                <p id="status-text" class="text-xs font-bold text-slate-700 italic tracking-tight">🛰️ Menghubungkan satelit GPS...</p>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    /* Styling scrollbar agar lebih tipis dan rapi */
+    /* Styling scrollbar agar lebih tipis dan modern */
     .custom-scrollbar::-webkit-scrollbar {
-        width: 5px;
+        width: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
         background: transparent;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
+        background: #e2e8f0;
         border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #cbd5e1;
     }
 </style>
 
@@ -110,6 +135,8 @@
 
     function initMap() {
         const statusText = document.getElementById('status-text');
+        const statusBadge = document.getElementById('status-badge');
+
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(
                 function(position) {
@@ -129,12 +156,17 @@
                         map.setView([currentLat, currentLng], 17);
                         marker.setLatLng([currentLat, currentLng]);
                     }
+                    
                     statusText.innerText = "🛰️ GPS Terkunci (Lokasi Akurat)";
-                    statusText.className = "text-xs font-bold text-green-600 italic";
+                    statusText.className = "text-xs font-bold text-emerald-600 italic";
+                    statusBadge.innerText = "Active";
+                    statusBadge.className = "px-2 py-1 bg-emerald-100 rounded-full text-[9px] font-bold text-emerald-600 uppercase tracking-tighter";
                 },
                 function(error) {
                     statusText.innerText = "❌ Akses GPS Ditolak/Gagal.";
-                    statusText.className = "text-xs font-bold text-red-600 italic";
+                    statusText.className = "text-xs font-bold text-rose-600 italic";
+                    statusBadge.innerText = "Error";
+                    statusBadge.className = "px-2 py-1 bg-rose-100 rounded-full text-[9px] font-bold text-rose-600 uppercase tracking-tighter";
                 },
                 { enableHighAccuracy: true }
             );
@@ -144,13 +176,13 @@
 
     function submitAbsensi(tipe) {
         if (!currentLat || !currentLng) {
-            Swal.fire({ icon: 'warning', title: 'GPS Belum Siap', text: 'Tunggu lokasi terdeteksi di peta.', confirmButtonColor: '#3b82f6' });
+            Swal.fire({ icon: 'warning', title: 'GPS Belum Siap', text: 'Tunggu lokasi terdeteksi di peta.', confirmButtonColor: '#4f46e5' });
             return;
         }
 
         const config = {
             title: tipe === 'masuk' ? 'Kirim Presensi Masuk?' : 'Kirim Presensi Pulang?',
-            text: "Pastikan Anda berada di area PT Saltek.",
+            text: "Pastikan Anda sudah berada di area kantor.",
             formId: tipe === 'masuk' ? 'formAbsensi' : 'formPulang'
         };
 
@@ -159,12 +191,17 @@
             text: config.text,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: tipe === 'masuk' ? '#1e40af' : '#f97316',
+            confirmButtonColor: tipe === 'masuk' ? '#4f46e5' : '#f43f5e',
             confirmButtonText: 'Ya, Kirim',
-            cancelButtonText: 'Batal'
+            cancelButtonText: 'Batal',
+            customClass: {
+                popup: 'rounded-[2rem]',
+                confirmButton: 'rounded-xl px-6 py-3',
+                cancelButton: 'rounded-xl px-6 py-3'
+            }
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({ title: 'Mengirim...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+                Swal.fire({ title: 'Memverifikasi...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
                 document.getElementById(config.formId).submit();
             }
         });
