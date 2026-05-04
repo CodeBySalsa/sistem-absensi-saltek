@@ -27,7 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/store', [AbsensiController::class, 'store'])->name('store');
         
         // --- TAMBAHAN ROUTE UNTUK ABSEN PULANG ---
-        // Route ini yang tadi menyebabkan error "Route [absensi.pulang] not defined"
+        // Menangani request dari tombol "Absen Pulang" di Dashboard
         Route::post('/pulang', [AbsensiController::class, 'pulang'])->name('pulang');
         
         // Update Absensi (untuk keperluan edit/admin)

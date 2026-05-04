@@ -73,7 +73,7 @@ class AbsensiController extends Controller
             'user_id' => $user->id,
             'tanggal' => date('Y-m-d'),
             'jam_masuk' => date('H:i:s'),
-            'status' => $statusFinal, // Menggunakan status Hadir atau Terlambat
+            'status' => $statusFinal, 
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'keterangan' => $keteranganSistem 
@@ -84,27 +84,66 @@ class AbsensiController extends Controller
 
     /**
      * Menangani Absen Pulang
+     * Mengupdate jam pulang dan koordinat lokasi saat pulang
+     */
+    public function pulang(Request $request)
+    {
+        $user = Auth::user();
+
+        // Validasi GPS saat pulang
+        $request->validate([
+            'latitude' => 'required',
+            'longitude' => 'required',
+        ], [
+            'latitude.required' => 'Lokasi GPS pulang belum terdeteksi.',
+            'longitude.required' => 'Lokasi GPS pulang belum terdeteksi.',
+        ]);
+
+        // Mencari data absensi hari ini milik user tersebut
+        $absensi = Absensi::where('karyawan_id', $user->karyawan->id)
+                          ->where('tanggal', date('Y-m-d'))
+                          ->first();
+
+        if (!$absensi) {
+            return redirect()->back()->with('error', 'Data absensi masuk tidak ditemukan.');
+        }
+
+        if ($absensi->jam_pulang) {
+            return redirect()->back()->with('error', 'Anda sudah melakukan absen pulang hari ini.');
+        }
+
+        // Update data pulang
+        $absensi->update([
+            'jam_pulang' => date('H:i:s'),
+            'status' => 'Selesai',
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Berhasil absen pulang! Hati-hati di jalan.');
+    }
+
+    /**
+     * Menangani Update Absensi (Tetap dipertahankan sesuai kode awalmu)
      */
     public function update(Request $request, $id)
     {
         $user = Auth::user();
         
-        // Memastikan absensi yang diupdate adalah milik user yang sedang login
         $absensi = Absensi::where('id', $id)
                           ->where('karyawan_id', $user->karyawan->id)
                           ->firstOrFail();
         
-        // Update jam pulang dan ubah status menjadi Selesai
         $absensi->update([
             'jam_pulang' => date('H:i:s'),
             'status' => 'Selesai'
         ]);
 
-        return back()->with('success', 'Berhasil absen pulang! Hati-hati di jalan.');
+        return back()->with('success', 'Berhasil update data absensi.');
     }
 
     /**
-     * Menangani Pengajuan Izin/Sakit (Backup jika dipanggil dari controller ini)
+     * Menangani Pengajuan Izin/Sakit
      */
     public function izinSakit(Request $request)
     {

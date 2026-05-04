@@ -54,6 +54,14 @@ class DashboardController extends Controller
                                 ->latest('tanggal')
                                 ->take(10) 
                                 ->get();
+
+            // --- TAMBAHAN: Logika 7 Hari Terakhir ---
+            // Mengisi variabel recentActivities agar tabel di dashboard karyawan tidak kosong
+            $recentActivities = Absensi::with(['karyawan'])
+                                ->where('karyawan_id', $karyawanId)
+                                ->where('tanggal', '>=', Carbon::now()->subDays(7)) 
+                                ->latest('tanggal')
+                                ->get();
         }
 
         // 3. Logika Khusus Admin
@@ -69,11 +77,10 @@ class DashboardController extends Controller
                                 ->whereIn('status', ['Izin', 'Sakit'])
                                 ->count();
 
-            // Tambahan: Memuat relasi 'user' agar di view admin $activity->user->name tidak error
+            // Admin melihat aktivitas terbaru dari SEMUA karyawan
             $recentActivities = Absensi::with(['karyawan', 'user'])
-                                    ->whereDate('tanggal', $hariIni)
                                     ->latest()
-                                    ->take(5)
+                                    ->take(10)
                                     ->get();
 
             // REKAPITULASI STATISTIK (Menampilkan semua karyawan)
@@ -146,8 +153,6 @@ class DashboardController extends Controller
             'jam_masuk'   => now()->format('H:i:s'), 
         ]);
 
-        // SweetAlert flash message (jika kamu pakai package realrashid/sweet-alert)
-        // atau sekedar session flash biasa
         return back()->with('success', 'Berhasil mengirimkan status ' . $request->status);
     }
 }
