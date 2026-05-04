@@ -69,8 +69,8 @@ class DashboardController extends Controller
                                 ->whereIn('status', ['Izin', 'Sakit'])
                                 ->count();
 
-            // 5 aktivitas terbaru hari ini - Memuat relasi 'karyawan'
-            $recentActivities = Absensi::with('karyawan')
+            // Tambahan: Memuat relasi 'user' agar di view admin $activity->user->name tidak error
+            $recentActivities = Absensi::with(['karyawan', 'user'])
                                     ->whereDate('tanggal', $hariIni)
                                     ->latest()
                                     ->take(5)
@@ -80,7 +80,6 @@ class DashboardController extends Controller
             $rekapBulanan = Karyawan::select('id', 'nama_lengkap') 
                 ->withCount([
                     'absensi as total_hadir' => function ($query) use ($bulanIni, $tahunIni) {
-                        // Menghitung status Hadir, Selesai, dan Terlambat sebagai kehadiran
                         $query->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
                               ->whereMonth('tanggal', $bulanIni)
                               ->whereYear('tanggal', $tahunIni);
@@ -137,15 +136,18 @@ class DashboardController extends Controller
             return back()->with('error', 'Anda sudah melakukan absensi atau pengajuan hari ini.');
         }
 
+        // Simpan data dengan menyertakan user_id dan karyawan_id
         Absensi::create([
             'karyawan_id' => $user->karyawan->id,
-            'user_id' => $user->id, 
-            'tanggal' => Carbon::today(),
-            'status' => $request->status,
-            'keterangan' => $request->keterangan,
-            'jam_masuk' => now()->format('H:i:s'), 
+            'user_id'     => $user->id, 
+            'tanggal'     => Carbon::today(),
+            'status'      => $request->status,
+            'keterangan'  => $request->keterangan,
+            'jam_masuk'   => now()->format('H:i:s'), 
         ]);
 
+        // SweetAlert flash message (jika kamu pakai package realrashid/sweet-alert)
+        // atau sekedar session flash biasa
         return back()->with('success', 'Berhasil mengirimkan status ' . $request->status);
     }
 }

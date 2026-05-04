@@ -169,7 +169,7 @@
                 </div>
             </div>
 
-            {{-- 5. TABEL AKTIVITAS (Kembali Dimasukkan) --}}
+            {{-- 5. TABEL AKTIVITAS --}}
             <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-50 overflow-hidden">
                 <div class="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
                     <h3 class="font-black text-slate-800 uppercase tracking-tight flex items-center gap-2 text-lg">
@@ -204,6 +204,43 @@
                 </div>
             </div>
 
+            {{-- 6. TABEL REKAPITULASI STATISTIK (KHUSUS ADMIN) --}}
+            @if(Auth::user()->role == 'admin')
+            <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-50 overflow-hidden mt-8">
+                <div class="p-8 border-b border-slate-50 bg-indigo-50/30">
+                    <h3 class="font-black text-slate-800 uppercase tracking-tight flex items-center gap-2 text-lg">
+                        <span>📊</span> Rekapitulasi Absensi - {{ $namaBulan ?? 'Bulan Ini' }}
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-slate-100">
+                                <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Nama Karyawan</th>
+                                <th class="px-8 py-5 text-center text-[10px] font-black text-emerald-500 uppercase tracking-widest">Hadir</th>
+                                <th class="px-8 py-5 text-center text-[10px] font-black text-amber-500 uppercase tracking-widest">Izin</th>
+                                <th class="px-8 py-5 text-center text-[10px] font-black text-rose-500 uppercase tracking-widest">Sakit</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            @forelse($rekapBulanan ?? [] as $rekap)
+                            <tr class="hover:bg-slate-50/50 transition">
+                                <td class="px-8 py-5 text-sm font-bold text-slate-700">{{ $rekap->nama_lengkap }}</td>
+                                <td class="px-8 py-5 text-center text-sm font-black text-slate-600">{{ $rekap->total_hadir ?? 0 }}</td>
+                                <td class="px-8 py-5 text-center text-sm font-black text-slate-600">{{ $rekap->total_izin ?? 0 }}</td>
+                                <td class="px-8 py-5 text-center text-sm font-black text-slate-600">{{ $rekap->total_sakit ?? 0 }}</td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="px-8 py-10 text-center text-slate-400 italic font-medium">Data rekapitulasi belum tersedia untuk bulan ini.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endif
+
         </div>
     </div>
 
@@ -213,6 +250,7 @@
         <div class="relative flex items-center justify-center min-h-screen p-4 pointer-events-none">
             <div id="modalContent" class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden transform translate-y-full transition-transform duration-500 ease-out pointer-events-auto">
                 <div class="p-6">
+                    {{-- Konten Panel Absensi --}}
                     @include('absensi.panel-content')
                 </div>
             </div>
@@ -221,13 +259,16 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // Realtime Clock
         function updateClock() {
             const now = new Date();
-            document.getElementById('realtime-clock').textContent = now.toLocaleTimeString('id-ID', { hour12: false });
+            const clock = document.getElementById('realtime-clock');
+            if(clock) clock.textContent = now.toLocaleTimeString('id-ID', { hour12: false });
         }
         setInterval(updateClock, 1000);
         updateClock();
 
+        // Countdown Timer
         function updateCountdown() {
             const now = new Date();
             const deadline = new Date();
@@ -248,6 +289,7 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
+        // Modal Functions
         function openAbsensiModal() {
             const modal = document.getElementById('absensiModal');
             const content = document.getElementById('modalContent');
@@ -262,10 +304,16 @@
             setTimeout(() => modal.classList.add('hidden'), 500);
         }
 
+        // Form Submission Confirmation
         function konfirmasiStatus(status) {
             const keterangan = document.getElementById('keterangan_input').value;
             if(!keterangan) {
-                Swal.fire('Eitss!', 'Isi alasannya dulu ya.', 'warning');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Eitss!',
+                    text: 'Isi alasannya dulu ya.',
+                    confirmButtonColor: '#fbbf24'
+                });
                 return;
             }
             Swal.fire({
@@ -274,7 +322,9 @@
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#4f46e5',
-                confirmButtonText: 'Ya, Kirim!'
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Kirim!',
+                cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('status_input').value = status;

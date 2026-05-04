@@ -16,8 +16,8 @@ class Absensi extends Model
     protected $table = 'absensis';
 
     /**
-     * mass assignment protection.
-     * Pastikan semua kolom yang dikirim dari controller terdaftar di sini.
+     * Mass assignment protection.
+     * Semua kolom yang dikirim dari DashboardController sudah terdaftar di sini.
      */
     protected $fillable = [
         'karyawan_id',
@@ -25,15 +25,24 @@ class Absensi extends Model
         'tanggal',
         'jam_masuk',
         'jam_pulang',
-        'status',      // Digunakan untuk: Hadir, Terlambat, Izin, Sakit, Selesai
-        'latitude',    // Penting untuk fitur koordinat lokasi PT Saltek
-        'longitude',   // Penting untuk fitur koordinat lokasi PT Saltek
-        'keterangan',  // Menyimpan alasan atau catatan sistem (Tepat Waktu/Terlambat)
+        'status',      // Status: Hadir, Terlambat, Izin, Sakit, Selesai
+        'latitude',    // Koordinat lokasi presensi PT Saltek
+        'longitude',   // Koordinat lokasi presensi PT Saltek
+        'keterangan',  // Catatan alasan izin/sakit atau info sistem
+    ];
+
+    /**
+     * Casting atribut agar otomatis menjadi tipe data tertentu.
+     * Ini memudahkan manipulasi tanggal di Dashboard.
+     */
+    protected $casts = [
+        'tanggal' => 'date',
+        'created_at' => 'datetime',
     ];
 
     /**
      * Menghubungkan data Absensi ke User.
-     * Digunakan jika ingin mengambil data user langsung dari tabel absensi.
+     * Digunakan untuk mengambil data user (email/nama akun) langsung dari tabel absensi.
      */
     public function user(): BelongsTo
     {
@@ -42,17 +51,17 @@ class Absensi extends Model
 
     /**
      * Menghubungkan data Absensi ke profil Karyawan.
-     * Relasi ini krusial untuk menampilkan nama karyawan di Dashboard Admin
-     * dan Monitoring Aktivitas Terbaru.
+     * Relasi ini sangat penting untuk Dashboard Monitoring Admin.
      */
     public function karyawan(): BelongsTo
     {
         /**
-         * withDefault() mencegah error "attempt to read property on null" 
-         * jika data karyawan tidak sengaja terhapus di database.
+         * withDefault() sangat membantu untuk mencegah aplikasi crash 
+         * jika relasi data sedang bermasalah.
          */
         return $this->belongsTo(Karyawan::class, 'karyawan_id')->withDefault([
-            'nama_lengkap' => 'Data Karyawan Terhapus'
+            'nama_lengkap' => 'Karyawan Tidak Ditemukan',
+            'jabatan' => '-'
         ]);
     }
 }
