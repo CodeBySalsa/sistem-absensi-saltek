@@ -12,7 +12,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Set locale ke Bahasa Indonesia agar nama bulan dan hari sesuai
         Carbon::setLocale('id');
         
         $sekarang = Carbon::now();
@@ -23,67 +22,54 @@ class DashboardController extends Controller
         
         $user = Auth::user();
         
-        // 1. Inisialisasi variabel default
         $totalHadir = 0;
         $totalKaryawan = 0;
         $hadirHariIni = 0;
         $izinSakit = 0;
         $recentActivities = collect(); 
         $rekapBulanan = collect(); 
+        $ringkasanStatistik = null; 
         $absensis = collect(); 
         $cekAbsensi = null;
 
-        // 2. Logika untuk User (Karyawan)
         if ($user->karyawan) {
             $karyawanId = $user->karyawan->id;
-
-            // Ambil status absen user hari ini untuk indikator dashboard
             $cekAbsensi = Absensi::where('karyawan_id', $karyawanId)
                                 ->whereDate('tanggal', $hariIni)
                                 ->first();
 
-            // Total hadir bulan ini (Termasuk status Hadir, Selesai, dan Terlambat)
             $totalHadir = Absensi::where('karyawan_id', $karyawanId)
                                 ->whereMonth('tanggal', $bulanIni)
                                 ->whereYear('tanggal', $tahunIni)
                                 ->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
                                 ->count();
 
-            // 10 riwayat terbaru milik user
-            $absensis = Absensi::where('karyawan_id', $karyawanId)
-                                ->latest('tanggal')
-                                ->take(10) 
-                                ->get();
-
-            // --- TAMBAHAN: Logika 7 Hari Terakhir ---
-            // Mengisi variabel recentActivities agar tabel di dashboard karyawan tidak kosong
-            $recentActivities = Absensi::with(['karyawan'])
-                                ->where('karyawan_id', $karyawanId)
+            $recentActivities = Absensi::where('karyawan_id', $karyawanId)
                                 ->where('tanggal', '>=', Carbon::now()->subDays(7)) 
                                 ->latest('tanggal')
                                 ->get();
         }
 
-        // 3. Logika Khusus Admin
         if ($user->role == 'admin') {
             $totalKaryawan = Karyawan::count();
-
-            // Statistik Hari Ini
             $hadirHariIni = Absensi::whereDate('tanggal', $hariIni)
                                     ->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
                                     ->count();
-
             $izinSakit = Absensi::whereDate('tanggal', $hariIni)
                                 ->whereIn('status', ['Izin', 'Sakit'])
                                 ->count();
 
-            // Admin melihat aktivitas terbaru dari SEMUA karyawan
-            $recentActivities = Absensi::with(['karyawan', 'user'])
+            $recentActivities = Absensi::with(['karyawan'])
+                                    ->whereDate('tanggal', $hariIni)
                                     ->latest()
-                                    ->take(10)
                                     ->get();
 
-            // REKAPITULASI STATISTIK (Menampilkan semua karyawan)
+            $ringkasanStatistik = (object) [
+                'total_hadir' => Absensi::whereMonth('tanggal', $bulanIni)->whereYear('tanggal', $tahunIni)->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])->count(),
+                'total_izin'  => Absensi::whereMonth('tanggal', $bulanIni)->whereYear('tanggal', $tahunIni)->where('status', 'Izin')->count(),
+                'total_sakit' => Absensi::whereMonth('tanggal', $bulanIni)->whereYear('tanggal', $tahunIni)->where('status', 'Sakit')->count(),
+            ];
+
             $rekapBulanan = Karyawan::select('id', 'nama_lengkap') 
                 ->withCount([
                     'absensi as total_hadir' => function ($query) use ($bulanIni, $tahunIni) {
@@ -102,10 +88,9 @@ class DashboardController extends Controller
                               ->whereYear('tanggal', $tahunIni);
                     }
                 ])
-                ->get(); 
+                ->get();
         }
 
-        // Mengirimkan data ke view dashboard
         return view('dashboard', compact(
             'totalHadir', 
             'totalKaryawan', 
@@ -113,15 +98,13 @@ class DashboardController extends Controller
             'izinSakit', 
             'recentActivities',
             'rekapBulanan',
+            'ringkasanStatistik',
             'absensis',
             'namaBulan',
             'cekAbsensi'
         ));
     }
 
-    /**
-     * Fitur Izin dan Sakit dari Dashboard
-     */
     public function izinSakit(Request $request)
     {
         $request->validate([
@@ -130,20 +113,11 @@ class DashboardController extends Controller
         ]);
 
         $user = Auth::user();
+        if (!$user->karyawan) return back()->with('error', 'Profil tidak ditemukan.');
 
-        if (!$user->karyawan) {
-            return back()->with('error', 'Profil karyawan Anda tidak ditemukan.');
-        }
+        $sudahAbsen = Absensi::where('karyawan_id', $user->karyawan->id)->whereDate('tanggal', Carbon::today())->exists();
+        if ($sudahAbsen) return back()->with('error', 'Anda sudah absen hari ini.');
 
-        $sudahAbsen = Absensi::where('karyawan_id', $user->karyawan->id)
-                             ->whereDate('tanggal', Carbon::today())
-                             ->exists();
-
-        if ($sudahAbsen) {
-            return back()->with('error', 'Anda sudah melakukan absensi atau pengajuan hari ini.');
-        }
-
-        // Simpan data dengan menyertakan user_id dan karyawan_id
         Absensi::create([
             'karyawan_id' => $user->karyawan->id,
             'user_id'     => $user->id, 
