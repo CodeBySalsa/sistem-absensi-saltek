@@ -36,7 +36,7 @@ class Absensi extends Model
      * Ini memudahkan manipulasi tanggal di Dashboard.
      */
     protected $casts = [
-        'tanggal' => 'date',
+        //'tanggal' => 'date',
         'created_at' => 'datetime',
     ];
 

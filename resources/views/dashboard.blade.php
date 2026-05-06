@@ -31,6 +31,8 @@
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
         /* Pastikan map memiliki tinggi */
         #map-preview { height: 200px; width: 100%; border-radius: 1.5rem; z-index: 1; }
+        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin-slow { animation: spin-slow 8s linear infinite; }
     </style>
 
     <div class="py-10 bg-slate-50/50 min-h-screen">
@@ -160,7 +162,7 @@
                     @endif
                 </div>
 
-                {{-- PERBAIKAN: Logika Tombol Absen agar tidak berulang --}}
+                {{-- KOLOM KETIGA: LOGIKA DINAMIS --}}
                 @if(!$cekAbsensi)
                     {{-- Belum absen sama sekali --}}
                     <div class="relative group cursor-pointer" onclick="handleAbsensi()">
@@ -170,7 +172,19 @@
                             <h4 class="font-black text-slate-800 uppercase tracking-widest text-xs">Klik Untuk Absen</h4>
                         </div>
                     </div>
-                @elseif($cekAbsensi && !$cekAbsensi->jam_keluar && in_array($cekAbsensi->status, ['Hadir', 'Terlambat']))
+                @elseif($cekAbsensi->status == 'Sakit')
+                    <div class="bg-white rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-rose-100 shadow-lg text-center">
+                        <div class="text-5xl mb-3 animate-bounce">🤒</div>
+                        <h4 class="font-black text-slate-800 uppercase tracking-tighter text-sm">Lekas Sembuh!</h4>
+                        <p class="text-[9px] text-slate-400 mt-1 leading-tight">Istirahat yang cukup ya, {{ Auth::user()->name }}!</p>
+                    </div>
+                @elseif($cekAbsensi->status == 'Izin')
+                    <div class="bg-white rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-amber-100 shadow-lg text-center">
+                        <div class="text-5xl mb-3 animate-pulse">🗓️</div>
+                        <h4 class="font-black text-slate-800 uppercase tracking-tighter text-sm">Sedang Izin</h4>
+                        <p class="text-[9px] text-slate-400 mt-1 leading-tight">Urusan Anda terpantau sistem. Tetap semangat!</p>
+                    </div>
+                @elseif(!$cekAbsensi->jam_keluar && in_array($cekAbsensi->status, ['Hadir', 'Terlambat']))
                     {{-- Sudah absen masuk, belum absen pulang --}}
                     <div class="relative group cursor-pointer" onclick="handleAbsensi()">
                         <div class="absolute -inset-1 bg-gradient-to-r from-rose-600 to-orange-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition"></div>
@@ -180,10 +194,11 @@
                         </div>
                     </div>
                 @else
-                    {{-- Sudah selesai semua (Masuk & Pulang) atau sedang Izin/Sakit --}}
-                    <div class="bg-slate-100 rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-200 shadow-inner opacity-60">
-                        <div class="w-20 h-20 bg-slate-200 rounded-3xl flex items-center justify-center text-4xl mb-4">✨</div>
-                        <h4 class="font-black text-slate-400 uppercase tracking-widest text-xs text-center">Aktivitas Selesai</h4>
+                    {{-- Sudah Selesai Kerja (Sudah Absen Pulang) --}}
+                    <div class="bg-slate-100 rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-200 shadow-inner opacity-80 text-center">
+                        <div class="w-16 h-16 bg-slate-200 rounded-3xl flex items-center justify-center text-3xl mb-3">✨</div>
+                        <h4 class="font-black text-slate-500 uppercase tracking-widest text-xs">Aktivitas Selesai</h4>
+                        <p class="text-[9px] text-slate-400 mt-1 italic">Terima kasih untuk hari ini!</p>
                     </div>
                 @endif
             </div>
@@ -261,14 +276,13 @@
         </div>
     </div>
 
-    {{-- MODAL PERBAIKAN: Menambahkan elemen div#map-preview --}}
+    {{-- MODAL --}}
     <div id="absensiModal" class="fixed inset-0 z-[999] hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAbsensiModal()"></div>
         <div class="relative flex items-center justify-center min-h-screen p-4">
             <div id="modalContent" class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl p-8 transform translate-y-full transition-transform duration-500">
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight mb-4">Konfirmasi Lokasi</h2>
-                    {{-- Container Map Baru --}}
                     <div id="map-preview" class="border-4 border-slate-50 shadow-inner"></div>
                 </div>
                 <form id="formUtamaAbsensi" action="{{ route('absensi.store') }}" method="POST">
@@ -282,7 +296,7 @@
     </div>
 
     <script>
-        let map; // Variabel global untuk map
+        let map;
 
         function updateClock() {
             const clock = document.getElementById('realtime-clock');
@@ -309,7 +323,7 @@
                     document.getElementById('absensiModal').classList.remove('hidden');
                     setTimeout(() => {
                         document.getElementById('modalContent').classList.remove('translate-y-full');
-                        initMap(lat, lng); // Panggil inisialisasi map
+                        initMap(lat, lng);
                     }, 10);
                 }, (err) => {
                     Swal.fire('Error', 'Gagal mengambil lokasi. Pastikan izin GPS aktif.', 'error');
@@ -318,17 +332,12 @@
         }
 
         function initMap(lat, lng) {
-            // Hapus map lama jika sudah ada agar tidak error saat re-init
             if (map) { map.remove(); }
-            
             map = L.map('map-preview').setView([lat, lng], 16);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap'
             }).addTo(map);
-            
-            L.marker([lat, lng]).addTo(map)
-                .bindPopup('Lokasi Anda Sekarang')
-                .openPopup();
+            L.marker([lat, lng]).addTo(map).bindPopup('Lokasi Anda Sekarang').openPopup();
         }
 
         function closeAbsensiModal() {

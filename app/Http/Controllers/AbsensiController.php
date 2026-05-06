@@ -11,6 +11,14 @@ use Carbon\Carbon;
 class AbsensiController extends Controller
 {
     /**
+     * Koordinat Kantor PT Saltek Dumpang Jaya
+     * Silakan ganti angka ini dengan titik koordinat kantor yang sebenarnya
+     */
+    private $officeLat = -3.315000; // Ganti dengan latitude kantor asli
+    private $officeLng = 114.590000; // Ganti dengan longitude kantor asli
+    private $radiusLimit = 20; // Batas radius dalam meter
+
+    /**
      * Menampilkan halaman riwayat absensi
      */
     public function index()
@@ -18,10 +26,8 @@ class AbsensiController extends Controller
         $user = Auth::user();
         
         if ($user->role == 'admin') {
-            // Admin melihat semua riwayat karyawan
             $absensis = Absensi::with('karyawan')->latest()->get();
         } else {
-            // Karyawan hanya melihat riwayat miliknya sendiri
             $absensis = Absensi::where('karyawan_id', $user->karyawan->id ?? 0)
                                 ->latest()
                                 ->get();
@@ -31,7 +37,20 @@ class AbsensiController extends Controller
     }
 
     /**
-     * Menangani Absen Masuk (Hadir) dengan Koordinat GPS
+     * Fungsi Hitung Jarak (Haversine Formula)
+     * Untuk memastikan user berada dalam radius yang ditentukan
+     */
+    private function calculateDistance($lat1, $lon1, $lat2, $lon2) {
+        $earthRadius = 6371000; // Radius bumi dalam meter
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+        $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon/2) * sin($dLon/2);
+        $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+        return $earthRadius * $c;
+    }
+
+    /**
+     * Menangani Absen Masuk (Hadir)
      */
     public function store(Request $request)
     {
@@ -41,7 +60,6 @@ class AbsensiController extends Controller
             return back()->with('error', 'Data karyawan tidak ditemukan.');
         }
 
-        // Validasi: Memastikan data GPS terkirim dari modal
         $request->validate([
             'latitude' => 'required',
             'longitude' => 'required',
@@ -50,7 +68,13 @@ class AbsensiController extends Controller
             'longitude.required' => 'Lokasi GPS belum terdeteksi.',
         ]);
 
-        // Cek apakah hari ini sudah ada data (Hadir/Izin/Sakit/Terlambat)
+        // Proteksi Jarak Radius 20 Meter
+        $distance = $this->calculateDistance($request->latitude, $request->longitude, $this->officeLat, $this->officeLng);
+        
+        if ($distance > $this->radiusLimit) {
+            return back()->with('error', 'Gagal! Jarak Anda ' . round($distance) . 'm dari kantor. Maksimal radius ' . $this->radiusLimit . 'm.');
+        }
+
         $sudahInput = Absensi::where('karyawan_id', $user->karyawan->id)
                             ->where('tanggal', date('Y-m-d'))
                             ->first();
@@ -59,15 +83,12 @@ class AbsensiController extends Controller
             return back()->with('error', 'Anda sudah melakukan absensi atau pengajuan hari ini.');
         }
 
-        // --- LOGIC SINKRONISASI DASHBOARD ---
         $jamSekarang = date('H:i');
         $batasWaktu = '08:30';
         
-        // Jika lewat 08:30, status utama menjadi 'Terlambat' agar indikator di dashboard berubah
         $statusFinal = ($jamSekarang > $batasWaktu) ? 'Terlambat' : 'Hadir';
         $keteranganSistem = ($jamSekarang > $batasWaktu) ? 'Terlambat Masuk' : 'Tepat Waktu';
 
-        // Simpan Data Absensi
         Absensi::create([
             'karyawan_id' => $user->karyawan->id,
             'user_id' => $user->id,
@@ -84,13 +105,11 @@ class AbsensiController extends Controller
 
     /**
      * Menangani Absen Pulang
-     * Mengupdate jam pulang dan koordinat lokasi saat pulang
      */
     public function pulang(Request $request)
     {
         $user = Auth::user();
 
-        // Validasi GPS saat pulang
         $request->validate([
             'latitude' => 'required',
             'longitude' => 'required',
@@ -99,7 +118,13 @@ class AbsensiController extends Controller
             'longitude.required' => 'Lokasi GPS pulang belum terdeteksi.',
         ]);
 
-        // Mencari data absensi hari ini milik user tersebut
+        // Proteksi Jarak Radius 20 Meter saat Pulang
+        $distance = $this->calculateDistance($request->latitude, $request->longitude, $this->officeLat, $this->officeLng);
+        
+        if ($distance > $this->radiusLimit) {
+            return back()->with('error', 'Gagal! Anda harus berada di area kantor untuk melakukan absen pulang.');
+        }
+
         $absensi = Absensi::where('karyawan_id', $user->karyawan->id)
                           ->where('tanggal', date('Y-m-d'))
                           ->first();
@@ -112,7 +137,6 @@ class AbsensiController extends Controller
             return redirect()->back()->with('error', 'Anda sudah melakukan absen pulang hari ini.');
         }
 
-        // Update data pulang
         $absensi->update([
             'jam_pulang' => date('H:i:s'),
             'status' => 'Selesai',
@@ -121,25 +145,6 @@ class AbsensiController extends Controller
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Berhasil absen pulang! Hati-hati di jalan.');
-    }
-
-    /**
-     * Menangani Update Absensi (Tetap dipertahankan sesuai kode awalmu)
-     */
-    public function update(Request $request, $id)
-    {
-        $user = Auth::user();
-        
-        $absensi = Absensi::where('id', $id)
-                          ->where('karyawan_id', $user->karyawan->id)
-                          ->firstOrFail();
-        
-        $absensi->update([
-            'jam_pulang' => date('H:i:s'),
-            'status' => 'Selesai'
-        ]);
-
-        return back()->with('success', 'Berhasil update data absensi.');
     }
 
     /**

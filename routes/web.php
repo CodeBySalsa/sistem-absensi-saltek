@@ -13,7 +13,7 @@ Route::get('/', function () {
 // GROUP 1: KARYAWAN & MONITORING (Akses Umum setelah Login)
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    // 1. Dashboard Utama (Monitoring)
+    // 1. Dashboard Utama (Monitoring & Statistik)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     // Fitur Izin/Sakit dari Dashboard
@@ -23,11 +23,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('absensi')->name('absensi.')->group(function () {
         Route::get('/', [AbsensiController::class, 'index'])->name('index');
         
-        // Simpan Absensi Masuk (Digunakan oleh tombol di Modal)
-        Route::post('/store', [AbsensiController::class, 'store'])->name('store');
+        /**
+         * PENTING: Route Store diarahkan ke DashboardController::storeAbsen
+         * Ini agar proteksi jarak 20 meter dan kalkulasi statistik hari ini berjalan.
+         */
+        Route::post('/store', [DashboardController::class, 'storeAbsen'])->name('store');
         
-        // --- TAMBAHAN ROUTE UNTUK ABSEN PULANG ---
-        // Menangani request dari tombol "Absen Pulang" di Dashboard
+        // Menangani request dari tombol "Absen Pulang"
         Route::post('/pulang', [AbsensiController::class, 'pulang'])->name('pulang');
         
         // Update Absensi (untuk keperluan edit/admin)
