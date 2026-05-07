@@ -6,33 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Jalankan migrasi untuk membuat tabel absensis.
-     */
     public function up(): void
     {
         Schema::create('absensis', function (Blueprint $table) {
             $table->id();
-            // Menghubungkan ke tabel karyawans
+            // ID Karyawan dan ID User (Penting untuk relasi)
             $table->foreignId('karyawan_id')->constrained('karyawans')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             
-            $table->date('tanggal'); // Menyimpan tanggal (YYYY-MM-DD)
-            $table->time('jam_masuk')->nullable(); // Jam klik masuk
-            $table->time('jam_keluar')->nullable(); // Jam klik pulang
+            $table->string('tanggal'); // Pakai string agar SQLite lebih stabil
+            $table->time('jam_masuk')->nullable();
+            $table->time('jam_pulang')->nullable(); // Kita samakan jadi jam_pulang sesuai Controller
             
-            // Status: Hadir, Terlambat, Izin, Alpa
-            $table->string('status'); 
+            $table->string('status'); // Hadir, Terlambat, Izin, Sakit, Selesai
             
-            // Keterangan tambahan (misal: alasan izin atau lokasi)
+            // KOLOM BARU UNTUK GPS (Tadi ini yang kurang)
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            
             $table->text('keterangan')->nullable(); 
-            
             $table->timestamps();
         });
     }
 
-    /**
-     * Batalkan migrasi.
-     */
     public function down(): void
     {
         Schema::dropIfExists('absensis');

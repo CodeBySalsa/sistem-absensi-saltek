@@ -69,6 +69,11 @@
                     {{ session('success') }}
                 </div>
             @endif
+            @if(session('error'))
+                <div class="bg-red-100 text-red-700 p-3 rounded-xl mb-4 text-sm font-medium border border-red-200">
+                    {{ session('error') }}
+                </div>
+            @endif
 
             @php
                 $karyawan = Auth::user()->karyawan;
@@ -84,6 +89,9 @@
                 @elseif(!$absenHariIni)
                     <form action="{{ route('absensi.store') }}" method="POST">
                         @csrf
+                        <input type="hidden" name="latitude" class="lat-input">
+                        <input type="hidden" name="longitude" class="lng-input">
+                        
                         <button type="submit" id="btn-absen" disabled class="w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all text-lg">
                             ABSEN MASUK SEKARANG
                         </button>
@@ -99,6 +107,9 @@
                     <form action="{{ route('absensi.update', $absenHariIni->id) }}" method="POST">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="latitude" class="lat-input">
+                        <input type="hidden" name="longitude" class="lng-input">
+
                         <button type="submit" id="btn-absen" disabled class="w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all text-lg">
                             ABSEN PULANG SEKARANG
                         </button>
@@ -162,7 +173,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // KOORDINAT KANTOR PT SALTEK (Sesuaikan jika titiknya bergeser)
+        // KOORDINAT KANTOR PT SALTEK
         const KANTOR_LAT = 3.5952; 
         const KANTOR_LNG = 98.6722;
         const RADIUS_MAKS = 20; 
@@ -176,7 +187,7 @@
         let userMarker;
 
         function hitungJarak(lat1, lon1, lat2, lon2) {
-            const R = 6371e3;
+            const R = 6371e3; // Radius bumi dalam meter
             const p1 = lat1 * Math.PI/180;
             const p2 = lat2 * Math.PI/180;
             const dp = (lat2-lat1) * Math.PI/180;
@@ -193,6 +204,10 @@
                 
                 const btn = document.getElementById('btn-absen');
                 const info = document.getElementById('distance-info');
+
+                // ISI VALUE INPUT LATITUDE & LONGITUDE FORM AGAR MASUK KE CONTROLLER
+                document.querySelectorAll('.lat-input').forEach(input => input.value = uLat);
+                document.querySelectorAll('.lng-input').forEach(input => input.value = uLng);
 
                 if (userMarker) map.removeLayer(userMarker);
                 userMarker = L.circleMarker([uLat, uLng], { radius: 7, color: 'white', fillColor: '#ef4444', fillOpacity: 1, weight: 2 }).addTo(map);
