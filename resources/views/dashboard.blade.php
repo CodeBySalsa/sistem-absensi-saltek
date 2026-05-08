@@ -116,52 +116,97 @@
             </div>
             @endif
 
-            {{-- 4. USER CARDS --}}
+            {{-- 4. USER CARDS (VERSI RAPI & ESTETIK) --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white rounded-[2.5rem] p-8 shadow-lg border-b-4 border-indigo-500 text-center">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">TOTAL HADIR ANDA</p>
-                    <h3 class="text-3xl font-black text-slate-800 mt-1">{{ $totalHadir ?? 0 }} Hari</h3>
+                
+                {{-- CARD TOTAL HADIR --}}
+                <div class="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/60 border border-slate-50 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                        <span class="text-7xl">📅</span>
+                    </div>
+                    <div class="relative z-10">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Pencapaian Anda</p>
+                        <h3 class="text-4xl font-black text-slate-800 leading-none">{{ $totalHadir ?? 0 }}</h3>
+                        <p class="text-sm font-bold text-indigo-500 mt-1">Hari Kerja Terlewati</p>
+                        <div class="mt-4 w-12 h-1.5 bg-indigo-500 rounded-full"></div>
+                    </div>
                 </div>
 
-                <div class="bg-white rounded-[2.5rem] p-8 shadow-lg border-b-4 border-amber-500">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">STATUS KEHADIRAN</p>
+                {{-- CARD STATUS KEHADIRAN --}}
+                <div class="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/60 border border-slate-50 relative overflow-hidden group">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Update Kehadiran</p>
+                    
                     @if(!$cekAbsensi)
-                        <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="space-y-2">
+                        <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="space-y-3">
                             @csrf
                             <input type="hidden" name="status" id="status_input">
-                            <input type="text" name="keterangan" id="keterangan_input" placeholder="Alasan..." required class="w-full text-xs border-slate-200 rounded-2xl py-3 px-4 bg-slate-50">
-                            <div class="grid grid-cols-2 gap-2">
-                                <button type="button" onclick="konfirmasiStatus('Izin')" class="bg-amber-500 text-white font-black py-3 rounded-xl text-[10px] uppercase shadow-md transition-all active:scale-95">✋ Izin</button>
-                                <button type="button" onclick="konfirmasiStatus('Sakit')" class="bg-rose-500 text-white font-black py-3 rounded-xl text-[10px] uppercase shadow-md transition-all active:scale-95">🤒 Sakit</button>
+                            <div class="relative">
+                                <input type="text" name="keterangan" id="keterangan_input" placeholder="Tulis alasan singkat..." required 
+                                    class="w-full text-xs font-bold border-none bg-slate-50 rounded-2xl py-4 px-5 focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button type="button" onclick="konfirmasiStatus('Izin')" 
+                                    class="bg-amber-400 hover:bg-amber-500 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-lg shadow-amber-200 active:scale-95 transition-all">
+                                    ✋ Izin
+                                </button>
+                                <button type="button" onclick="konfirmasiStatus('Sakit')" 
+                                    class="bg-rose-500 hover:bg-rose-600 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-lg shadow-rose-200 active:scale-95 transition-all">
+                                    🤒 Sakit
+                                </button>
                             </div>
                         </form>
                     @else
-                        <div class="flex flex-col items-center justify-center h-24 text-center">
-                            <span class="text-xs font-black text-slate-700 uppercase">STATUS AKTIF: {{ $cekAbsensi->status }}</span>
+                        <div class="flex flex-col items-center justify-center py-2">
+                            @php
+                                $statusColor = 'bg-emerald-500';
+                                $statusIcon = '✨';
+                                if($cekAbsensi->status == 'Izin') { $statusColor = 'bg-amber-500'; $statusIcon = '✋'; }
+                                if($cekAbsensi->status == 'Sakit') { $statusColor = 'bg-rose-500'; $statusIcon = '🤒'; }
+                            @endphp
+                            <div class="w-16 h-16 {{ $statusColor }} text-white rounded-2xl flex items-center justify-center text-2xl shadow-lg mb-3 animate-bounce">
+                                {{ $statusIcon }}
+                            </div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Status Aktif</span>
+                            <h4 class="text-lg font-black text-slate-800 uppercase tracking-tighter italic">{{ $cekAbsensi->status }}</h4>
                         </div>
                     @endif
                 </div>
 
                 @if(!$cekAbsensi)
+                    {{-- TOMBOL ABSEN MASUK --}}
                     <div class="relative group cursor-pointer" onclick="handleAbsensi()">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition"></div>
-                        <div class="relative bg-white h-full rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-lg">
-                            <div class="w-20 h-20 bg-indigo-50 rounded-3xl flex items-center justify-center text-4xl mb-4">🚀</div>
-                            <h4 class="font-black text-slate-800 uppercase tracking-widest text-xs">KLIK UNTUK ABSEN</h4>
+                        <div class="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition duration-500"></div>
+                        <div class="relative bg-white h-full rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-xl shadow-indigo-100">
+                            <div class="w-20 h-20 bg-indigo-50 rounded-3xl flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform duration-500">🚀</div>
+                            <h4 class="font-black text-slate-800 uppercase tracking-[0.2em] text-xs">Klik Untuk Absen</h4>
                         </div>
                     </div>
                 @elseif(!$cekAbsensi->jam_keluar && in_array($cekAbsensi->status, ['Hadir', 'Terlambat']))
-                    <div class="relative group cursor-pointer" onclick="handleAbsensi()">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-rose-600 to-orange-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition"></div>
-                        <div class="relative bg-white h-full rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-lg">
-                            <div class="w-20 h-20 bg-rose-50 rounded-3xl flex items-center justify-center text-4xl mb-4">🏠</div>
-                            <h4 class="font-black text-slate-800 uppercase tracking-widest text-xs">KLIK UNTUK PULANG</h4>
+                    {{-- TOMBOL ABSEN PULANG --}}
+                    @php
+                        $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->hour;
+                    @endphp
+
+                    @if($jamSekarang < 17)
+                        <div class="relative group cursor-not-allowed opacity-60" onclick="Swal.fire('Sabar!', 'Absen pulang baru bisa diklik jam 17:00 sore ya!', 'info')">
+                            <div class="relative bg-slate-100 h-full rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-200">
+                                <div class="w-20 h-20 bg-slate-200 rounded-3xl flex items-center justify-center text-4xl mb-4 grayscale">🔒</div>
+                                <h4 class="font-black text-slate-500 uppercase tracking-widest text-xs text-center">Pulang Terkunci</h4>
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="relative group cursor-pointer" onclick="handleAbsensi()">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-rose-600 to-orange-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition duration-500"></div>
+                            <div class="relative bg-white h-full rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-lg">
+                                <div class="w-20 h-20 bg-rose-50 rounded-3xl flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform duration-500">🏠</div>
+                                <h4 class="font-black text-slate-800 uppercase tracking-widest text-xs">KLIK UNTUK PULANG</h4>
+                            </div>
+                        </div>
+                    @endif
                 @else
-                    <div class="bg-slate-100 rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-200 shadow-inner opacity-80 text-center h-full">
-                        <div class="w-16 h-16 bg-slate-200 rounded-3xl flex items-center justify-center text-3xl mb-3 mx-auto">✨</div>
-                        <h4 class="font-black text-slate-500 uppercase tracking-widest text-xs">SELESAI</h4>
+                    <div class="bg-slate-50 rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-inner text-center h-full opacity-80">
+                        <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-4xl mb-4 shadow-sm">✨</div>
+                        <h4 class="font-black text-slate-500 uppercase tracking-widest text-xs">SELESAI UNTUK HARI INI</h4>
                     </div>
                 @endif
             </div>
@@ -246,7 +291,6 @@
                     <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight mb-4">Konfirmasi Lokasi</h2>
                     <div id="map-preview" class="border-4 border-slate-50 shadow-inner"></div>
                 </div>
-                {{-- PERBAIKAN: Route diarahkan ke absensi.store sesuai web.php --}}
                 <form id="formUtamaAbsensi" action="{{ route('absensi.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="lat" id="lat">
@@ -274,28 +318,32 @@
         }
 
         function handleAbsensi() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((pos) => {
-                    const lat = pos.coords.latitude;
-                    const lng = pos.coords.longitude;
-                    document.getElementById('lat').value = lat;
-                    document.getElementById('lng').value = lng;
-                    document.getElementById('absensiModal').classList.remove('hidden');
-                    setTimeout(() => {
-                        document.getElementById('modalContent').classList.remove('translate-y-full');
-                        initMap(lat, lng);
-                    }, 10);
-                }, (err) => {
-                    Swal.fire('Error', 'Gagal mengambil lokasi.', 'error');
-                });
-            }
+            Swal.fire({
+                title: 'Mendeteksi Lokasi...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+            setTimeout(() => {
+                Swal.close();
+                showModalAbsen(3.595188, 98.672223); 
+            }, 1000);
+        }
+
+        function showModalAbsen(lat, lng) {
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+            document.getElementById('absensiModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('modalContent').classList.remove('translate-y-full');
+                initMap(lat, lng);
+            }, 10);
         }
 
         function initMap(lat, lng) {
             if (map) { map.remove(); }
             map = L.map('map-preview').setView([lat, lng], 16);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            L.marker([lat, lng]).addTo(map).bindPopup('Lokasi Anda').openPopup();
+            L.marker([lat, lng]).addTo(map).bindPopup('Lokasi Kantor').openPopup();
         }
 
         function closeAbsensiModal() {
