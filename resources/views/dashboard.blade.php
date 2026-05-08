@@ -25,14 +25,9 @@
     <style>
         .swal2-popup { border-radius: 24px !important; }
         .custom-gradient { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); }
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
-        /* Pastikan map memiliki tinggi */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         #map-preview { height: 200px; width: 100%; border-radius: 1.5rem; z-index: 1; }
-        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .animate-spin-slow { animation: spin-slow 8s linear infinite; }
     </style>
 
     <div class="py-10 bg-slate-50/50 min-h-screen">
@@ -44,22 +39,17 @@
                     Swal.fire({ icon: 'success', title: 'Berhasil!', text: "{{ session('success') }}", showConfirmButton: false, timer: 2000 });
                 </script>
             @endif
+            @if(session('error'))
+                <script>
+                    Swal.fire({ icon: 'error', title: 'Gagal!', text: "{{ session('error') }}", showConfirmButton: true });
+                </script>
+            @endif
 
             {{-- 1. HERO BANNER --}}
             @if(Auth::user()->role !== 'admin')
-                @php
-                    $bannerGradient = 'custom-gradient';
-                    if ($cekAbsensi && $cekAbsensi->jam_keluar) {
-                        $bannerGradient = 'bg-gradient-to-br from-blue-600 to-indigo-800';
-                    } elseif ($cekAbsensi && in_array($cekAbsensi->status, ['Hadir', 'Terlambat'])) {
-                        $bannerGradient = 'bg-gradient-to-br from-emerald-500 to-teal-700';
-                    } elseif ($cekAbsensi && in_array($cekAbsensi->status, ['Izin', 'Sakit'])) {
-                        $bannerGradient = 'bg-gradient-to-br from-amber-400 to-orange-600';
-                    }
-                @endphp
-                <div class="mb-6 {{ $bannerGradient }} rounded-[2rem] p-7 text-white shadow-lg relative overflow-hidden transition-all duration-500">
+                <div class="mb-6 custom-gradient rounded-[2rem] p-7 text-white shadow-lg relative overflow-hidden transition-all duration-500">
                     <div class="relative z-10">
-                        <h1 class="text-3xl font-black uppercase tracking-tighter italic">Halo, {{ Auth::user()->name }}!</h1>
+                        <h1 class="text-3xl font-black uppercase tracking-tighter italic">HALO, {{ Auth::user()->name }}!</h1>
                         <p class="text-white/90 mt-1 font-medium text-sm max-w-xl opacity-90">Selamat datang di Sistem Absensi Digital KKN PT Saltek.</p>
                     </div>
                 </div>
@@ -80,7 +70,7 @@
                     <div>
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-1 italic">Status Real-time Anda</p>
                         <h3 class="text-2xl font-black text-slate-800 tracking-tight uppercase">
-                            @if($cekAbsensi) Sudah Absen ({{ $cekAbsensi->status }}) @else Menunggu Absensi Masuk @endif
+                            @if($cekAbsensi) Sudah Absen ({{ $cekAbsensi->status }}) @else MENUNGGU ABSENSI MASUK @endif
                         </h3>
                     </div>
                 </div>
@@ -94,42 +84,32 @@
                         <div class="space-y-2">
                             <h3 class="text-[11px] font-black tracking-[0.3em] uppercase text-indigo-400/80">Control Center PT Saltek</h3>
                             <h1 class="text-4xl font-black tracking-tighter text-white uppercase italic">
-                                Hello, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">{{ Auth::user()->name }}</span>!
+                                HELLO, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">{{ Auth::user()->name }}</span>!
                             </h1>
+                            
+                            <div class="flex flex-wrap gap-3 mt-6">
+                                <a href="{{ route('karyawan.index') }}" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-lg flex items-center gap-2">
+                                    <span>👥</span> DATA KARYAWAN
+                                </a>
+                                <a href="{{ route('karyawan.create') }}" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-lg flex items-center gap-2">
+                                    <span>➕</span> TAMBAH KARYAWAN
+                                </a>
+                            </div>
                         </div>
 
                         <div class="w-full lg:w-auto grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
                             <div class="bg-slate-800/40 border border-white/5 p-6 rounded-[2rem] flex flex-col items-center text-center">
                                 <h3 class="text-3xl font-black text-white tracking-tighter">{{ $totalKaryawan ?? 0 }}</h3>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Total Anggota</p>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">ANGGOTA</p>
                             </div>
                             <div class="bg-emerald-500/10 border border-emerald-500/20 p-6 rounded-[2rem] flex flex-col items-center text-center">
                                 <h3 class="text-3xl font-black text-emerald-400 tracking-tighter">{{ $hadirHariIni ?? 0 }}</h3>
-                                <p class="text-[10px] font-bold text-emerald-500/70 uppercase tracking-widest mt-1">Hadir Hari Ini</p>
+                                <p class="text-[10px] font-bold text-emerald-500/70 uppercase tracking-widest mt-1">HADIR HARI INI</p>
                             </div>
                             <div class="bg-rose-500/10 border border-rose-500/20 p-6 rounded-[2rem] flex flex-col items-center text-center">
                                 <h3 class="text-3xl font-black text-rose-400 tracking-tighter">{{ $izinSakit ?? 0 }}</h3>
-                                <p class="text-[10px] font-bold text-rose-500/70 uppercase tracking-widest mt-1">Izin & Sakit</p>
+                                <p class="text-[10px] font-bold text-rose-500/70 uppercase tracking-widest mt-1">IZIN & SAKIT</p>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-8 pt-8 border-t border-white/5 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
-                            <p class="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-1">Rekap Seluruh Karyawan</p>
-                            <h4 class="text-lg font-bold text-white uppercase">{{ $namaBulan }} {{ now()->year }}</h4>
-                        </div>
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5 text-center">
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Hadir</p>
-                            <h4 class="text-xl font-black text-emerald-400">{{ $ringkasanStatistik->total_hadir ?? 0 }}</h4>
-                        </div>
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5 text-center">
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Izin</p>
-                            <h4 class="text-xl font-black text-amber-400">{{ $ringkasanStatistik->total_izin ?? 0 }}</h4>
-                        </div>
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5 text-center">
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Sakit</p>
-                            <h4 class="text-xl font-black text-rose-400">{{ $ringkasanStatistik->total_sakit ?? 0 }}</h4>
                         </div>
                     </div>
                 </div>
@@ -138,13 +118,13 @@
 
             {{-- 4. USER CARDS --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white rounded-[2.5rem] p-8 shadow-lg border-b-4 border-indigo-500">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Hadir Anda</p>
+                <div class="bg-white rounded-[2.5rem] p-8 shadow-lg border-b-4 border-indigo-500 text-center">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">TOTAL HADIR ANDA</p>
                     <h3 class="text-3xl font-black text-slate-800 mt-1">{{ $totalHadir ?? 0 }} Hari</h3>
                 </div>
 
                 <div class="bg-white rounded-[2.5rem] p-8 shadow-lg border-b-4 border-amber-500">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Status Kehadiran</p>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">STATUS KEHADIRAN</p>
                     @if(!$cekAbsensi)
                         <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="space-y-2">
                             @csrf
@@ -156,68 +136,50 @@
                             </div>
                         </form>
                     @else
-                        <div class="flex flex-col items-center justify-center h-24">
-                            <span class="text-xs font-black text-slate-700 uppercase">Status Aktif: {{ $cekAbsensi->status }}</span>
+                        <div class="flex flex-col items-center justify-center h-24 text-center">
+                            <span class="text-xs font-black text-slate-700 uppercase">STATUS AKTIF: {{ $cekAbsensi->status }}</span>
                         </div>
                     @endif
                 </div>
 
-                {{-- KOLOM KETIGA: LOGIKA DINAMIS --}}
                 @if(!$cekAbsensi)
-                    {{-- Belum absen sama sekali --}}
                     <div class="relative group cursor-pointer" onclick="handleAbsensi()">
                         <div class="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition"></div>
                         <div class="relative bg-white h-full rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-lg">
                             <div class="w-20 h-20 bg-indigo-50 rounded-3xl flex items-center justify-center text-4xl mb-4">🚀</div>
-                            <h4 class="font-black text-slate-800 uppercase tracking-widest text-xs">Klik Untuk Absen</h4>
+                            <h4 class="font-black text-slate-800 uppercase tracking-widest text-xs">KLIK UNTUK ABSEN</h4>
                         </div>
                     </div>
-                @elseif($cekAbsensi->status == 'Sakit')
-                    <div class="bg-white rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-rose-100 shadow-lg text-center">
-                        <div class="text-5xl mb-3 animate-bounce">🤒</div>
-                        <h4 class="font-black text-slate-800 uppercase tracking-tighter text-sm">Lekas Sembuh!</h4>
-                        <p class="text-[9px] text-slate-400 mt-1 leading-tight">Istirahat yang cukup ya, {{ Auth::user()->name }}!</p>
-                    </div>
-                @elseif($cekAbsensi->status == 'Izin')
-                    <div class="bg-white rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-amber-100 shadow-lg text-center">
-                        <div class="text-5xl mb-3 animate-pulse">🗓️</div>
-                        <h4 class="font-black text-slate-800 uppercase tracking-tighter text-sm">Sedang Izin</h4>
-                        <p class="text-[9px] text-slate-400 mt-1 leading-tight">Urusan Anda terpantau sistem. Tetap semangat!</p>
-                    </div>
                 @elseif(!$cekAbsensi->jam_keluar && in_array($cekAbsensi->status, ['Hadir', 'Terlambat']))
-                    {{-- Sudah absen masuk, belum absen pulang --}}
                     <div class="relative group cursor-pointer" onclick="handleAbsensi()">
                         <div class="absolute -inset-1 bg-gradient-to-r from-rose-600 to-orange-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition"></div>
                         <div class="relative bg-white h-full rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-lg">
                             <div class="w-20 h-20 bg-rose-50 rounded-3xl flex items-center justify-center text-4xl mb-4">🏠</div>
-                            <h4 class="font-black text-slate-800 uppercase tracking-widest text-xs">Klik Untuk Pulang</h4>
+                            <h4 class="font-black text-slate-800 uppercase tracking-widest text-xs">KLIK UNTUK PULANG</h4>
                         </div>
                     </div>
                 @else
-                    {{-- Sudah Selesai Kerja (Sudah Absen Pulang) --}}
-                    <div class="bg-slate-100 rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-200 shadow-inner opacity-80 text-center">
-                        <div class="w-16 h-16 bg-slate-200 rounded-3xl flex items-center justify-center text-3xl mb-3">✨</div>
-                        <h4 class="font-black text-slate-500 uppercase tracking-widest text-xs">Aktivitas Selesai</h4>
-                        <p class="text-[9px] text-slate-400 mt-1 italic">Terima kasih untuk hari ini!</p>
+                    <div class="bg-slate-100 rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-200 shadow-inner opacity-80 text-center h-full">
+                        <div class="w-16 h-16 bg-slate-200 rounded-3xl flex items-center justify-center text-3xl mb-3 mx-auto">✨</div>
+                        <h4 class="font-black text-slate-500 uppercase tracking-widest text-xs">SELESAI</h4>
                     </div>
                 @endif
             </div>
 
-            {{-- 5. TABEL MONITORING --}}
+            {{-- 5. LOG AKTIVITAS HARI INI --}}
             <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-50 overflow-hidden mb-8 animate-fade-in">
                 <div class="p-8 border-b border-slate-50 bg-slate-50/30">
                     <h3 class="font-black text-slate-800 uppercase tracking-tight flex items-center gap-2 text-lg">
-                        <span>⚡</span> Monitor Absensi Hari Ini
+                        <span>⚡</span> LOG AKTIVITAS HARI INI
                     </h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
                             <tr class="border-b border-slate-100">
-                                <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Waktu</th>
-                                <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Karyawan</th>
-                                <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Masuk</th>
-                                <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                                <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">WAKTU</th>
+                                <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">KARYAWAN</th>
+                                <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">STATUS</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
@@ -225,7 +187,6 @@
                             <tr class="hover:bg-slate-50 transition">
                                 <td class="px-8 py-5 text-sm font-bold text-indigo-600">{{ $activity->created_at->format('H:i') }}</td>
                                 <td class="px-8 py-5 text-sm font-bold text-slate-700">{{ $activity->karyawan->nama_lengkap ?? $activity->user->name }}</td>
-                                <td class="px-8 py-5 text-sm font-mono text-slate-500">{{ $activity->jam_masuk ?? '--:--' }}</td>
                                 <td class="px-8 py-5">
                                     <span class="px-3 py-1 rounded-lg text-[10px] font-black uppercase {{ $activity->status == 'Hadir' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }}">
                                         {{ $activity->status }}
@@ -233,29 +194,29 @@
                                 </td>
                             </tr>
                             @empty
-                            <tr><td colspan="4" class="px-8 py-10 text-center text-slate-400 italic">Belum ada aktivitas hari ini.</td></tr>
+                            <tr><td colspan="3" class="px-8 py-10 text-center text-slate-400 italic">BELUM ADA AKTIVITAS.</td></tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            {{-- 6. REKAP BULANAN ADMIN --}}
+            {{-- 6. REKAPITULASI BULANAN --}}
             @if(Auth::user()->role == 'admin')
             <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-50 overflow-hidden animate-fade-in">
                 <div class="p-8 border-b border-slate-100 bg-indigo-50/30">
                     <h3 class="font-black text-slate-800 uppercase tracking-tight flex items-center gap-2 text-lg">
-                        <span>📊</span> Rekap Kehadiran Karyawan ({{ $namaBulan }})
+                        <span>📊</span> REKAPITULASI ABSENSI BULANAN ({{ $namaBulan }})
                     </h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
                             <tr class="bg-slate-50">
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase">Nama Karyawan</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-emerald-600 uppercase text-center">Hadir</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-amber-600 uppercase text-center">Izin</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-rose-600 uppercase text-center">Sakit</th>
+                                <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase">NAMA KARYAWAN</th>
+                                <th class="px-8 py-4 text-[10px] font-black text-emerald-600 uppercase text-center">HADIR</th>
+                                <th class="px-8 py-4 text-[10px] font-black text-amber-600 uppercase text-center">IZIN</th>
+                                <th class="px-8 py-4 text-[10px] font-black text-rose-600 uppercase text-center">SAKIT</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
@@ -276,7 +237,7 @@
         </div>
     </div>
 
-    {{-- MODAL --}}
+    {{-- MODAL ABSENSI --}}
     <div id="absensiModal" class="fixed inset-0 z-[999] hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAbsensiModal()"></div>
         <div class="relative flex items-center justify-center min-h-screen p-4">
@@ -285,6 +246,7 @@
                     <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight mb-4">Konfirmasi Lokasi</h2>
                     <div id="map-preview" class="border-4 border-slate-50 shadow-inner"></div>
                 </div>
+                {{-- PERBAIKAN: Route diarahkan ke absensi.store sesuai web.php --}}
                 <form id="formUtamaAbsensi" action="{{ route('absensi.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="lat" id="lat">
@@ -316,17 +278,15 @@
                 navigator.geolocation.getCurrentPosition((pos) => {
                     const lat = pos.coords.latitude;
                     const lng = pos.coords.longitude;
-                    
                     document.getElementById('lat').value = lat;
                     document.getElementById('lng').value = lng;
-                    
                     document.getElementById('absensiModal').classList.remove('hidden');
                     setTimeout(() => {
                         document.getElementById('modalContent').classList.remove('translate-y-full');
                         initMap(lat, lng);
                     }, 10);
                 }, (err) => {
-                    Swal.fire('Error', 'Gagal mengambil lokasi. Pastikan izin GPS aktif.', 'error');
+                    Swal.fire('Error', 'Gagal mengambil lokasi.', 'error');
                 });
             }
         }
@@ -334,10 +294,8 @@
         function initMap(lat, lng) {
             if (map) { map.remove(); }
             map = L.map('map-preview').setView([lat, lng], 16);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap'
-            }).addTo(map);
-            L.marker([lat, lng]).addTo(map).bindPopup('Lokasi Anda Sekarang').openPopup();
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            L.marker([lat, lng]).addTo(map).bindPopup('Lokasi Anda').openPopup();
         }
 
         function closeAbsensiModal() {
