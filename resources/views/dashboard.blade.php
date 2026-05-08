@@ -116,25 +116,29 @@
             </div>
             @endif
 
-            {{-- 4. USER CARDS (VERSI RAPI & ESTETIK) --}}
+            {{-- 4. USER CARDS (VERSI PERBAIKAN & RAPI) --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 
-                {{-- CARD TOTAL HADIR --}}
-                <div class="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/60 border border-slate-50 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
-                        <span class="text-7xl">📅</span>
+                {{-- CARD 1: TOTAL HADIR (VERSI IKON JELAS) --}}
+                <div class="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/60 border border-slate-50 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Pencapaian Anda</p>
+                            <h3 class="text-5xl font-black text-slate-800 leading-none">{{ $totalHadir ?? 0 }}</h3>
+                            <p class="text-sm font-bold text-indigo-500 mt-2">Hari Kerja Terlewati</p>
+                        </div>
+                        <div class="bg-indigo-50 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-sm">
+                            📅
+                        </div>
                     </div>
-                    <div class="relative z-10">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Pencapaian Anda</p>
-                        <h3 class="text-4xl font-black text-slate-800 leading-none">{{ $totalHadir ?? 0 }}</h3>
-                        <p class="text-sm font-bold text-indigo-500 mt-1">Hari Kerja Terlewati</p>
-                        <div class="mt-4 w-12 h-1.5 bg-indigo-500 rounded-full"></div>
+                    <div class="mt-4 w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="w-1/3 h-full bg-indigo-500 rounded-full"></div>
                     </div>
                 </div>
 
-                {{-- CARD STATUS KEHADIRAN --}}
+                {{-- CARD 2: INFO KEHADIRAN (KHUSUS IZIN/SAKIT ATAU JAM MASUK) --}}
                 <div class="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/60 border border-slate-50 relative overflow-hidden group">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Update Kehadiran</p>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Info Kehadiran</p>
                     
                     @if(!$cekAbsensi)
                         <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="space-y-3">
@@ -156,24 +160,35 @@
                             </div>
                         </form>
                     @else
-                        <div class="flex flex-col items-center justify-center py-2">
+                        <div class="flex flex-col items-center justify-center py-2 text-center">
                             @php
-                                $statusColor = 'bg-emerald-500';
-                                $statusIcon = '✨';
-                                if($cekAbsensi->status == 'Izin') { $statusColor = 'bg-amber-500'; $statusIcon = '✋'; }
-                                if($cekAbsensi->status == 'Sakit') { $statusColor = 'bg-rose-500'; $statusIcon = '🤒'; }
+                                $isSpecial = in_array($cekAbsensi->status, ['Izin', 'Sakit']);
+                                $bgIcon = $isSpecial ? ($cekAbsensi->status == 'Izin' ? 'bg-amber-500' : 'bg-rose-500') : 'bg-indigo-500';
+                                $icon = $cekAbsensi->status == 'Izin' ? '✋' : ($cekAbsensi->status == 'Sakit' ? '🤒' : '🕒');
                             @endphp
-                            <div class="w-16 h-16 {{ $statusColor }} text-white rounded-2xl flex items-center justify-center text-2xl shadow-lg mb-3 animate-bounce">
-                                {{ $statusIcon }}
+                            
+                            <div class="w-16 h-16 {{ $bgIcon }} text-white rounded-2xl flex items-center justify-center text-2xl shadow-lg mb-3">
+                                {{ $icon }}
                             </div>
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Status Aktif</span>
-                            <h4 class="text-lg font-black text-slate-800 uppercase tracking-tighter italic">{{ $cekAbsensi->status }}</h4>
+                            
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                @if($isSpecial) STATUS PENGAJUAN @else JAM MASUK HARI INI @endif
+                            </span>
+                            
+                            <h4 class="text-xl font-black text-slate-800 uppercase">
+                                @if($isSpecial) 
+                                    {{ $cekAbsensi->status }} 
+                                @else 
+                                    {{ \Carbon\Carbon::parse($cekAbsensi->jam_masuk)->format('H:i') }} WIB
+                                @endif
+                            </h4>
                         </div>
                     @endif
                 </div>
 
+                {{-- CARD 3: AKSI (TOMBOL ABSEN / SELESAI) --}}
                 @if(!$cekAbsensi)
-                    {{-- TOMBOL ABSEN MASUK --}}
+                    {{-- Tombol Absen Masuk --}}
                     <div class="relative group cursor-pointer" onclick="handleAbsensi()">
                         <div class="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition duration-500"></div>
                         <div class="relative bg-white h-full rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-xl shadow-indigo-100">
@@ -182,7 +197,7 @@
                         </div>
                     </div>
                 @elseif(!$cekAbsensi->jam_keluar && in_array($cekAbsensi->status, ['Hadir', 'Terlambat']))
-                    {{-- TOMBOL ABSEN PULANG --}}
+                    {{-- Tombol Absen Pulang dengan Proteksi Jam 5 Sore --}}
                     @php
                         $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->hour;
                     @endphp
@@ -197,16 +212,17 @@
                     @else
                         <div class="relative group cursor-pointer" onclick="handleAbsensi()">
                             <div class="absolute -inset-1 bg-gradient-to-r from-rose-600 to-orange-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition duration-500"></div>
-                            <div class="relative bg-white h-full rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-lg">
+                            <div class="relative bg-white h-full rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-lg shadow-rose-100">
                                 <div class="w-20 h-20 bg-rose-50 rounded-3xl flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform duration-500">🏠</div>
                                 <h4 class="font-black text-slate-800 uppercase tracking-widest text-xs">KLIK UNTUK PULANG</h4>
                             </div>
                         </div>
                     @endif
                 @else
+                    {{-- Tampilan Selesai --}}
                     <div class="bg-slate-50 rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-inner text-center h-full opacity-80">
                         <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-4xl mb-4 shadow-sm">✨</div>
-                        <h4 class="font-black text-slate-500 uppercase tracking-widest text-xs">SELESAI UNTUK HARI INI</h4>
+                        <h4 class="font-black text-slate-500 uppercase tracking-widest text-xs">TUGAS HARI INI SELESAI</h4>
                     </div>
                 @endif
             </div>
@@ -318,11 +334,16 @@
         }
 
         function handleAbsensi() {
-            Swal.fire({
-                title: 'Mendeteksi Lokasi...',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
+            Swal.fire({ title: 'Mendeteksi Lokasi...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+
+            setTimeout(() => {
+                Swal.close();
+                // GANTI DUA ANGKA DI BAWAH INI DENGAN KOORDINAT KANTOR KAMU
+                showModalAbsen(-3.4475, 114.8322); 
+            }, 1000);
+        }
+
+            // BYPASS GPS: Langsung panggil modal dengan koordinat kantor
             setTimeout(() => {
                 Swal.close();
                 showModalAbsen(3.595188, 98.672223); 
@@ -332,6 +353,7 @@
         function showModalAbsen(lat, lng) {
             document.getElementById('lat').value = lat;
             document.getElementById('lng').value = lng;
+            
             document.getElementById('absensiModal').classList.remove('hidden');
             setTimeout(() => {
                 document.getElementById('modalContent').classList.remove('translate-y-full');

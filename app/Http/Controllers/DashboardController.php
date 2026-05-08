@@ -22,6 +22,7 @@ class DashboardController extends Controller
         
         $user = Auth::user();
         
+        // Inisialisasi variabel awal
         $totalHadir = 0; 
         $totalKaryawan = 0; 
         $hadirHariIni = 0; 
@@ -30,19 +31,25 @@ class DashboardController extends Controller
         $rekapBulanan = collect(); 
         $cekAbsensi = null;
 
+        // 1. LOGIKA UNTUK KARYAWAN (BAGIAN ATAS DASHBOARD)
         if ($user->karyawan) {
             $karyawanId = $user->karyawan->id;
+            
             $cekAbsensi = Absensi::where('karyawan_id', $karyawanId)
                                 ->where('tanggal', $hariIni)
                                 ->first();
 
             $totalHadir = Absensi::where('karyawan_id', $karyawanId)
                                 ->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
+                                ->whereMonth('tanggal', $bulanIni)
+                                ->whereYear('tanggal', $tahunIni)
                                 ->count();
         }
 
+        // 2. LOGIKA KHUSUS ADMIN (CONTROL CENTER & MONITOR)
         if ($user->role == 'admin') {
             $totalKaryawan = Karyawan::count();
+
             $hadirHariIni = Absensi::where('tanggal', $hariIni)
                                     ->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
                                     ->count();
@@ -56,13 +63,31 @@ class DashboardController extends Controller
                                     ->latest()
                                     ->get();
 
-            $rekapBulanan = Karyawan::all();
+            // PERBAIKAN: Menghitung rekap bulanan untuk tabel admin
+            $rekapBulanan = Karyawan::withCount([
+                'absensi as total_hadir' => function ($query) use ($bulanIni, $tahunIni) {
+                    $query->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
+                          ->whereMonth('tanggal', $bulanIni)
+                          ->whereYear('tanggal', $tahunIni);
+                },
+                'absensi as total_izin' => function ($query) use ($bulanIni, $tahunIni) {
+                    $query->where('status', 'Izin')
+                          ->whereMonth('tanggal', $bulanIni)
+                          ->whereYear('tanggal', $tahunIni);
+                },
+                'absensi as total_sakit' => function ($query) use ($bulanIni, $tahunIni) {
+                    $query->where('status', 'Sakit')
+                          ->whereMonth('tanggal', $bulanIni)
+                          ->whereYear('tanggal', $tahunIni);
+                }
+            ])->get();
         }
 
+        // Statistik Ringkasan (Box Warna-warni)
         $ringkasanStatistik = (object) [
-            'total_hadir' => Absensi::where('tanggal', 'like', "$tahunIni-$bulanIni-%")->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])->count(),
-            'total_izin'  => Absensi::where('tanggal', 'like', "$tahunIni-$bulanIni-%")->where('status', 'Izin')->count(),
-            'total_sakit' => Absensi::where('tanggal', 'like', "$tahunIni-$bulanIni-%")->where('status', 'Sakit')->count(),
+            'total_hadir' => Absensi::whereMonth('tanggal', $bulanIni)->whereYear('tanggal', $tahunIni)->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])->count(),
+            'total_izin'  => Absensi::whereMonth('tanggal', $bulanIni)->whereYear('tanggal', $tahunIni)->where('status', 'Izin')->count(),
+            'total_sakit' => Absensi::whereMonth('tanggal', $bulanIni)->whereYear('tanggal', $tahunIni)->where('status', 'Sakit')->count(),
         ];
 
         return view('dashboard', compact(
@@ -91,7 +116,6 @@ class DashboardController extends Controller
                 return back()->with('error', 'Anda sudah melakukan absensi masuk dan pulang hari ini.');
             }
 
-            // PROTEKSI JAM 5 SORE (17:00)
             if ($sekarang->hour < 17) {
                 return back()->with('error', 'Belum waktunya pulang! Absen pulang baru bisa dilakukan mulai pukul 17:00.');
             }
