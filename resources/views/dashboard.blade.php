@@ -116,10 +116,10 @@
             </div>
             @endif
 
-            {{-- 4. USER CARDS (VERSI PERBAIKAN & RAPI) --}}
+            {{-- 4. USER CARDS --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 
-                {{-- CARD 1: TOTAL HADIR (VERSI IKON JELAS) --}}
+                {{-- CARD 1: TOTAL HADIR --}}
                 <div class="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/60 border border-slate-50 relative overflow-hidden">
                     <div class="flex items-center justify-between">
                         <div>
@@ -136,7 +136,7 @@
                     </div>
                 </div>
 
-                {{-- CARD 2: INFO KEHADIRAN (KHUSUS IZIN/SAKIT ATAU JAM MASUK) --}}
+                {{-- CARD 2: INFO KEHADIRAN --}}
                 <div class="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/60 border border-slate-50 relative overflow-hidden group">
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Info Kehadiran</p>
                     
@@ -188,7 +188,6 @@
 
                 {{-- CARD 3: AKSI (TOMBOL ABSEN / SELESAI) --}}
                 @if(!$cekAbsensi)
-                    {{-- Tombol Absen Masuk --}}
                     <div class="relative group cursor-pointer" onclick="handleAbsensi()">
                         <div class="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition duration-500"></div>
                         <div class="relative bg-white h-full rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-xl shadow-indigo-100">
@@ -197,7 +196,6 @@
                         </div>
                     </div>
                 @elseif(!$cekAbsensi->jam_keluar && in_array($cekAbsensi->status, ['Hadir', 'Terlambat']))
-                    {{-- Tombol Absen Pulang dengan Proteksi Jam 5 Sore --}}
                     @php
                         $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->hour;
                     @endphp
@@ -219,7 +217,6 @@
                         </div>
                     @endif
                 @else
-                    {{-- Tampilan Selesai --}}
                     <div class="bg-slate-50 rounded-[2.5rem] p-6 flex flex-col items-center justify-center border border-slate-100 shadow-inner text-center h-full opacity-80">
                         <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-4xl mb-4 shadow-sm">✨</div>
                         <h4 class="font-black text-slate-500 uppercase tracking-widest text-xs">TUGAS HARI INI SELESAI</h4>
@@ -298,27 +295,67 @@
         </div>
     </div>
 
-    {{-- MODAL ABSENSI --}}
-    <div id="absensiModal" class="fixed inset-0 z-[999] hidden">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAbsensiModal()"></div>
-        <div class="relative flex items-center justify-center min-h-screen p-4">
-            <div id="modalContent" class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl p-8 transform translate-y-full transition-transform duration-500">
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight mb-4">Konfirmasi Lokasi</h2>
-                    <div id="map-preview" class="border-4 border-slate-50 shadow-inner"></div>
+  {{-- MODAL ABSENSI --}}
+<div id="absensiModal" class="fixed inset-0 z-[999] hidden">
+
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+        onclick="closeAbsensiModal()"></div>
+
+    <div class="relative flex items-center justify-center min-h-screen p-4">
+
+        <div id="modalContent"
+            class="relative bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl p-8 transform translate-y-full transition-transform duration-500">
+
+            <!-- Tombol Silang -->
+            <button
+                type="button"
+                onclick="closeAbsensiModal()"
+                class="absolute top-5 right-6 text-slate-400 hover:text-rose-500 transition-all active:scale-90 z-[1010] text-3xl font-bold">
+                ✕
+            </button>
+
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight mb-4">
+                    Konfirmasi Lokasi
+                </h2>
+
+                <div id="map-preview"
+                    class="border-4 border-slate-50 shadow-inner">
                 </div>
-                <form id="formUtamaAbsensi" action="{{ route('absensi.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="lat" id="lat">
-                    <input type="hidden" name="lng" id="lng">
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-black py-5 rounded-[1.5rem] shadow-xl uppercase active:scale-95 transition-all">Kirim Sekarang</button>
-                </form>
+
+                <p id="location-status"
+                    class="text-[10px] font-bold text-indigo-600 mt-3 uppercase tracking-widest">
+                    Lokasi Terdeteksi
+                </p>
             </div>
+
+            <form id="formUtamaAbsensi"
+                action="{{ route('absensi.store') }}"
+                method="POST">
+
+                @csrf
+
+                <input type="hidden" name="lat" id="lat">
+                <input type="hidden" name="lng" id="lng">
+
+                <button type="submit"
+                    class="w-full bg-indigo-600 text-white font-black py-5 rounded-[1.5rem] shadow-xl uppercase active:scale-95 transition-all">
+                    Presensi Sekarang
+                </button>
+
+            </form>
         </div>
     </div>
+</div>
+
+
 
     <script>
         let map;
+        // KOORDINAT PT SALTEK (Pusat Medan)
+        const KANTOR_LAT = 3.50690;;
+        const KANTOR_LNG = 98.66092;
+        const MAX_RADIUS = 20; // Radius maksimal dalam meter
 
         function updateClock() {
             const clock = document.getElementById('realtime-clock');
@@ -326,51 +363,155 @@
         }
         setInterval(updateClock, 1000);
 
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371e3; // Earth radius in meters
+            const φ1 = lat1 * Math.PI/180;
+            const φ2 = lat2 * Math.PI/180;
+            const Δφ = (lat2-lat1) * Math.PI/180;
+            const Δλ = (lon2-lon1) * Math.PI/180;
+            const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                      Math.cos(φ1) * Math.cos(φ2) *
+                      Math.sin(Δλ/2) * Math.sin(Δλ/2);
+
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
         function konfirmasiStatus(status) {
             const ket = document.getElementById('keterangan_input').value;
-            if(!ket) { Swal.fire('Isi Alasan', '', 'warning'); return; }
+            if(!ket) { 
+                Swal.fire({
+                    title: 'Isi Alasan',
+                    text: 'Silakan isi alasan singkat terlebih dahulu.',
+                    icon: 'warning',
+                    confirmButtonColor: '#4f46e5'
+                }); 
+                return; 
+            }
             document.getElementById('status_input').value = status;
             document.getElementById('formIzinSakit').submit();
         }
 
         function handleAbsensi() {
-            Swal.fire({ title: 'Mendeteksi Lokasi...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+            if (!navigator.geolocation) {
+                Swal.fire('Gagal!', 'Browser Anda tidak mendukung fitur lokasi.', 'error');
+                return;
+            }
 
-            setTimeout(() => {
-                Swal.close();
-                // GANTI DUA ANGKA DI BAWAH INI DENGAN KOORDINAT KANTOR KAMU
-                showModalAbsen(-3.4475, 114.8322); 
-            }, 1000);
-        }
+            Swal.fire({ 
+                title: 'Mendeteksi Lokasi...', 
+                text: 'Mohon izinkan akses GPS di perangkat Anda',
+                allowOutsideClick: false, 
+                didOpen: () => { Swal.showLoading(); } 
+            });
 
-            // BYPASS GPS: Langsung panggil modal dengan koordinat kantor
-            setTimeout(() => {
-                Swal.close();
-                showModalAbsen(3.595188, 98.672223); 
-            }, 1000);
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    const distance = calculateDistance(userLat, userLng, KANTOR_LAT, KANTOR_LNG);
+
+                    Swal.close();
+
+                    if (distance > MAX_RADIUS) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Diluar Jangkauan!',
+                            text: `Anda berada ${Math.round(distance)}m dari PT Saltek. Jarak maksimal adalah ${MAX_RADIUS}m.`,
+                            confirmButtonColor: '#e11d48'
+                        });
+                    } else {
+                        showModalAbsen(userLat, userLng);
+                    }
+                },
+                (error) => {
+                    Swal.close();
+                    let msg = 'Gagal mendeteksi lokasi.';
+                    if(error.code == 1) msg = 'Akses lokasi ditolak. Mohon izinkan GPS.';
+                    Swal.fire('Error', msg, 'error');
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
         }
 
         function showModalAbsen(lat, lng) {
             document.getElementById('lat').value = lat;
             document.getElementById('lng').value = lng;
             
-            document.getElementById('absensiModal').classList.remove('hidden');
+            const modal = document.getElementById('absensiModal');
+            const content = document.getElementById('modalContent');
+            
+            modal.classList.remove('hidden');
             setTimeout(() => {
-                document.getElementById('modalContent').classList.remove('translate-y-full');
+                content.classList.remove('translate-y-full');
                 initMap(lat, lng);
-            }, 10);
+            }, 50);
         }
 
         function initMap(lat, lng) {
             if (map) { map.remove(); }
-            map = L.map('map-preview').setView([lat, lng], 16);
+            map = L.map('map-preview', {
+                center: [lat, lng],
+                zoom: 17,
+                zoomControl: true
+            });
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            L.marker([lat, lng]).addTo(map).bindPopup('Lokasi Kantor').openPopup();
+            
+            // Marker User
+            L.marker([lat, lng]).addTo(map).bindPopup('Lokasi Anda').openPopup();
+            
+            // Tombol kembali ke lokasi user
+const recenterButton = L.control({ position: 'topright' });
+
+recenterButton.onAdd = function () {
+    const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+
+    div.innerHTML = `
+        <button id="recenter-map-btn"
+            style="
+                width:34px;
+                height:34px;
+                background:white;
+                border:none;
+                cursor:pointer;
+                font-size:18px;
+                font-weight:bold;
+                border-radius:8px;
+                box-shadow:0 2px 6px rgba(0,0,0,0.2);
+            ">
+            📍
+        </button>
+    `;
+
+    div.onclick = function () {
+        map.setView([lat, lng], 17);
+    };
+
+    return div;
+};
+
+recenterButton.addTo(map);
+
+
+            // Area Kantor PT Saltek
+            L.circle([KANTOR_LAT, KANTOR_LNG], {
+                color: '#4f46e5',
+                fillColor: '#4f46e5',
+                fillOpacity: 0.2,
+                radius: MAX_RADIUS
+            }).addTo(map).bindPopup('Area Absensi PT Saltek');
         }
 
         function closeAbsensiModal() {
-            document.getElementById('modalContent').classList.add('translate-y-full');
-            setTimeout(() => document.getElementById('absensiModal').classList.add('hidden'), 500);
+            const modal = document.getElementById('absensiModal');
+            const content = document.getElementById('modalContent');
+
+            // Animasi turun dulu baru sembunyi
+            content.classList.add('translate-y-full');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 500);
         }
+        
     </script>
 </x-app-layout>
