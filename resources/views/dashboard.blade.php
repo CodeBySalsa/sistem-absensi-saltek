@@ -224,74 +224,100 @@
                 @endif
             </div>
 
-            {{-- 5. LOG AKTIVITAS HARI INI --}}
-            <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-50 overflow-hidden mb-8 animate-fade-in">
-                <div class="p-8 border-b border-slate-50 bg-slate-50/30">
-                    <h3 class="font-black text-slate-800 uppercase tracking-tight flex items-center gap-2 text-lg">
-                        <span>⚡</span> LOG AKTIVITAS HARI INI
-                    </h3>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="border-b border-slate-100">
-                                <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">WAKTU</th>
-                                <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">KARYAWAN</th>
-                                <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">STATUS</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-50">
-                            @forelse($recentActivities as $activity)
-                            <tr class="hover:bg-slate-50 transition">
-                                <td class="px-8 py-5 text-sm font-bold text-indigo-600">{{ $activity->created_at->format('H:i') }}</td>
-                                <td class="px-8 py-5 text-sm font-bold text-slate-700">{{ $activity->karyawan->nama_lengkap ?? $activity->user->name }}</td>
-                                <td class="px-8 py-5">
-                                    <span class="px-3 py-1 rounded-lg text-[10px] font-black uppercase {{ $activity->status == 'Hadir' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }}">
-                                        {{ $activity->status }}
-                                    </span>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr><td colspan="3" class="px-8 py-10 text-center text-slate-400 italic">BELUM ADA AKTIVITAS.</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+           {{-- LOG AKTIVITAS MINGGU INI --}}
+<div class="mt-8 bg-white rounded-[2.5rem] shadow-xl border border-slate-50 overflow-hidden">
+    <div class="p-8 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
+        <h3 class="font-black text-slate-800 uppercase tracking-tight text-lg flex items-center gap-2">
+            <span class="w-2 h-6 bg-indigo-600 rounded-full mr-1"></span>
+            LOG AKTIVITAS MINGGU INI
+        </h3>
+        <span class="text-[10px] font-bold text-slate-400 bg-white px-3 py-1 rounded-full border border-slate-100 uppercase">
+            Reset 6 Hari
+        </span>
+    </div>
 
-            {{-- 6. REKAPITULASI BULANAN --}}
-            @if(Auth::user()->role == 'admin')
-            <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-50 overflow-hidden animate-fade-in">
-                <div class="p-8 border-b border-slate-100 bg-indigo-50/30">
-                    <h3 class="font-black text-slate-800 uppercase tracking-tight flex items-center gap-2 text-lg">
-                        <span>📊</span> REKAPITULASI ABSENSI BULANAN ({{ $namaBulan }})
-                    </h3>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="bg-slate-50">
-                                <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase">NAMA KARYAWAN</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-emerald-600 uppercase text-center">HADIR</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-amber-600 uppercase text-center">IZIN</th>
-                                <th class="px-8 py-4 text-[10px] font-black text-rose-600 uppercase text-center">SAKIT</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            @foreach($rekapBulanan as $rekap)
-                            <tr class="hover:bg-slate-50/50">
-                                <td class="px-8 py-4 text-sm font-bold text-slate-700">{{ $rekap->nama_lengkap }}</td>
-                                <td class="px-8 py-4 text-sm font-black text-emerald-500 text-center">{{ $rekap->total_hadir }}</td>
-                                <td class="px-8 py-4 text-sm font-black text-amber-500 text-center">{{ $rekap->total_izin }}</td>
-                                <td class="px-8 py-4 text-sm font-black text-rose-500 text-center">{{ $rekap->total_sakit }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            @endif
+    <div class="overflow-x-auto p-6">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">
+                    <th class="pb-4 text-center">Hari</th>
+                    <th class="pb-4 text-center">Tanggal</th>
+                    <th class="pb-4 text-center">Karyawan</th> {{-- TAMBAHKAN KOLOM INI --}}
+                    <th class="pb-4 text-center">Waktu</th>
+                    <th class="pb-4 text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody class="text-xs font-bold text-slate-600">
+                @forelse($absensis as $log)
+                    <tr class="border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-all">
+                        <td class="py-5 text-center text-slate-400">
+                            {{ \Carbon\Carbon::parse($log->tanggal)->translatedFormat('l') }}
+                        </td>
+                        <td class="py-5 text-center">
+                            {{ \Carbon\Carbon::parse($log->tanggal)->translatedFormat('d M Y') }}
+                        </td>
+                        <td class="py-5 text-center text-slate-800 uppercase">
+                            {{ Auth::user()->name }} {{-- INI AKAN MEMUNCULKAN NAMA KAMU --}}
+                        </td>
+                        <td class="py-5 text-center text-indigo-600 font-mono">
+                            {{ $log->jam_masuk ?? '--:--' }}
+                        </td>
+                        <td class="py-5 text-center">
+                            <span class="px-3 py-1 rounded-full 
+                                {{ $log->status == 'Hadir' ? 'bg-emerald-50 text-emerald-600' : 
+                                  ($log->status == 'Sakit' ? 'bg-rose-50 text-rose-600' : 'bg-amber-50 text-amber-600') }}">
+                                {{ $log->status }}
+                            </span>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="py-12 text-center text-slate-400 italic font-medium">
+                            Belum ada aktivitas minggu ini.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 
+{{-- LETAKKAN DI SINI (Sebelum penutup container utama) --}}
+    @if(Auth::user()->role == 'admin')
+    <div class="mt-8 bg-white rounded-[2.5rem] shadow-xl border border-slate-50 overflow-hidden mb-10">
+        <div class="p-8 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
+            <h3 class="font-black text-slate-800 uppercase tracking-tight text-lg flex items-center gap-2">
+                <span class="w-2 h-6 bg-blue-600 rounded-full mr-1"></span>
+                REKAPITULASI ABSENSI - {{ strtoupper($namaBulan) }} {{ date('Y') }}
+            </h3>
+        </div>
+
+        <div class="overflow-x-auto p-6">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">
+                        <th class="pb-4">Nama Karyawan</th>
+                        <th class="pb-4 text-center text-emerald-600">Hadir</th>
+                        <th class="pb-4 text-center text-blue-600">Izin</th>
+                        <th class="pb-4 text-center text-rose-600">Sakit</th>
+                    </tr>
+                </thead>
+                <tbody class="text-xs font-bold text-slate-600">
+                    @foreach($rekapBulanan as $rekap)
+                    <tr class="border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-all">
+                        <td class="py-5 font-black text-slate-800 uppercase">{{ $rekap->nama_lengkap }}</td>
+                        <td class="py-5 text-center">{{ $rekap->total_hadir }}</td>
+                        <td class="py-5 text-center">{{ $rekap->total_izin }}</td>
+                        <td class="py-5 text-center">{{ $rekap->total_sakit }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
+
+</div> {{-- Ini penutup container utama (max-w-md mx-auto) --}}
         </div>
     </div>
 

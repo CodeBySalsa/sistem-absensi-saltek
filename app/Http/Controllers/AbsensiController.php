@@ -12,29 +12,28 @@ class AbsensiController extends Controller
 {
     /**
      * Koordinat Kantor PT Saltek Dumpang Jaya
-     * Silakan ganti angka ini dengan titik koordinat kantor yang sebenarnya
+     * Sudah diperbarui sesuai lokasi yang kamu berikan tadi
      */
-    private $officeLat = -3.315000; // Ganti dengan latitude kantor asli
-    private $officeLng = 114.590000; // Ganti dengan longitude kantor asli
-    private $radiusLimit = 20; // Batas radius dalam meter
+    private $officeLat = 3.50690; 
+    private $officeLng = 98.66092; 
+    private $radiusLimit = 20; // Tetap 20 meter
 
     /**
      * Menampilkan halaman riwayat absensi
      */
     public function index()
-    {
-        $user = Auth::user();
-        
-        if ($user->role == 'admin') {
-            $absensis = Absensi::with('karyawan')->latest()->get();
-        } else {
-            $absensis = Absensi::where('karyawan_id', $user->karyawan->id ?? 0)
-                                ->latest()
-                                ->get();
-        }
+{
+    $user = Auth::user();
+    
+    // Ambil data absen KHUSUS user yang login & hanya BULAN INI
+    $absensis = Absensi::where('karyawan_id', $user->karyawan->id ?? 0)
+                        ->whereMonth('tanggal', Carbon::now()->month)
+                        ->whereYear('tanggal', Carbon::now()->year)
+                        ->latest()
+                        ->get();
 
-        return view('absensi.index', compact('absensis'));
-    }
+    return view('absensi.index', compact('absensis'));
+}
 
     /**
      * Fungsi Hitung Jarak (Haversine Formula)

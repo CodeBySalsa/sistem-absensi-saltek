@@ -127,38 +127,52 @@
             <p class="text-[8px] text-slate-400 mt-4 italic">* Radius aman: 20m dari kantor PT Saltek.</p>
         </div>
 
+        {{-- LOG AKTIVITAS BULAN INI --}}
         <div class="mt-10 mb-10">
-            <h3 class="font-bold text-slate-700 mb-4 px-1 flex items-center">
+            <h3 class="font-bold text-slate-700 mb-4 px-1 flex items-center uppercase tracking-widest text-xs">
                 <span class="w-2 h-6 bg-blue-600 rounded-full mr-3"></span>
-                Riwayat Hari Ini
+                Log Aktivitas Bulan Ini
             </h3>
             
-            <div class="space-y-3">
-                @forelse($absensis->where('tanggal', date('Y-m-d')) as $absen)
-                <div class="bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border border-slate-100">
-                    <div class="flex items-center">
-                        <div class="h-10 w-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-sm">
-                            {{ strtoupper(substr($absen->karyawan->nama_lengkap ?? 'K', 0, 1)) }}
-                        </div>
-                        <div class="ml-4">
-                            <p class="font-black text-slate-800 text-sm mb-1">{{ $absen->karyawan->nama_lengkap }}</p>
-                            <div class="flex gap-2">
-                                <span class="text-[9px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md font-bold">IN: {{ $absen->jam_masuk ?? '--:--' }}</span>
-                                @if($absen->jam_pulang)
-                                <span class="text-[9px] bg-orange-50 text-orange-600 px-2 py-0.5 rounded-md font-bold">OUT: {{ $absen->jam_pulang }}</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    <span class="text-[8px] px-3 py-1.5 rounded-xl font-black uppercase {{ $absen->status == 'Hadir' ? 'bg-green-500 text-white' : 'bg-amber-100 text-amber-600' }}">
-                        {{ $absen->status }}
-                    </span>
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-slate-100 bg-slate-50/50">
+                                <th class="px-4 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Tanggal</th>
+                                <th class="px-4 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Waktu</th>
+                                <th class="px-4 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Karyawan</th>
+                                <th class="px-4 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            @forelse($absensis as $absen)
+                            <tr class="hover:bg-slate-50 transition-all">
+                                <td class="px-4 py-4 text-[10px] font-bold text-slate-700 text-center">
+                                    {{ \Carbon\Carbon::parse($absen->tanggal)->format('d M Y') }}
+                                </td>
+                                <td class="px-4 py-4 text-[10px] font-bold text-indigo-600 text-center">
+                                    {{ $absen->jam_masuk ?? '--:--' }}
+                                </td>
+                                <td class="px-4 py-4 text-[10px] font-bold text-slate-700 text-center">
+                                    {{ Auth::user()->name }}
+                                </td>
+                                <td class="px-4 py-4 text-center">
+                                    <span class="px-2 py-1 rounded-md text-[8px] font-black uppercase 
+                                        {{ $absen->status == 'Hadir' ? 'bg-green-100 text-green-700' : 
+                                          ($absen->status == 'Sakit' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700') }}">
+                                        {{ $absen->status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="px-8 py-10 text-center text-slate-400 italic text-xs font-medium">Belum ada riwayat aktivitas bulan ini.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
-                @empty
-                <div class="text-center bg-slate-50 border border-dashed border-slate-200 rounded-3xl py-10">
-                    <p class="text-slate-400 text-sm italic font-medium">Belum ada absen masuk.</p>
-                </div>
-                @endforelse
             </div>
         </div>
     </div>
@@ -173,10 +187,11 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // KOORDINAT KANTOR PT SALTEK
-        const KANTOR_LAT = 3.5952; 
-        const KANTOR_LNG = 98.6722;
-        const RADIUS_MAKS = 20; 
+        
+        // KOORDINAT BARU PT SALTEK
+        const KANTOR_LAT = 3.50690; 
+        const KANTOR_LNG = 98.66092;
+        const RADIUS_MAKS = 20;
 
         const map = L.map('map', { zoomControl: false }).setView([KANTOR_LAT, KANTOR_LNG], 18);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -209,26 +224,27 @@
                 document.querySelectorAll('.lat-input').forEach(input => input.value = uLat);
                 document.querySelectorAll('.lng-input').forEach(input => input.value = uLng);
 
-                if (userMarker) map.removeLayer(userMarker);
-                userMarker = L.circleMarker([uLat, uLng], { radius: 7, color: 'white', fillColor: '#ef4444', fillOpacity: 1, weight: 2 }).addTo(map);
-                
-                if (btn) {
-                    if (jarak <= RADIUS_MAKS) {
-                        btn.disabled = false;
-                        if (btn.innerText.includes('MASUK')) {
-                            btn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-2xl shadow-lg transition-all active:scale-95 text-lg";
-                        } else {
-                            btn.className = "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-5 rounded-2xl shadow-lg transition-all active:scale-95 text-lg";
-                        }
-                        info.innerText = `📍 Lokasi Sesuai ✅ (${Math.round(jarak)}m)`;
-                        info.className = "mb-4 p-2 rounded-xl bg-green-100 text-green-600 text-[10px] font-bold uppercase tracking-widest";
+            if (userMarker) map.removeLayer(userMarker);
+            userMarker = L.circleMarker([uLat, uLng], { radius: 7, color: 'white', fillColor: '#ef4444', fillOpacity: 1, weight: 2 }).addTo(map);
+
+            if (btn) {
+                // Menggunakan Math.floor agar 20.9 meter tetap dianggap 20 meter
+                if (Math.floor(jarak) <= RADIUS_MAKS) { 
+                    btn.disabled = false;
+                    if (btn.innerText.includes('MASUK')) {
+                        btn.className = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-2xl shadow-lg transition-all active:scale-95 text-lg";
                     } else {
-                        btn.disabled = true;
-                        btn.className = "w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all text-lg";
-                        info.innerText = `📍 Jarak: ${Math.round(jarak)}m (Luar Area)`;
-                        info.className = "mb-4 p-2 rounded-xl bg-red-50 text-red-500 text-[10px] font-bold uppercase tracking-widest";
+                        btn.className = "w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-5 rounded-2xl shadow-lg transition-all active:scale-95 text-lg";
                     }
+                    info.innerText = `📍 Lokasi Sesuai ✅ (${Math.round(jarak)}m)`;
+                    info.className = "mb-4 p-2 rounded-xl bg-green-100 text-green-600 text-[10px] font-bold uppercase tracking-widest";
+                } else {
+                    btn.disabled = true;
+                    btn.className = "w-full bg-slate-300 opacity-50 cursor-not-allowed text-white font-bold py-5 rounded-2xl shadow-lg transition-all text-lg";
+                    info.innerText = `📍 Jarak: ${Math.round(jarak)}m (Luar Area)`;
+                    info.className = "mb-4 p-2 rounded-xl bg-red-50 text-red-500 text-[10px] font-bold uppercase tracking-widest";
                 }
+            }
             }, function(err) {
                 document.getElementById('distance-info').innerText = "❌ GPS Error: Berikan izin lokasi";
             }, { enableHighAccuracy: true });
