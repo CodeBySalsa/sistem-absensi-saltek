@@ -137,9 +137,9 @@
                             <div class="space-y-2">
                                 <h3 class="text-[11px] font-black tracking-[0.3em] uppercase text-indigo-400/80 italic">Control Center PT Salttek</h3>
                                 <h1 class="text-4xl font-black tracking-tighter text-white uppercase italic">
-                                    MONITORING <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">PANEL</span>
+                                    HALO, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">{{ Auth::user()->name }}</span>
                                 </h1>
-                                
+                                                                
                                 <div class="flex flex-wrap gap-3 mt-6">
                                     <a href="{{ route('karyawan.index') }}" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-lg flex items-center gap-2">
                                         <span>👥</span> DATA KARYAWAN
