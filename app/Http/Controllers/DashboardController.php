@@ -162,12 +162,15 @@ class DashboardController extends Controller
             return redirect()->route('dashboard')->with('success', 'Berhasil Absen Pulang! Hati-hati di jalan.');
         }
 
+        // LOGIKA PERBAIKAN: Deteksi Terlambat jika sudah lewat jam 08:00 pagi
+        $statusAbsen = ($sekarang->hour >= 8 && $sekarang->minute > 0) ? 'Terlambat' : 'Hadir';
+
         Absensi::create([
             'karyawan_id' => $user->karyawan->id,
             'user_id'     => $user->id,
             'tanggal'     => $hariIni,
             'jam_masuk'   => $jamSekarang,
-            'status'      => ($sekarang->hour >= 8 && $sekarang->minute > 0) ? 'Terlambat' : 'Hadir',
+            'status'      => $statusAbsen,
             'latitude'    => $request->lat ?? 0,
             'longitude'   => $request->lng ?? 0,
         ]);

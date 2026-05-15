@@ -17,8 +17,9 @@ class Karyawan extends Model
     protected $table = 'karyawans';
 
     /**
-     * Menggunakan guarded kosong agar semua kolom (nip, nama_lengkap, jabatan, no_hp, user_id)
-     * bisa diisi secara massal sesuai kebutuhan sistem PT Saltek.
+     * Menggunakan guarded kosong agar semua kolom bisa diisi secara massal.
+     * Kolom yang tersedia: nip, nama_lengkap, jabatan, no_hp, user_id.
+     * Karena menggunakan $guarded = [], maka 'no_hp' sudah otomatis bisa disimpan.
      */
     protected $guarded = [];
 

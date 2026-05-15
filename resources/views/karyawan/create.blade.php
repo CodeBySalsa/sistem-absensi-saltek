@@ -58,7 +58,7 @@
                         <select name="user_id" class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all appearance-none cursor-pointer">
                             <option value="" disabled selected>-- Pilih Akun Mahasiswa/Karyawan --</option>
                             @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }} (ID: {{ $user->id }})</option>
+                                <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }} (ID: {{ $user->id }})</option>
                             @endforeach
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
@@ -87,10 +87,18 @@
                         class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-300">
                 </div>
 
+                {{-- KOLOM NOMOR WHATSAPP DENGAN DESAIN IKON --}}
                 <div class="space-y-2">
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nomor WhatsApp</label>
-                    <input type="text" name="no_hp" value="{{ old('no_hp') }}" placeholder="Contoh: 081234567890" 
-                        class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-300">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nomor WhatsApp / HP</label>
+                    <div class="relative">
+                        <input type="text" name="no_hp" value="{{ old('no_hp') }}" placeholder="Contoh: 081234567890" 
+                            class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-300">
+                        <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-slate-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="pt-4">

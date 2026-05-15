@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
 use App\Models\User;
-use App\Models\Absensi; // Tambahkan ini
+use App\Models\Absensi;
 use Illuminate\Http\Request;
-use Carbon\Carbon; // Tambahkan ini
+use Carbon\Carbon;
 
 class KaryawanController extends Controller
 {
@@ -21,7 +21,7 @@ class KaryawanController extends Controller
         
         // 2. Jumlah yang sudah absen masuk atau selesai hari ini
         $hadirHariIni = Absensi::whereDate('tanggal', $hariIni)
-                            ->whereIn('status', ['Hadir', 'Selesai'])
+                            ->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
                             ->count();
                             
         // 3. Jumlah yang mengirim laporan Izin atau Sakit hari ini
@@ -55,6 +55,8 @@ class KaryawanController extends Controller
             'user_id' => 'required|unique:karyawans,user_id',
             'nama_lengkap' => 'required',
             'jabatan' => 'required',
+            'nip' => 'required|unique:karyawans,nip',
+            'no_hp' => 'nullable', // Tambahkan validasi No HP (boleh kosong)
         ]);
 
         Karyawan::create($request->all());
@@ -81,8 +83,11 @@ class KaryawanController extends Controller
             'user_id' => 'required|unique:karyawans,user_id,' . $id,
             'nama_lengkap' => 'required',
             'jabatan' => 'required',
+            'nip' => 'required|unique:karyawans,nip,' . $id,
+            'no_hp' => 'nullable', // Pastikan no_hp masuk validasi agar bisa di-update
         ]);
 
+        // Menggunakan $request->all() akan otomatis mengambil no_hp dari form edit.blade.php
         $karyawan->update($request->all());
 
         return redirect()->route('karyawan.index')->with('success', 'Data karyawan berhasil diperbarui!');

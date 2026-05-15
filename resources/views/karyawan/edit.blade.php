@@ -46,18 +46,36 @@
                 @csrf
                 @method('PUT')
 
+                {{-- Kolom NIP --}}
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nomor Induk Pegawai (NIP)</label>
                     <input type="text" name="nip" value="{{ old('nip', $karyawan->nip) }}" 
                         class="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 placeholder:text-slate-300">
                 </div>
 
+                {{-- Kolom Nama Lengkap --}}
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nama Lengkap</label>
                     <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap', $karyawan->nama_lengkap) }}" 
                         class="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 placeholder:text-slate-300">
                 </div>
 
+                {{-- PENAMBAHAN KOLOM NOMOR HP --}}
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nomor WhatsApp / HP</label>
+                    <div class="relative">
+                        <input type="text" name="no_hp" value="{{ old('no_hp', $karyawan->no_hp) }}" 
+                            class="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 placeholder:text-slate-300"
+                            placeholder="Contoh: 08123456789">
+                        <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-slate-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Kolom Jabatan --}}
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Jabatan / Posisi</label>
                     <div class="relative">
@@ -75,6 +93,7 @@
                     </div>
                 </div>
 
+                {{-- Kolom Hubungkan Akun --}}
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Hubungkan ke Akun Login</label>
                     <div class="relative">
@@ -93,6 +112,7 @@
                     </div>
                 </div>
 
+                {{-- Tombol Aksi --}}
                 <div class="flex flex-col md:flex-row gap-4 pt-6">
                     <button type="submit" class="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-blue-100 uppercase tracking-widest text-[11px] flex justify-center items-center gap-2 active:scale-[0.98]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
