@@ -13,6 +13,12 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+
+        // LOGIKA BARU: Jika yang login adalah Pimpinan, langsung lempar ke halaman rekap
+        if ($user->role == 'pimpinan') {
+            return redirect()->route('pimpinan.index');
+        }
+
         $hariIni = Carbon::now('Asia/Jakarta')->toDateString();
         $bulanIni = Carbon::now('Asia/Jakarta')->month;
         $tahunIni = Carbon::now('Asia/Jakarta')->year;

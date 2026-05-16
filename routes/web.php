@@ -40,6 +40,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // 4. Halaman Monitoring Pimpinan (Wajib Login)
+    Route::get('/pimpinan/rekap', [KaryawanController::class, 'pimpinanIndex'])->name('pimpinan.index');
 });
 
 // GROUP 2: KHUSUS ADMIN (Manajemen Karyawan PT Saltek)

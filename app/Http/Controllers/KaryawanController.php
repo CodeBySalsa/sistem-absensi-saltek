@@ -101,4 +101,25 @@ class KaryawanController extends Controller
 
         return redirect()->route('karyawan.index')->with('success', 'Data karyawan telah dihapus dari sistem.');
     }
+
+    /**
+     * Fungsi Baru: Pimpinan Index
+     * Untuk menampilkan monitor kehadiran khusus Boss/Pimpinan
+     */
+    public function pimpinanIndex()
+    {
+        $hariIni = Carbon::today()->format('Y-m-d');
+
+        // Ambil data absensi hari ini beserta data karyawannya
+        $absensiHariIni = Absensi::with('karyawan')
+                            ->whereDate('tanggal', $hariIni)
+                            ->get();
+
+        // Hitung statistik singkat untuk pimpinan
+        $totalHadir = $absensiHariIni->whereIn('status', ['Hadir', 'Terlambat', 'Selesai'])->count();
+        $totalIzin = $absensiHariIni->where('status', 'Izin')->count();
+        $totalSakit = $absensiHariIni->where('status', 'Sakit')->count();
+
+        return view('pimpinan.index', compact('absensiHariIni', 'totalHadir', 'totalIzin', 'totalSakit'));
+    }
 }
