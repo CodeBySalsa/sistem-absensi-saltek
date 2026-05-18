@@ -108,7 +108,9 @@ class KaryawanController extends Controller
      */
     public function pimpinanIndex()
     {
-        $hariIni = Carbon::today()->format('Y-m-d');
+        $hariIni = Carbon::now('Asia/Jakarta')->toDateString();
+        $bulanIni = Carbon::now('Asia/Jakarta')->month;
+        $tahunIni = Carbon::now('Asia/Jakarta')->year;
 
         // Ambil data absensi hari ini beserta data karyawannya
         $absensiHariIni = Absensi::with('karyawan')
@@ -120,6 +122,25 @@ class KaryawanController extends Controller
         $totalIzin = $absensiHariIni->where('status', 'Izin')->count();
         $totalSakit = $absensiHariIni->where('status', 'Sakit')->count();
 
-        return view('pimpinan.index', compact('absensiHariIni', 'totalHadir', 'totalIzin', 'totalSakit'));
+        // Tambahan: Mengambil data rekapitulasi bulanan kumulatif seluruh karyawan untuk pimpinan
+        $rekapBulanan = Karyawan::withCount([
+            'absensi as total_hadir' => function ($query) use ($bulanIni, $tahunIni) {
+                $query->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
+                      ->whereMonth('tanggal', $bulanIni)
+                      ->whereYear('tanggal', $tahunIni);
+            },
+            'absensi as total_izin' => function ($query) use ($bulanIni, $tahunIni) {
+                $query->where('status', 'Izin')
+                      ->whereMonth('tanggal', $bulanIni)
+                      ->whereYear('tanggal', $tahunIni);
+            },
+            'absensi as total_sakit' => function ($query) use ($bulanIni, $tahunIni) {
+                $query->where('status', 'Sakit')
+                      ->whereMonth('tanggal', $bulanIni)
+                      ->whereYear('tanggal', $tahunIni);
+            }
+        ])->get();
+
+        return view('pimpinan.index', compact('absensiHariIni', 'totalHadir', 'totalIzin', 'totalSakit', 'rekapBulanan'));
     }
 }
