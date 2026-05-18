@@ -18,11 +18,9 @@
         <div class="relative z-10 w-full max-w-md">
             <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(8,112,184,0.12)] border border-blue-50/50 p-10 text-center">
                 
-                {{-- Logo Section --}}
-                <div class="w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-blue-200">
-                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A10.003 10.003 0 0012 3c1.708 0 3.305.429 4.708 1.186M15.5 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+                {{-- Logo Section (Perbaikan: Ukuran logo diperbesar agar lebih jelas dan proporsional) --}}
+                <div class="w-28 h-28 md:w-32 md:h-32 bg-white rounded-3xl mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-blue-200/40 overflow-hidden border border-slate-100 p-1">
+                    <img src="{{ asset('logo pt salttek dumpang jaya.jpeg') }}" alt="Logo PT Salttek" class="w-full h-full object-contain">
                 </div>
 
                 {{-- Branding Section --}}
@@ -31,7 +29,7 @@
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">DUMPANG JAYA</span>
                 </h1>
 
-                {{-- Deskripsi Profesional (Tulisan KKN sudah dihapus) --}}
+                {{-- Deskripsi Profesional --}}
                 <p class="mt-4 text-slate-500 text-sm font-medium leading-relaxed">
                     Sistem Monitoring Absensi Digital <br>& Manajemen Karyawan Terintegrasi.
                 </p>

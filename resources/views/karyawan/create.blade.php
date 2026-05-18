@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Karyawan - PT Saltek</title>
+    <title>Tambah Karyawan - PT Salttek</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen p-6 md:p-10">
+<body class="bg-slate-50 min-h-screen p-6 md:p-10 flex items-center justify-center">
 
-    <div class="max-w-xl mx-auto">
-        <div class="flex flex-col gap-6 mb-8">
+    <div class="max-w-xl w-full mx-auto space-y-6">
+        <div class="flex flex-col gap-6">
             <div class="flex justify-between items-center">
                 <a href="{{ route('karyawan.index') }}" class="text-blue-600 text-[10px] font-black hover:text-blue-800 flex items-center gap-2 tracking-[0.2em] group">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l-7-7m-7 7h18" />
                     </svg>
                     KEMBALI KE DAFTAR
                 </a>
@@ -30,14 +30,19 @@
                 </a>
             </div>
 
+            {{-- Perbaikan Poin 1: Mengubah teks judul & sub-judul menjadi lebih rapi dan elegan --}}
             <div class="text-center md:text-left">
-                <h1 class="text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">Tambah Karyawan</h1>
-                <p class="text-slate-500 text-sm font-medium mt-2">Daftarkan anggota tim atau mahasiswa KKN baru di PT Saltek.</p>
+                <h1 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none italic">
+                    Tambah <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Karyawan</span>
+                </h1>
+                <p class="text-slate-500 text-xs md:text-sm font-medium mt-2">Daftarkan anggota tim di PT Salttek Dumpang Jaya.</p>
             </div>
         </div>
 
-        <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/5 border border-slate-100 p-8 md:p-10 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+        {{-- Perbaikan Poin 3: Desain form dipercantik dengan shadow halus dan dekorasi glow estetik --}}
+        <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-100 p-6 md:p-10 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-full -mr-10 -mt-10 blur-2xl pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/5 rounded-full -ml-10 -mb-10 blur-xl pointer-events-none"></div>
 
             @if ($errors->any())
                 <div class="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl">
@@ -49,22 +54,21 @@
                 </div>
             @endif
 
-            <form action="{{ route('karyawan.store') }}" method="POST" class="space-y-6 relative">
+            <form action="{{ route('karyawan.store') }}" method="POST" class="space-y-5 relative">
                 @csrf
                 
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Hubungkan ke Akun User</label>
                     <div class="relative group">
-                        <select name="user_id" class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all appearance-none cursor-pointer">
-                            <option value="" disabled selected>-- Pilih Akun Mahasiswa/Karyawan --</option>
+                        <select name="user_id" class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all appearance-none cursor-pointer shadow-sm">
+                            {{-- Perbaikan Poin 2: Mengubah teks pilihan dropdown menjadi netral --}}
+                            <option value="" disabled selected>-- Pilih Akun User / Karyawan --</option>
                             @foreach($users as $user)
                                 <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }} (ID: {{ $user->id }})</option>
                             @endforeach
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-slate-400 text-xs">
+                            ▼
                         </div>
                     </div>
                 </div>
@@ -72,19 +76,19 @@
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">NIP (Nomor Induk Pegawai)</label>
                     <input type="text" name="nip" value="{{ old('nip') }}" placeholder="Contoh: 2026001" required
-                        class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-300">
+                        class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-300 shadow-sm">
                 </div>
 
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nama Lengkap</label>
                     <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap') }}" placeholder="Masukkan nama sesuai KTP..." required
-                        class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-300">
+                        class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-300 shadow-sm">
                 </div>
 
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Jabatan</label>
                     <input type="text" name="jabatan" value="{{ old('jabatan') }}" placeholder="Contoh: Admin / Teknisi Fiber Optic" required
-                        class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-300">
+                        class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-300 shadow-sm">
                 </div>
 
                 {{-- KOLOM NOMOR WHATSAPP DENGAN DESAIN IKON --}}
@@ -92,7 +96,7 @@
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nomor WhatsApp / HP</label>
                     <div class="relative">
                         <input type="text" name="no_hp" value="{{ old('no_hp') }}" placeholder="Contoh: 081234567890" 
-                            class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-300">
+                            class="w-full bg-slate-50 border-2 border-slate-100 p-4 pl-6 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-300 shadow-sm">
                         <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-slate-300">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -102,7 +106,7 @@
                 </div>
 
                 <div class="pt-4">
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-2xl shadow-xl shadow-blue-100 transition-all active:scale-[0.98] text-[11px] uppercase tracking-[0.2em] flex justify-center items-center gap-2">
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black py-4.5 rounded-2xl shadow-xl shadow-blue-600/10 transition-all active:scale-[0.98] text-[11px] uppercase tracking-[0.2em] flex justify-center items-center gap-2">
                         <span>Simpan Data Karyawan</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
