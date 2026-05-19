@@ -71,10 +71,15 @@
             .force-tight-gap { gap: 4px !important; }
             .force-icon-size { width: 22px !important; height: 22px !important; }
         }
+    
+        <div class="floating-emoji" style="left:10%; animation-delay:0s;">✨</div>
+        <div class="floating-emoji" style="left:30%; animation-delay:2s;">🚀</div>
+        <div class="floating-emoji" style="left:60%; animation-delay:4s;">⚡</div>
+        <div class="floating-emoji" style="left:80%; animation-delay:1s;">💎</div>
     </style>
 
     <div class="py-6 md:py-10 bg-slate-50/50 min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
             {{-- LOGIKA DETEKSI HARI MINGGU --}}
             @php
@@ -92,7 +97,7 @@
 
             {{-- 1. HERO BANNER KARYAWAN --}}
             @if(Auth::user()->role !== 'admin')
-                <div class="mb-6 hero-premium rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 text-white relative overflow-hidden flex flex-row justify-between items-center gap-2 animate-fade-in">
+                <div class="mb-6 hero-premium live-badge rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 text-white relative overflow-hidden flex flex-row justify-between items-center gap-2 animate-fade-in">
                     <div class="relative z-10 w-7/12 pb-1 md:pb-0">
                         <div class="inline-flex items-center gap-1 bg-white/10 px-2 py-1 rounded-full text-[6px] md:text-[9px] font-black uppercase tracking-[0.15em] border border-white/10 backdrop-blur-md mb-2 md:mb-4 whitespace-nowrap">
                             <span class="flex h-1 w-1 relative">
@@ -103,22 +108,22 @@
                         </div>
                         <h1 class="text-xs md:text-3xl lg:text-4xl font-black tracking-tight leading-tight uppercase italic mobile-title">HELLO, <span class="text-indigo-300">{{ Auth::user()->name }}!</span></h1>
                         <div class="flex gap-1.5 md:gap-3 mt-2 md:mt-4">
-                            <div class="glass-stat px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
+                            <div class="glass-stat hover-card px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
                                 <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase">Hadir</span>
                                 <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1">{{ $totalHadir ?? 0 }}</span>
                             </div>
-                            <div class="glass-stat px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
+                            <div class="glass-stat hover-card px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
                                 <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase">Izin</span>
                                 <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1">{{ $ringkasanStatistik->total_izin ?? 0 }}</span>
                             </div>
-                            <div class="glass-stat px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
+                            <div class="glass-stat hover-card px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
                                 <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase">Sakit</span>
                                 <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1">{{ $ringkasanStatistik->total_sakit ?? 0 }}</span>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="glass-card p-2 md:p-5 rounded-xl md:rounded-[1.5rem] flex items-center gap-2 md:gap-5 w-5/12 md:w-auto shadow-xl border-white/20 shrink-0">
+                    <div class="glass-card hover-card live-badge p-2 md:p-5 rounded-xl md:rounded-[1.5rem] flex items-center gap-2 md:gap-5 w-5/12 md:w-auto shadow-xl border-white/20 shrink-0">
                         <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center text-sm md:text-2xl shadow-inner shrink-0
                             @if($isMinggu) bg-slate-100 @elseif($cekAbsensi && $cekAbsensi->status == 'Terlambat') bg-rose-100 @elseif($cekAbsensi) bg-emerald-50 @else bg-amber-50 @endif">
                             @if($isMinggu) ☕ @elseif($cekAbsensi && $cekAbsensi->status == 'Terlambat') ⏰ @elseif($cekAbsensi && $cekAbsensi->jam_keluar) 🏁 @elseif($cekAbsensi) ✅ @else ⏳ @endif
@@ -223,7 +228,7 @@
                             @php $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->hour; @endphp
                             @if(!$cekAbsensi)
                                 <div class="bg-white h-full p-2 md:p-6 flex flex-col items-center justify-center cursor-pointer text-center force-no-p" onclick="handleAbsensi()">
-                                    <div class="text-lg md:text-4xl mb-1">🚀</div>
+                                 <div class="text-lg md:text-4xl mb-1 rocket-float">🚀</div>
                                     <h4 class="font-black text-indigo-600 uppercase text-[6px] md:text-xs tracking-wider">KLIK MASUK</h4>
                                 </div>
                             @elseif(!$cekAbsensi->jam_keluar && in_array($cekAbsensi->status, ['Hadir', 'Terlambat']))
@@ -363,7 +368,7 @@
                 <form id="formUtamaAbsensi" action="{{ route('absensi.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="lat" id="lat"><input type="hidden" name="lng" id="lng">
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-black py-5 rounded-[1.5rem] shadow-xl uppercase active:scale-95 transition-all tracking-widest">Kirim Presensi 🚀</button>
+                    <button type="submit" class="pulse-btn class="w-full bg-indigo-600 text-white font-black py-5 rounded-[1.5rem] shadow-xl uppercase active:scale-95 transition-all tracking-widest">Kirim Presensi 🚀</button>
                 </form>
             </div>
         </div>
@@ -443,3 +448,903 @@
         }
     </script>
 </x-app-layout>
+
+<style>
+
+
+
+/* ===============================
+   PREMIUM DASHBOARD ANIMATION
+=================================*/
+
+.swal2-popup {
+    border-radius: 24px !important;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#map-preview {
+    height: 200px;
+    width: 100%;
+    border-radius: 1.5rem;
+    z-index: 1;
+}
+
+/* ===============================
+   GLASS EFFECT
+=================================*/
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    animation: floating 4s ease-in-out infinite;
+    transition: all .4s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.glass-stat {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    animation: floating 4s ease-in-out infinite;
+    transition: all .4s ease;
+}
+
+.glass-stat:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+@keyframes floating {
+    0%,100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+/* ===============================
+   HERO PREMIUM
+=================================*/
+
+.hero-premium {
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);
+    position: relative;
+    overflow: hidden;
+
+    box-shadow:
+        0 0 20px rgba(79,70,229,0.2),
+        0 0 60px rgba(79,70,229,0.1);
+
+    min-height: 140px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.hero-premium::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -5%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.hero-premium::after {
+    content:'';
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255,255,255,0.05) 25%,
+        transparent 50%
+    );
+
+    animation: shineMove 6s linear infinite;
+    pointer-events:none;
+}
+
+@keyframes shineMove {
+    0% {
+        transform:translateX(-100%);
+    }
+    100% {
+        transform:translateX(100%);
+    }
+}
+
+/* ===============================
+   TEXT ANIMATION
+=================================*/
+
+.hero-premium h1 {
+    animation: fadeSlide 1s ease;
+}
+
+@keyframes fadeSlide {
+    from {
+        opacity:0;
+        transform:translateX(-30px);
+    }
+    to {
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+/* ===============================
+   ROCKET FLOAT
+=================================*/
+
+.rocket-float {
+    animation: rocketFloat 2s ease-in-out infinite;
+}
+
+@keyframes rocketFloat {
+    0%,100% {
+        transform:translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform:translateY(-10px) rotate(-5deg);
+    }
+}
+
+/* ===============================
+   BUTTON GLOW
+=================================*/
+
+.pulse-btn {
+    animation:pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow:0 0 0 0 rgba(79,70,229,0.6);
+    }
+    70% {
+        box-shadow:0 0 0 15px rgba(79,70,229,0);
+    }
+    100% {
+        box-shadow:0 0 0 0 rgba(79,70,229,0);
+    }
+}
+
+/* ===============================
+   TABLE EFFECT
+=================================*/
+
+tbody tr {
+    transition:0.3s ease;
+}
+
+tbody tr:hover {
+    transform:scale(1.01);
+    background:#eef2ff;
+}
+
+/* ===============================
+   REALTIME CLOCK GLOW
+=================================*/
+
+#realtime-clock {
+    animation:clockGlow 2s infinite alternate;
+}
+
+@keyframes clockGlow {
+    from {
+        box-shadow:0 0 5px rgba(99,102,241,.2);
+    }
+    to {
+        box-shadow:0 0 20px rgba(99,102,241,.5);
+    }
+}
+
+/* ===============================
+   TIMER BLINK
+=================================*/
+
+#timer {
+    animation:blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity:0.4;
+    }
+    
+
+}
+
+/* ===============================
+   BACKGROUND PARTICLES
+=================================*/
+
+body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+
+    background-image:
+    radial-gradient(circle at 20% 30%, rgba(99,102,241,0.08) 2px, transparent 2px),
+    radial-gradient(circle at 70% 60%, rgba(168,85,247,0.08) 2px, transparent 2px),
+    radial-gradient(circle at 40% 80%, rgba(59,130,246,0.08) 2px, transparent 2px);
+
+    background-size:150px 150px;
+
+    animation:bgMove 20s linear infinite;
+
+    pointer-events:none;
+    z-index:-1;
+}
+
+@keyframes bgMove {
+    from {
+        transform:translateY(0px);
+    }
+    to {
+        transform:translateY(-200px);
+    }
+}
+
+/* ===============================
+   LIVE BADGE
+=================================*/
+
+.live-badge {
+    position:relative;
+}
+
+.live-badge::after {
+    content:'';
+    position:absolute;
+    top:-2px;
+    right:-2px;
+    width:8px;
+    height:8px;
+    background:#10b981;
+    border-radius:50%;
+
+    animation:ping 1.5s infinite;
+}
+
+@keyframes ping {
+    0% {
+        transform:scale(1);
+        opacity:1;
+    }
+    100% {
+        transform:scale(2.5);
+        opacity:0;
+    }
+}
+
+/* ===============================
+   CARD SHOW ANIMATION
+=================================*/
+
+.grid > div {
+    animation:cardShow .7s ease both;
+}
+
+.grid > div:nth-child(2) {
+    animation-delay:.2s;
+}
+
+.grid > div:nth-child(3) {
+    animation-delay:.4s;
+}
+
+@keyframes cardShow {
+    from {
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to {
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ===============================
+   FLOATING EMOJI
+=================================*/
+
+.floating-emoji {
+    position:absolute;
+    font-size:20px;
+    animation:emojiFloat 6s linear infinite;
+    opacity:0.15;
+}
+
+@keyframes emojiFloat {
+    0% {
+        transform:translateY(30px);
+        opacity:0;
+    }
+
+    20% {
+        opacity:0.15;
+    }
+
+    100% {
+        transform:translateY(-250px);
+        opacity:0;
+    }
+}
+
+/* ===============================
+   MOBILE OPTIMIZATION
+=================================*/
+
+@media (max-width: 767px) {
+
+    .mobile-title {
+        font-size: 10px !important;
+        font-weight: 800 !important;
+    }
+
+    .mobile-sub {
+        font-size: 7px !important;
+    }
+
+    .mobile-badge {
+        font-size: 6px !important;
+        padding: 2px 4px !important;
+    }
+
+    .mobile-table-text {
+        font-size: 7.5px !important;
+    }
+
+    .mobile-padding {
+        padding: 6px 4px !important;
+    }
+
+    .mobile-truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 80px;
+    }
+
+    .force-no-p {
+        padding: 6px !important;
+        border-radius: 1rem !important;
+    }
+
+    .force-tight-gap {
+        gap: 4px !important;
+    }
+
+    .force-icon-size {
+        width: 22px !important;
+        height: 22px !important;
+    }
+}
+
+
+<!-- ===================================================== -->
+<!-- FLOATING ASSISTANT CHARACTER -->
+<!-- ===================================================== -->
+
+<div id="floatingGirl">
+
+    <img 
+    src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
+    alt="assistant">
+
+</div>
+
+<!-- ===================================================== -->
+<!-- REMINDER POPUP -->
+<!-- ===================================================== -->
+
+<div id="reminderPopup">
+
+    <div class="popup-header">
+        🔔 Reminder Kehadiran
+    </div>
+
+    <div class="popup-body">
+
+        <div class="typing-text">
+            Jangan lupa melakukan absensi hari ini ya 😊
+        </div>
+
+        <button onclick="handleAbsensi()">
+            Absen Sekarang
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- FLOATING TOAST -->
+<!-- ===================================================== -->
+
+<div id="toastNotif">
+    🚀 Sistem Absensi Aktif
+</div>
+
+<!-- ===================================================== -->
+<!-- CSS -->
+<!-- ===================================================== -->
+
+<style>
+
+/* ===================================================== */
+/* FLOATING GIRL */
+/* ===================================================== */
+
+#floatingGirl{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    z-index:9999;
+    animation:floatingGirl 4s ease-in-out infinite;
+}
+
+#floatingGirl img{
+    width:95px;
+    filter:drop-shadow(0 20px 30px rgba(99,102,241,.35));
+    transition:.3s;
+}
+
+#floatingGirl img:hover{
+    transform:scale(1.08) rotate(-4deg);
+}
+
+@keyframes floatingGirl{
+    0%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(-15px);
+    }
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+/* ===================================================== */
+/* POPUP */
+/* ===================================================== */
+
+#reminderPopup{
+    position:fixed;
+    top:30px;
+    right:30px;
+    width:320px;
+    background:white;
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:0 25px 60px rgba(0,0,0,.15);
+    z-index:99999;
+    animation:popupSlide .8s ease;
+    border:1px solid #eef2ff;
+}
+
+.popup-header{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    padding:16px 22px;
+    font-weight:800;
+    font-size:15px;
+    letter-spacing:.5px;
+}
+
+.popup-body{
+    padding:24px;
+}
+
+.popup-body button{
+    width:100%;
+    margin-top:18px;
+    border:none;
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    padding:14px;
+    border-radius:16px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.popup-body button:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 35px rgba(99,102,241,.25);
+}
+
+@keyframes popupSlide{
+    from{
+        opacity:0;
+        transform:translateY(-30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ===================================================== */
+/* TYPING EFFECT */
+/* ===================================================== */
+
+.typing-text{
+    overflow:hidden;
+    white-space:nowrap;
+    border-right:3px solid #4f46e5;
+    width:0;
+    font-weight:600;
+    color:#334155;
+    animation:
+    typing 4s steps(40,end) forwards,
+    blink .8s infinite;
+}
+
+@keyframes typing{
+    from{
+        width:0;
+    }
+    to{
+        width:100%;
+    }
+}
+
+@keyframes blink{
+    50%{
+        border-color:transparent;
+    }
+}
+
+/* ===================================================== */
+/* TOAST */
+/* ===================================================== */
+
+#toastNotif{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    background:#0f172a;
+    color:white;
+    padding:16px 24px;
+    border-radius:18px;
+    font-weight:700;
+    z-index:99999;
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+    animation:toastAnim 1s ease;
+}
+
+@keyframes toastAnim{
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ===================================================== */
+/* AUTO HIDE */
+/* ===================================================== */
+
+.hidePopup{
+    animation:hidePopup .5s forwards;
+}
+
+@keyframes hidePopup{
+    to{
+        opacity:0;
+        transform:translateY(-20px);
+    }
+}
+
+/* ===================================================== */
+/* GLOW */
+/* ===================================================== */
+
+#reminderPopup{
+    animation:
+    popupSlide .8s ease,
+    glowPopup 2s infinite alternate;
+}
+
+@keyframes glowPopup{
+    from{
+        box-shadow:0 20px 50px rgba(79,70,229,.15);
+    }
+    to{
+        box-shadow:0 25px 70px rgba(124,58,237,.28);
+    }
+}
+
+/* ===================================================== */
+/* MOBILE */
+/* ===================================================== */
+
+@media(max-width:768px){
+
+    #reminderPopup{
+        width:88%;
+        right:6%;
+        top:15px;
+    }
+
+    #floatingGirl img{
+        width:70px;
+    }
+
+    #toastNotif{
+        right:12px;
+        left:12px;
+        text-align:center;
+    }
+
+}
+
+/* ===================================================== */
+/* MINI ASSISTANT */
+/* ===================================================== */
+
+#miniAssistant{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    z-index:9999;
+    animation:assistantFloat 3s ease-in-out infinite;
+}
+
+#miniAssistant img{
+    width:70px;
+    height:70px;
+    object-fit:contain;
+    cursor:pointer;
+    filter:drop-shadow(0 10px 20px rgba(79,70,229,.3));
+    transition:.3s;
+}
+
+#miniAssistant img:hover{
+    transform:scale(1.08);
+}
+
+.assistantBubble{
+    position:absolute;
+    right:80px;
+    bottom:18px;
+    background:white;
+    padding:10px 14px;
+    border-radius:16px;
+    font-size:11px;
+    font-weight:700;
+    color:#1e293b;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    white-space:nowrap;
+}
+
+@keyframes assistantFloat{
+    0%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(-10px);
+    }
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+#miniReminder{
+    position:fixed;
+    top:90px;
+    right:20px;
+    background:white;
+    padding:14px 18px;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    z-index:9998;
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+    border:1px solid #eef2ff;
+}
+
+.reminderIcon{
+    width:40px;
+    height:40px;
+    border-radius:14px;
+    background:#eef2ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+#miniReminder h4{
+    font-size:13px;
+    font-weight:800;
+    color:#0f172a;
+    margin:0;
+}
+
+#miniReminder p{
+    font-size:11px;
+    color:#64748b;
+    margin:2px 0 0;
+}
+
+.hero-premium{
+    position:relative;
+    overflow:hidden;
+}
+
+.hero-premium::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.08),
+        transparent
+    );
+
+    transform:translateX(-100%);
+    animation:heroShine 6s linear infinite;
+}
+
+@keyframes heroShine{
+    100%{
+        transform:translateX(100%);
+    }
+}
+
+</style>
+
+<!-- ===================================================== -->
+<!-- SCRIPT -->
+<!-- ===================================================== -->
+
+<script>
+
+/* ===================================================== */
+/* AUTO HIDE TOAST */
+/* ===================================================== */
+
+setTimeout(() => {
+
+    const toast = document.getElementById('toastNotif');
+
+    if(toast){
+        toast.style.display = 'none';
+    }
+
+},4000);
+
+/* ===================================================== */
+/* AUTO HIDE REMINDER */
+/* ===================================================== */
+
+setTimeout(() => {
+
+    const popup = document.getElementById('reminderPopup');
+
+    if(popup){
+        popup.classList.add('hidePopup');
+
+        setTimeout(() => {
+            popup.style.display = 'none';
+        },500);
+    }
+
+},12000);
+
+/* ===================================================== */
+/* RANDOM MESSAGE */
+/* ===================================================== */
+
+const messages = [
+
+    "Jangan lupa melakukan absensi 😊",
+
+    "Semangat bekerja hari ini 🚀",
+
+    "Pastikan lokasi GPS aktif 📍",
+
+    "Hari ini kamu keren ✨",
+
+    "Tetap produktif ya 💼"
+
+];
+
+const typing = document.querySelector('.typing-text');
+
+if(typing){
+
+    const random = messages[Math.floor(Math.random()*messages.length)];
+
+    typing.innerHTML = random;
+
+}
+
+/* ===================================================== */
+/* CLICK CHARACTER */
+/* ===================================================== */
+
+document.getElementById('floatingGirl')
+.addEventListener('click',function(){
+
+    const popup = document.getElementById('reminderPopup');
+
+    popup.style.display = 'block';
+
+});
+
+</script>
+
+<!-- ===================================================== -->
+<!-- MINI FLOATING ASSISTANT -->
+<!-- ===================================================== -->
+
+<div id="miniAssistant">
+
+    <img 
+    src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
+    alt="assistant">
+
+    <div class="assistantBubble">
+        Halo {{ Auth::user()->name }} 👋
+    </div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- MINI REMINDER -->
+<!-- ===================================================== -->
+
+<div id="miniReminder">
+
+    <div class="reminderIcon">
+        🔔
+    </div>
+
+    <div>
+        <h4>Reminder Absensi</h4>
+        <p>Jangan lupa absen hari ini 🚀</p>
+    </div>
+
+</div>
+
+</style>
+
+
+
+
