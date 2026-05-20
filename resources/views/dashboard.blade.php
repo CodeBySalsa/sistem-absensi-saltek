@@ -907,46 +907,17 @@ tbody tr:hover{
 <!-- PREMIUM TOAST -->
 <!-- ===================================================== -->
 
-<div id="liveToast">
+<!-- ===================================================== -->
+<!-- REMINDER POPUP -->
+<!-- ===================================================== -->
 
-    <div class="toast-top">
-        🚀 Sistem Absensi Premium
-    </div>
 
-    <div class="toast-body">
-
-        <h3>
-            Halo {{ Auth::user()->name }} 👋
-        </h3>
-
-        <p>
-            Jangan lupa melakukan absensi hari ini ya ✨
-        </p>
-
-        <button
-        class="toast-btn"
-        onclick="handleAbsensi()">
-            Absen Sekarang
-        </button>
-
-    </div>
 
 </div>
-
 <!-- ===================================================== -->
 <!-- MINI ASSISTANT -->
 <!-- ===================================================== -->
 
-<div id="miniAssistant">
-
-    <img
-    id="assistantImg"
-    src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
-    alt="assistant">
-
-    <div class="assistant-chat">
-        Klik aku 😊
-    </div>
 
 </div>
 
@@ -1534,24 +1505,26 @@ tbody tr:hover{
 </style>
 
 <!-- ===================================================== -->
-<!-- PREMIUM TOAST -->
+<!-- PREMIUM REMINDER MINI POPUP -->
 <!-- ===================================================== -->
 
 <!-- ===================================================== -->
-<!-- REMINDER POPUP -->
+<!-- MINI POPUP REMINDER -->
 <!-- ===================================================== -->
 
-<div id="liveToast">
+<!-- ===================================================== -->
+<!-- MINI POPUP REMINDER -->
+<!-- ===================================================== -->
 
-    <div class="toast-top">
-        🔔 Pengingat Absensi
+<div id="miniPopupReminder">
+
+    <div class="miniBell">
+        🔔
     </div>
 
-    <div class="toast-body">
+    <div class="miniPopupContent">
 
-        <h3>
-            Halo {{ Auth::user()->name }} 👋
-        </h3>
+        <h4>Pengingat Absensi</h4>
 
         <p>
             Jangan lupa melakukan absensi hari ini ya ✨
@@ -1560,24 +1533,953 @@ tbody tr:hover{
     </div>
 
 </div>
+</div>
+
+<!-- ===================================================== -->
+<!-- ROBOT ASSISTANT -->
+<!-- ===================================================== -->
+
+<div id="robotAssistant">
+
+    <div class="robotBubble">
+        Semangat bekerja 🚀
+    </div>
+
+    <img 
+    src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
+    alt="robot">
+
+</div>
+
+<!-- ===================================================== -->
+<!-- STYLE -->
+<!-- ===================================================== -->
+
+<style>
+
+/* ===================================================== */
+/* MINI POPUP REMINDER */
+/* ===================================================== */
+
+#miniPopupReminder{
+
+    position:fixed;
+
+    top:22px;
+    right:22px;
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:10px 14px;
+
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+
+    z-index:99999;
+
+    min-width:240px;
+    max-width:260px;
+
+    border:1px solid #eef2ff;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.08);
+
+    animation:
+    popupFade .5s ease,
+    popupOut .5s ease 3s forwards;
+}
+
+/* ICON */
+
+.miniBell{
+
+    width:34px;
+    height:34px;
+
+    min-width:34px;
+
+    border-radius:12px;
+
+    background:#eef2ff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:15px;
+
+    animation:bellShake 2s infinite;
+}
+
+/* CONTENT */
+
+.miniPopupContent h4{
+
+    margin:0;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    color:#0f172a;
+}
+
+.miniPopupContent p{
+
+    margin-top:3px;
+
+    font-size:10px;
+
+    line-height:1.5;
+
+    color:#64748b;
+
+    font-weight:600;
+}
+
+/* ANIMATION */
+
+@keyframes popupFade{
+
+    from{
+        opacity:0;
+        transform:
+        translateY(-15px)
+        scale(.95);
+    }
+
+    to{
+        opacity:1;
+        transform:
+        translateY(0)
+        scale(1);
+    }
+}
+
+@keyframes popupOut{
+
+    to{
+        opacity:0;
+        transform:translateY(-10px);
+        visibility:hidden;
+    }
+}
+
+/* LONCENG */
+
+@keyframes bellShake{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    5%{
+        transform:rotate(10deg);
+    }
+
+    10%{
+        transform:rotate(-10deg);
+    }
+
+    15%{
+        transform:rotate(8deg);
+    }
+
+    20%{
+        transform:rotate(0deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    #miniPopupReminder{
+
+        right:10px;
+        left:10px;
+
+        max-width:none;
+        min-width:auto;
+
+    }
+
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    #miniPopupReminder{
+
+        right:10px;
+        left:10px;
+
+        max-width:none;
+        min-width:auto;
+
+    }
+
+}
+
+/* ===================================================== */
+/* ROBOT ASSISTANT */
+/* ===================================================== */
+
+#robotAssistant{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    z-index:9999;
+
+    animation:robotFloat 3s ease-in-out infinite;
+}
+
+#robotAssistant img{
+    width:85px;
+    cursor:pointer;
+
+    filter:
+    drop-shadow(0 15px 30px rgba(79,70,229,.35));
+
+    transition:.3s;
+}
+
+#robotAssistant img:hover{
+    transform:scale(1.08) rotate(-5deg);
+}
+
+.robotBubble{
+    position:absolute;
+    right:90px;
+    bottom:25px;
+
+    background:white;
+
+    padding:10px 16px;
+
+    border-radius:18px;
+
+    font-size:12px;
+    font-weight:700;
+
+    color:#1e293b;
+
+    white-space:nowrap;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.08);
+
+    animation:bubbleGlow 2s infinite alternate;
+}
+
+@keyframes bubbleGlow{
+    from{
+        box-shadow:
+        0 10px 25px rgba(79,70,229,.08);
+    }
+    to{
+        box-shadow:
+        0 15px 35px rgba(124,58,237,.20);
+    }
+}
+
+@keyframes robotFloat{
+    0%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(-12px);
+    }
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+/* ===================================================== */
+/* GLOBAL CARD STYLE */
+/* ===================================================== */
+
+.grid > div{
+
+    transition:.35s ease;
+    position:relative;
+    overflow:hidden;
+    border-radius:28px;
+
+}
+
+/* hover semua card */
+
+.grid > div:hover{
+
+    transform:
+    translateY(-8px)
+    scale(1.02);
+
+    box-shadow:
+    0 20px 40px rgba(79,70,229,.12);
+
+}
+
+/* glow effect */
+
+.grid > div::before{
+
+    content:'';
+
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.25),
+        transparent
+    );
+
+    transform:translateX(-100%);
+
+}
+
+.grid > div:hover::before{
+
+    animation:cardShine 1.2s linear;
+
+}
+
+@keyframes cardShine{
+
+    100%{
+        transform:translateX(100%);
+    }
+
+}
+
+/* ===================================================== */
+/* CARD PENCAPAIAN */
+/* ===================================================== */
+
+.pencapaian-card{
+
+    background:
+    linear-gradient(
+        135deg,
+        #eef2ff,
+        #dbeafe
+    ) !important;
+
+    border:1px solid rgba(99,102,241,.08);
+
+}
+
+/* icon kecil */
+
+.pencapaian-card img{
+
+    transition:.4s ease;
+    cursor:pointer;
+
+}
+
+/* bergerak saat disentuh */
+
+.pencapaian-card img:hover{
+
+    transform:
+    rotate(15deg)
+    scale(1.18);
+
+    filter:drop-shadow(0 10px 20px rgba(79,70,229,.25));
+
+}
+
+/* efek klik */
+
+.pencapaian-card img:active{
+
+    transform:
+    scale(.92);
+
+}
+
+/* sparkle */
+
+.pencapaian-card::after{
+
+    content:'✨';
+
+    position:absolute;
+
+    top:14px;
+    right:18px;
+
+    font-size:14px;
+
+    animation:sparkle 2s infinite;
+
+}
+
+@keyframes sparkle{
+
+    0%{
+        opacity:0;
+        transform:scale(.5);
+    }
+
+    50%{
+        opacity:1;
+        transform:scale(1.2);
+    }
+
+    100%{
+        opacity:0;
+        transform:scale(.5);
+    }
+
+}
+
+/* ===================================================== */
+/* CARD INFO KEHADIRAN */
+/* ===================================================== */
+
+.info-kehadiran-card{
+
+    background:
+    linear-gradient(
+        135deg,
+        #fff7ed,
+        #fef3c7
+    ) !important;
+
+    border:1px solid rgba(251,191,36,.12);
+
+}
+
+/* input alasan */
+
+#formIzinSakit input{
+
+    height:58px !important;
+
+    font-size:13px !important;
+
+    border-radius:18px !important;
+
+    padding:14px 18px !important;
+
+    background:#ffffff !important;
+
+    box-shadow:
+    inset 0 2px 6px rgba(0,0,0,.04);
+
+    border:none !important;
+
+}
+
+/* tombol izin sakit */
+
+#formIzinSakit button{
+
+    height:48px !important;
+
+    font-size:13px !important;
+
+    border-radius:16px !important;
+
+    transition:.3s ease;
+
+    font-weight:600;
+
+}
+
+/* hover tombol */
+
+#formIzinSakit button:hover{
+
+    transform:
+    translateY(-3px)
+    scale(1.03);
+
+    box-shadow:
+    0 10px 20px rgba(0,0,0,.08);
+
+}
+
+/* tombol izin */
+
+#formIzinSakit button:first-child{
+
+    background:
+    linear-gradient(
+        135deg,
+        #fbbf24,
+        #f59e0b
+    ) !important;
+
+    color:white !important;
+
+}
+
+/* tombol sakit */
+
+#formIzinSakit button:last-child{
+
+    background:
+    linear-gradient(
+        135deg,
+        #fb7185,
+        #f43f5e
+    ) !important;
+
+    color:white !important;
+
+}
+
+/* ===================================================== */
+/* CARD ABSENSI */
+/* ===================================================== */
+
+.absensi-card{
+
+    background:
+    linear-gradient(
+        135deg,
+        #eff6ff,
+        #dbeafe
+    ) !important;
+
+    border:1px solid rgba(59,130,246,.10);
+
+}
+
+/* rocket default diam */
+
+.rocket-float{
+
+    transition:.35s ease;
+    cursor:pointer;
+
+}
+
+/* bergerak hanya saat disentuh */
+
+.rocket-float:hover{
+
+    animation:rocketMove .8s ease infinite;
+
+}
+
+@keyframes rocketMove{
+
+    0%{
+        transform:translateY(0px) rotate(0deg);
+    }
+
+    25%{
+        transform:translateY(-8px) rotate(-6deg);
+    }
+
+    50%{
+        transform:translateY(0px) rotate(6deg);
+    }
+
+    75%{
+        transform:translateY(-5px) rotate(-4deg);
+    }
+
+    100%{
+        transform:translateY(0px) rotate(0deg);
+    }
+
+}
+
+/* ===================================================== */
+/* REALTIME STATUS */
+/* ===================================================== */
+
+.glass-card{
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,255,255,.95),
+        rgba(255,255,255,.82)
+    ) !important;
+
+    backdrop-filter:blur(12px);
+
+    transition:.4s ease;
+
+    border-radius:24px;
+
+}
+
+.glass-card:hover{
+
+    transform:
+    translateY(-6px);
+
+    box-shadow:
+    0 20px 40px rgba(79,70,229,.12);
+
+}
+
+/* ===================================================== */
+/* POPUP PENGINGAT */
+/* ===================================================== */
+
+#liveToast{
+
+    position:fixed;
+    top:25px;
+    right:25px;
+
+    width:260px;
+
+    background:#ffffff;
+
+    border-radius:20px;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.12);
+
+    z-index:9999;
+
+    overflow:hidden;
+
+    animation:
+    toastSlide .5s ease,
+    toastHide .5s ease 3s forwards;
+
+}
+
+/* isi popup */
+
+.toast-body{
+
+    padding:16px;
+
+}
+
+/* top popup */
+
+.toast-top{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:12px 16px;
+
+    background:#ffffff;
+
+    border-bottom:1px solid #f1f5f9;
+
+    font-size:14px;
+    font-weight:700;
+    color:#111827;
+
+}
+
+/* icon lonceng */
+
+.toast-top::before{
+
+    content:'🔔';
+
+    font-size:16px;
+
+    animation:ring 1s infinite;
+
+}
+
+/* animasi lonceng */
+
+@keyframes ring{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    25%{
+        transform:rotate(15deg);
+    }
+
+    50%{
+        transform:rotate(-15deg);
+    }
+
+    75%{
+        transform:rotate(10deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+
+}
+
+.toast-body h3{
+
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:6px;
+    color:#111827;
+
+}
+
+.toast-body p{
+
+    font-size:12px;
+    color:#64748b;
+    line-height:1.5;
+
+}
+
+/* animasi muncul */
+
+@keyframes toastSlide{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(-20px)
+        scale(.9);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0)
+        scale(1);
+
+    }
+
+}
+
+/* animasi hilang */
+
+@keyframes toastHide{
+
+    to{
+
+        opacity:0;
+        visibility:hidden;
+
+        transform:
+        translateY(-20px)
+        scale(.9);
+
+    }
+
+}
+
+/* ===================================================== */
+/* ROBOT */
+/* ===================================================== */
+
+.robot-chat{
+
+    position:fixed;
+    right:20px;
+    bottom:18px;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    z-index:999;
+
+}
+
+.robot-text{
+
+    background:#ffffff;
+
+    padding:10px 14px;
+
+    border-radius:16px;
+
+    font-size:12px;
+    font-weight:600;
+
+    color:#4f46e5;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,.08);
+
+    animation:robotFloat 2s infinite ease-in-out;
+
+}
+
+/* robot bergerak terus */
+
+.robot-img{
+
+    animation:robotMove 2s infinite ease-in-out;
+
+}
+
+@keyframes robotMove{
+
+    0%{
+        transform:translateY(0px) rotate(0deg);
+    }
+
+    50%{
+        transform:translateY(-8px) rotate(4deg);
+    }
+
+    100%{
+        transform:translateY(0px) rotate(0deg);
+    }
+
+}
+
+@keyframes robotFloat{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-4px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+
+}
+
+/* ===================================================== */
+/* MOBILE */
+/* ===================================================== */
+
+@media(max-width:768px){
+
+    #liveToast{
+
+        width:220px;
+        right:15px;
+        top:15px;
+
+    }
+
+    #formIzinSakit input{
+
+        height:50px !important;
+        font-size:11px !important;
+
+    }
+
+    #formIzinSakit button{
+
+        height:42px !important;
+        font-size:11px !important;
+
+    }
+
+    .robot-text{
+
+        display:none;
+
+    }
+
+}
+
+/* ===================================================== */
+/* CARD UMUM */
+/* ===================================================== */
+
+.grid > div{
+
+    transition:.35s;
+}
+
+.grid > div:hover{
+
+    transform:translateY(-5px);
+
+}
+
+/* ===================================================== */
+/* MOBILE */
+/* ===================================================== */
+
+@media(max-width:768px){
+
+    #miniPopupReminder{
+
+        width:88%;
+        right:6%;
+        top:15px;
+
+    }
+
+    #robotAssistant img{
+
+        width:70px;
+
+    }
+
+    .robotBubble{
+
+        font-size:10px;
+        right:75px;
+
+    }
+
+}
+
+</style>
+
+<!-- ===================================================== -->
+<!-- SCRIPT -->
+<!-- ===================================================== -->
+
+<script>
+
+/* ===================================================== */
+/* AUTO HIDE POPUP */
+/* ===================================================== */
+
+setTimeout(() => {
+
+    const popup = document.getElementById('miniPopupReminder');
+
+    if(popup){
+
+        popup.style.display = 'none';
+
+    }
+
+},3000);
+
+</script>
+</div>
 
 
 <!-- ===================================================== -->
 <!-- MINI ASSISTANT -->
 <!-- ===================================================== -->
 
-<div id="miniAssistant">
 
-    <img
-    id="assistantImg"
-    src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
-    alt="assistant">
-
-    <div class="assistant-chat">
-        Klik aku 😊
-    </div>
-
-</div>
 
 <!-- ===================================================== -->
 <!-- POPUP INFO -->
@@ -1704,5 +2606,345 @@ document.querySelectorAll('.hover-card')
     });
 
 });
+
+
+/* ===================================================== */
+/* POPUP ABSEN PULANG */
+/* ===================================================== */
+
+#toastPulang{
+
+    position:fixed;
+
+    top:25px;
+    right:25px;
+
+    width:260px;
+
+    background:#ffffff;
+
+    border-radius:20px;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.12);
+
+    z-index:9999;
+
+    overflow:hidden;
+
+    animation:
+    toastSlide .5s ease,
+    toastHide .5s ease 3s forwards;
+
+}
+
+/* top popup */
+
+#toastPulang .toast-top{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:12px 16px;
+
+    border-bottom:1px solid #f1f5f9;
+
+    font-size:14px;
+    font-weight:700;
+
+    color:#111827;
+
+    background:#ffffff;
+
+}
+
+/* icon lonceng */
+
+#toastPulang .toast-top::before{
+
+    content:'🔔';
+
+    font-size:16px;
+
+    animation:ring 1s infinite;
+
+}
+
+/* isi popup */
+
+#toastPulang .toast-body{
+
+    padding:16px;
+
+}
+
+#toastPulang .toast-body h3{
+
+    font-size:15px;
+    margin-bottom:6px;
+
+    color:#111827;
+
+}
+
+#toastPulang .toast-body p{
+
+    font-size:12px;
+    color:#64748b;
+
+    line-height:1.5;
+
+}
+
+/* animasi popup */
+
+@keyframes toastSlide{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(-20px)
+        scale(.9);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0)
+        scale(1);
+
+    }
+
+}
+
+@keyframes toastHide{
+
+    to{
+
+        opacity:0;
+        visibility:hidden;
+
+        transform:
+        translateY(-20px)
+        scale(.9);
+
+    }
+
+}
+
+/* animasi lonceng */
+
+@keyframes ring{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    25%{
+        transform:rotate(15deg);
+    }
+
+    50%{
+        transform:rotate(-15deg);
+    }
+
+    75%{
+        transform:rotate(10deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+
+}
+
+<div id="toastPulang">
+
+    <div class="toast-top">
+        Pengingat Pulang
+    </div>
+
+    <div class="toast-body">
+
+        <h3>
+            Hai {{ Auth::user()->name }} 👋
+        </h3>
+
+        <p>
+            Jangan lupa absen pulang ya ✨
+        </p>
+
+    </div>
+
+</div>
+
+/* ===================================================== */
+/* ICON KALENDER */
+/* ===================================================== */
+
+.calendar-icon{
+
+    cursor:pointer;
+    transition:.3s ease;
+
+}
+
+/* saat disentuh */
+
+.calendar-icon:hover{
+
+    animation:calendarDance .8s ease infinite;
+
+    filter:
+    drop-shadow(
+        0 10px 20px rgba(79,70,229,.35)
+    );
+
+}
+
+/* animasi kalender */
+
+@keyframes calendarDance{
+
+    0%{
+        transform:
+        rotate(0deg)
+        translateY(0px)
+        scale(1);
+    }
+
+    20%{
+        transform:
+        rotate(12deg)
+        translateY(-5px)
+        scale(1.08);
+    }
+
+    40%{
+        transform:
+        rotate(-12deg)
+        translateY(0px)
+        scale(1.12);
+    }
+
+    60%{
+        transform:
+        rotate(8deg)
+        translateY(-4px)
+        scale(1.08);
+    }
+
+    80%{
+        transform:
+        rotate(-8deg)
+        translateY(0px)
+        scale(1.05);
+    }
+
+    100%{
+        transform:
+        rotate(0deg)
+        translateY(0px)
+        scale(1);
+    }
+
+}
+
+/* ===================================================== */
+/* ICON RUMAH */
+/* ===================================================== */
+
+.home-float{
+
+    cursor:pointer;
+    transition:.3s ease;
+
+}
+
+/* saat disentuh */
+
+.home-float:hover{
+
+    animation:homeDance .8s ease infinite;
+
+    filter:
+    drop-shadow(
+        0 10px 22px rgba(59,130,246,.35)
+    );
+
+}
+
+/* animasi rumah */
+
+@keyframes homeDance{
+
+    0%{
+        transform:
+        translateY(0px)
+        rotate(0deg)
+        scale(1);
+    }
+
+    25%{
+        transform:
+        translateY(-8px)
+        rotate(-8deg)
+        scale(1.08);
+    }
+
+    50%{
+        transform:
+        translateY(0px)
+        rotate(8deg)
+        scale(1.12);
+    }
+
+    75%{
+        transform:
+        translateY(-5px)
+        rotate(-5deg)
+        scale(1.08);
+    }
+
+    100%{
+        transform:
+        translateY(0px)
+        rotate(0deg)
+        scale(1);
+    }
+
+}
+
+</script>
+
+<script>
+
+window.onload = function(){
+
+    let jam = new Date().getHours();
+
+    // popup masuk pagi
+    if(jam >= 6 && jam <= 10){
+
+        document.getElementById("liveToast")
+        .style.display = "block";
+
+    }
+
+    // popup pulang sore
+    if(jam >= 16 && jam <= 18){
+
+        document.getElementById("toastPulang")
+        .style.display = "block";
+
+    }
+
+}
 
 </script>
