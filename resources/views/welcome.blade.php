@@ -3,72 +3,817 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Absensi Digital - PT SALTTEK DUMPANG JAYA</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:'Plus Jakarta Sans',sans-serif;
+            overflow-x:hidden;
+
+            background:
+            linear-gradient(135deg,#eef4ff,#f8fbff);
+
+            min-height:100vh;
+            position:relative;
+        }
+
+        /* ===================================== */
+        /* AURORA BACKGROUND */
+        /* ===================================== */
+
+        body::before{
+            content:'';
+            position:fixed;
+            inset:-20%;
+
+            background:
+            radial-gradient(circle at 20% 20%, rgba(59,130,246,0.18), transparent 30%),
+            radial-gradient(circle at 80% 30%, rgba(99,102,241,0.18), transparent 35%),
+            radial-gradient(circle at 50% 80%, rgba(6,182,212,0.16), transparent 35%);
+
+            filter:blur(80px);
+
+            animation:auroraMove 18s ease-in-out infinite alternate;
+
+            z-index:-5;
+        }
+
+        @keyframes auroraMove{
+
+            0%{
+                transform:
+                translateX(-40px)
+                translateY(-20px)
+                rotate(0deg);
+            }
+
+            100%{
+                transform:
+                translateX(40px)
+                translateY(20px)
+                rotate(8deg);
+            }
+        }
+
+        /* ===================================== */
+        /* MAIN BG */
+        /* ===================================== */
+
+        .animated-bg{
+            position:fixed;
+            inset:0;
+            overflow:hidden;
+            pointer-events:none;
+            z-index:0;
+        }
+
+        /* ===================================== */
+        /* FLOATING BUBBLES */
+        /* ===================================== */
+
+/* ===================================== */
+/* FLOATING BUBBLES */
+/* ===================================== */
+
+.bubble{
+    position:absolute;
+    bottom:-200px;
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+        circle at 30% 30%,
+        rgba(255,255,255,0.7),
+        rgba(139,92,246,0.35),
+        rgba(59,130,246,0.28)
+    );
+
+    border:1px solid rgba(255,255,255,0.25);
+
+    backdrop-filter:blur(10px);
+
+    box-shadow:
+    inset 0 0 20px rgba(255,255,255,0.45),
+    0 0 35px rgba(139,92,246,0.35),
+    0 0 60px rgba(59,130,246,0.25);
+
+    animation:bubbleMove linear infinite;
+}
+
+/* VARIASI WARNA BUBBLE */
+
+.x1{
+    background:
+    radial-gradient(circle at 30% 30%,
+    rgba(255,255,255,0.8),
+    rgba(99,102,241,0.45),
+    rgba(59,130,246,0.3));
+}
+
+.x2{
+    background:
+    radial-gradient(circle at 30% 30%,
+    rgba(255,255,255,0.8),
+    rgba(168,85,247,0.45),
+    rgba(99,102,241,0.3));
+}
+
+.x3{
+    background:
+    radial-gradient(circle at 30% 30%,
+    rgba(255,255,255,0.8),
+    rgba(59,130,246,0.45),
+    rgba(6,182,212,0.3));
+}
+
+.x4{
+    background:
+    radial-gradient(circle at 30% 30%,
+    rgba(255,255,255,0.8),
+    rgba(139,92,246,0.45),
+    rgba(59,130,246,0.3));
+}
+
+.x5{
+    background:
+    radial-gradient(circle at 30% 30%,
+    rgba(255,255,255,0.8),
+    rgba(99,102,241,0.45),
+    rgba(168,85,247,0.3));
+}
+
+        .x1{
+            width:130px;
+            height:130px;
+            left:5%;
+            animation-duration:18s;
+        }
+
+        .x2{
+            width:80px;
+            height:80px;
+            left:25%;
+            animation-duration:12s;
+            animation-delay:2s;
+        }
+
+        .x3{
+            width:150px;
+            height:150px;
+            right:10%;
+            animation-duration:20s;
+        }
+
+        .x4{
+            width:60px;
+            height:60px;
+            right:30%;
+            animation-duration:10s;
+            animation-delay:1s;
+        }
+
+        .x5{
+            width:100px;
+            height:100px;
+            left:50%;
+            animation-duration:15s;
+        }
+
+        @keyframes bubbleMove{
+
+            0%{
+                transform:
+                translateY(0)
+                scale(0.8)
+                rotate(0deg);
+
+                opacity:0;
+            }
+
+            20%{
+                opacity:.7;
+            }
+
+            100%{
+                transform:
+                translateY(-130vh)
+                scale(1.3)
+                rotate(360deg);
+
+                opacity:0;
+            }
+        }
+
+        /* ===================================== */
+        /* SPARKLES */
+        /* ===================================== */
+
+        .spark{
+            position:absolute;
+
+            color:white;
+
+            font-size:22px;
+
+            text-shadow:
+            0 0 10px #fff,
+            0 0 20px #6ea8ff,
+            0 0 35px #8b5cf6;
+
+            animation:sparkle 3s ease-in-out infinite;
+        }
+
+        .s1{
+            top:15%;
+            left:12%;
+        }
+
+        .s2{
+            top:25%;
+            right:18%;
+            animation-delay:1s;
+        }
+
+        .s3{
+            bottom:20%;
+            left:20%;
+            animation-delay:2s;
+        }
+
+        .s4{
+            bottom:30%;
+            right:25%;
+            animation-delay:1.5s;
+        }
+
+        @keyframes sparkle{
+
+            0%,100%{
+                opacity:.2;
+                transform:
+                scale(.5)
+                rotate(0deg);
+            }
+
+            50%{
+                opacity:1;
+                transform:
+                scale(1.5)
+                rotate(180deg);
+            }
+        }
+
+        /* ===================================== */
+        /* MICRO PARTICLES */
+        /* ===================================== */
+
+        .micro-particles{
+            position:fixed;
+            inset:0;
+            pointer-events:none;
+            z-index:0;
+        }
+
+        .micro-particles span{
+            position:absolute;
+
+            width:5px;
+            height:5px;
+
+            border-radius:999px;
+
+            background:rgba(255,255,255,0.6);
+
+            box-shadow:
+            0 0 10px rgba(255,255,255,0.6),
+            0 0 20px rgba(59,130,246,0.35);
+
+            animation:microFloat linear infinite;
+        }
+
+        .micro-particles span:nth-child(1){
+            top:15%;
+            left:10%;
+            animation-duration:12s;
+        }
+
+        .micro-particles span:nth-child(2){
+            top:35%;
+            left:85%;
+            animation-duration:15s;
+        }
+
+        .micro-particles span:nth-child(3){
+            top:75%;
+            left:20%;
+            animation-duration:11s;
+        }
+
+        .micro-particles span:nth-child(4){
+            top:60%;
+            left:70%;
+            animation-duration:17s;
+        }
+
+        .micro-particles span:nth-child(5){
+            top:40%;
+            left:45%;
+            animation-duration:13s;
+        }
+
+        @keyframes microFloat{
+
+            0%{
+                transform:translateY(0px);
+                opacity:0;
+            }
+
+            30%{
+                opacity:1;
+            }
+
+            100%{
+                transform:translateY(-120px);
+                opacity:0;
+            }
+        }
+
+        /* ===================================== */
+        /* CARD */
+        /* ===================================== */
+
+        .login-wrapper{
+            position:relative;
+            z-index:10;
+
+            animation:softZoom 1.2s ease;
+        }
+
+        @keyframes softZoom{
+
+            from{
+                opacity:0;
+                transform:scale(.92);
+            }
+
+            to{
+                opacity:1;
+                transform:scale(1);
+            }
+        }
+
+        .login-card{
+            position:relative;
+
+            overflow:hidden;
+
+            border-radius:40px;
+
+            padding:42px;
+
+            background:rgba(255,255,255,0.95);
+
+            backdrop-filter:blur(20px);
+
+            border:1px solid rgba(255,255,255,0.7);
+
+            box-shadow:
+            0 25px 70px rgba(59,130,246,0.18),
+            0 0 60px rgba(99,102,241,0.15);
+
+            animation:cardFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes cardFloat{
+
+            0%,100%{
+                transform:translateY(0px);
+            }
+
+            50%{
+                transform:translateY(-8px);
+            }
+        }
+
+        /* BORDER ANIMATION */
+
+        .login-card::before{
+            content:'';
+
+            position:absolute;
+            inset:0;
+
+            padding:2px;
+
+            border-radius:40px;
+
+            background:linear-gradient(
+                130deg,
+                #3b82f6,
+                #6366f1,
+                #06b6d4,
+                #3b82f6
+            );
+
+            background-size:300% 300%;
+
+            animation:borderMove 6s linear infinite;
+
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+
+            -webkit-mask-composite:xor;
+                    mask-composite:exclude;
+
+            z-index:-1;
+        }
+
+        @keyframes borderMove{
+
+            0%{
+                background-position:0% 50%;
+            }
+
+            50%{
+                background-position:100% 50%;
+            }
+
+            100%{
+                background-position:0% 50%;
+            }
+        }
+
+        /* ===================================== */
+        /* LOGO */
+        /* ===================================== */
+
+        .logo-box{
+            position:relative;
+
+            width:130px;
+            height:130px;
+
+            margin:auto;
+
+            border-radius:32px;
+
+            background:white;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            overflow:hidden;
+
+            box-shadow:
+            0 15px 40px rgba(59,130,246,0.18);
+
+            margin-bottom:30px;
+        }
+
+        .logo-box::before{
+            content:'';
+
+            position:absolute;
+            inset:-6px;
+
+            border-radius:38px;
+
+            background:conic-gradient(
+                from 0deg,
+                #3b82f6,
+                #06b6d4,
+                #6366f1,
+                #3b82f6
+            );
+
+            animation:spinGlow 5s linear infinite;
+
+            z-index:-1;
+
+            filter:blur(14px);
+        }
+
+        @keyframes spinGlow{
+
+            100%{
+                transform:rotate(360deg);
+            }
+        }
+
+        .logo-box img{
+            width:100%;
+            height:100%;
+            object-fit:contain;
+            transition:1s ease;
+        }
+
+        .logo-box:hover img{
+            transform:scale(1.08) rotate(3deg);
+        }
+
+        /* ===================================== */
+        /* TITLE */
+        /* ===================================== */
+
+        h1{
+            position:relative;
+
+            font-size:32px;
+            font-weight:800;
+
+            line-height:1.2;
+
+            text-transform:uppercase;
+
+            color:#1e293b;
+
+            text-align:center;
+
+            text-shadow:
+            0 0 15px rgba(59,130,246,0.12);
+
+            animation:titleFloat 5s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat{
+
+            0%,100%{
+                transform:translateY(0px);
+            }
+
+            50%{
+                transform:translateY(-4px);
+            }
+        }
+
+        .gradient-text{
+            background:
+            linear-gradient(
+                90deg,
+                #2563eb,
+                #6366f1,
+                #06b6d4,
+                #2563eb
+            );
+
+            background-size:200% auto;
+
+            color:transparent;
+
+            -webkit-background-clip:text;
+
+            animation:textWave 4s linear infinite;
+        }
+
+        @keyframes textWave{
+
+            100%{
+                background-position:200% center;
+            }
+        }
+
+        /* ===================================== */
+        /* DESCRIPTION */
+        /* ===================================== */
+
+        .desc{
+            margin-top:18px;
+
+            text-align:center;
+
+            color:#64748b;
+
+            font-size:14px;
+
+            line-height:1.8;
+        }
+
+        /* ===================================== */
+        /* BUTTON */
+        /* ===================================== */
+
+        .btn{
+            width:100%;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            padding:18px;
+
+            border-radius:20px;
+
+            font-weight:800;
+
+            text-decoration:none;
+
+            transition:.4s ease;
+
+            position:relative;
+
+            overflow:hidden;
+        }
+
+        .btn-primary{
+            background:#2563eb;
+            color:white;
+
+            box-shadow:
+            0 15px 30px rgba(37,99,235,0.25);
+        }
+
+        .btn-primary:hover{
+            transform:
+            translateY(-4px)
+            scale(1.02);
+
+            background:#1d4ed8;
+
+            box-shadow:
+            0 20px 40px rgba(37,99,235,0.4);
+        }
+
+        .btn-secondary{
+            background:white;
+
+            border:2px solid #e2e8f0;
+
+            color:#475569;
+        }
+
+        .btn-secondary:hover{
+            border-color:#93c5fd;
+
+            transform:
+            translateY(-4px)
+            scale(1.02);
+        }
+
+        /* ===================================== */
+        /* DIVIDER */
+        /* ===================================== */
+
+        .divider{
+            display:flex;
+            align-items:center;
+            gap:14px;
+
+            margin:25px 0;
+        }
+
+        .divider div{
+            flex:1;
+            height:1px;
+            background:#e2e8f0;
+        }
+
+        .divider span{
+            font-size:11px;
+            color:#94a3b8;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:3px;
+        }
+
+        /* ===================================== */
+        /* FOOTER */
+        /* ===================================== */
+
+        .footer{
+            margin-top:40px;
+            padding-top:25px;
+
+            border-top:1px solid #f1f5f9;
+
+            text-align:center;
+
+            font-size:10px;
+
+            color:#cbd5e1;
+
+            font-weight:800;
+
+            letter-spacing:5px;
+
+            text-transform:uppercase;
+        }
+
+    </style>
 </head>
-<body class="bg-[#F8FAFC] antialiased">
 
-    <div class="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
-        {{-- Efek Dekorasi Background --}}
-        <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-96 h-96 bg-blue-200 rounded-full blur-[120px] opacity-50"></div>
-        <div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/3 w-96 h-96 bg-indigo-200 rounded-full blur-[120px] opacity-50"></div>
+<body>
 
-        <div class="relative z-10 w-full max-w-md">
-            <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(8,112,184,0.12)] border border-blue-50/50 p-10 text-center">
-                
-                {{-- Logo Section (Perbaikan: Ukuran logo diperbesar agar lebih jelas dan proporsional) --}}
-                <div class="w-28 h-28 md:w-32 md:h-32 bg-white rounded-3xl mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-blue-200/40 overflow-hidden border border-slate-100 p-1">
-                    <img src="{{ asset('logo pt salttek dumpang jaya.jpeg') }}" alt="Logo PT Salttek" class="w-full h-full object-contain">
+    <!-- BACKGROUND EFFECT -->
+    <div class="animated-bg">
+
+        <span class="bubble x1"></span>
+        <span class="bubble x2"></span>
+        <span class="bubble x3"></span>
+        <span class="bubble x4"></span>
+        <span class="bubble x5"></span>
+
+        <span class="spark s1">✦</span>
+        <span class="spark s2">✦</span>
+        <span class="spark s3">✦</span>
+        <span class="spark s4">✦</span>
+
+    </div>
+
+    <!-- MICRO PARTICLES -->
+    <div class="micro-particles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- MAIN -->
+    <div class="min-h-screen flex items-center justify-center p-6 relative">
+
+        <div class="login-wrapper w-full max-w-md">
+
+            <div class="login-card">
+
+                <!-- LOGO -->
+                <div class="logo-box">
+                    <img src="{{ asset('logo pt salttek dumpang jaya.jpeg') }}" alt="Logo">
                 </div>
 
-                {{-- Branding Section --}}
-                <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight leading-tight uppercase">
+                <!-- TITLE -->
+                <h1>
                     PT SALTTEK <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">DUMPANG JAYA</span>
+                    <span class="gradient-text">
+                        DUMPANG JAYA
+                    </span>
                 </h1>
 
-                {{-- Deskripsi Profesional --}}
-                <p class="mt-4 text-slate-500 text-sm font-medium leading-relaxed">
-                    Sistem Monitoring Absensi Digital <br>& Manajemen Karyawan Terintegrasi.
+                <!-- DESCRIPTION -->
+                <p class="desc">
+                    Sistem Monitoring Absensi Digital <br>
+                    & Manajemen Karyawan Terintegrasi.
                 </p>
 
-                {{-- Button Section --}}
+                <!-- BUTTON -->
                 <div class="mt-10 space-y-4">
+
                     @if (Route::has('login'))
+
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="flex items-center justify-center w-full bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-2xl transition-all active:scale-95 shadow-lg shadow-slate-200">
+
+                            <a href="{{ url('/dashboard') }}" class="btn btn-primary">
                                 MASUK KE DASHBOARD
                             </a>
+
                         @else
-                            <a href="{{ route('login') }}" class="flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-blue-200 active:scale-95 uppercase text-xs tracking-widest">
+
+                            <a href="{{ route('login') }}" class="btn btn-primary">
                                 LOGIN SEKARANG
                             </a>
 
                             @if (Route::has('register'))
-                                <div class="flex items-center gap-4 my-6">
-                                    <div class="h-px bg-slate-100 flex-1"></div>
-                                    <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Atau</span>
-                                    <div class="h-px bg-slate-100 flex-1"></div>
+
+                                <div class="divider">
+                                    <div></div>
+                                    <span>Atau</span>
+                                    <div></div>
                                 </div>
 
-                                <a href="{{ route('register') }}" class="flex items-center justify-center w-full bg-white border-2 border-slate-100 hover:border-blue-100 text-slate-600 font-bold py-4 rounded-2xl transition-all active:scale-95 text-sm">
+                                <a href="{{ route('register') }}" class="btn btn-secondary">
                                     Daftar Akun Baru
                                 </a>
+
                             @endif
+
                         @endauth
+
                     @endif
+
                 </div>
 
-                {{-- Footer Section --}}
-                <div class="mt-12 pt-8 border-t border-slate-50">
-                    <p class="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em]">
-                        Medan, Sumatera Utara • 2026
-                    </p>
+                <!-- FOOTER -->
+                <div class="footer">
+                    MEDAN • SUMATERA UTARA • 2026
                 </div>
+
             </div>
+
         </div>
+
     </div>
 
 </body>

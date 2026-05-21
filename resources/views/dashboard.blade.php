@@ -229,7 +229,7 @@
                             @if(!$cekAbsensi)
                                 <div class="bg-white h-full p-2 md:p-6 flex flex-col items-center justify-center cursor-pointer text-center force-no-p" onclick="handleAbsensi()">
                                  <div class="text-lg md:text-4xl mb-1 rocket-float">🚀</div>
-                                    <h4 class="font-black text-indigo-600 uppercase text-[6px] md:text-xs tracking-wider">KLIK MASUK</h4>
+                                    <h4 class="font-black text-indigo-600 uppercase text-[6px] md:text-xs tracking-wider">Presensi Now</h4>
                                 </div>
                             @elseif(!$cekAbsensi->jam_keluar && in_array($cekAbsensi->status, ['Hadir', 'Terlambat']))
                                 <div class="h-full flex flex-col items-center justify-center cursor-pointer text-center p-2 md:p-6 transition-all {{ $jamSekarang < 17 ? 'bg-rose-50/60' : 'bg-white' }}" onclick="handlePulang({{ $jamSekarang }})">
@@ -1542,7 +1542,7 @@ tbody tr:hover{
 <div id="robotAssistant">
 
     <div class="robotBubble">
-        Semangat bekerja 🚀
+        Semangat bekerja🥰
     </div>
 
     <img 
