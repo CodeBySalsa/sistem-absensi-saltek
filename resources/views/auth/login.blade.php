@@ -1,12 +1,7 @@
 <x-guest-layout>
 
-<!-- ===================================== -->
-<!-- PREMIUM EFFECT -->
-<!-- ===================================== -->
-
 <div class="effects">
 
-    <!-- SPARKLES -->
     <span class="spark s1">✦</span>
     <span class="spark s2">✦</span>
     <span class="spark s3">✦</span>
@@ -16,7 +11,6 @@
     <span class="spark s7">✦</span>
     <span class="spark s8">✦</span>
 
-    <!-- BUBBLES -->
     <span class="bubble b1"></span>
     <span class="bubble b2"></span>
     <span class="bubble b3"></span>
@@ -27,20 +21,14 @@
 
 </div>
 
-<!-- ===================================== -->
-<!-- LOGIN WRAPPER -->
-<!-- ===================================== -->
-
 <div class="login-wrapper">
 
     <div class="login-card">
 
-        <!-- LOGO -->
         <div class="logo-box">
             <img src="{{ asset('logo pt salttek dumpang jaya.jpeg') }}" alt="Logo">
         </div>
 
-        <!-- TITLE -->
         <h1>
             PT SALTTEK
             <span>DUMPANG JAYA</span>
@@ -50,19 +38,15 @@
             Sistem Monitoring Absensi Digital & Manajemen Karyawan Modern
         </p>
 
-        <!-- BACK -->
         <a href="{{ url('/') }}" class="back-btn">
             ← Kembali ke Beranda
         </a>
 
-        <!-- SESSION -->
         <x-auth-session-status class="mb-4" :status="session('status')" />
 
-        <!-- FORM -->
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <!-- EMAIL -->
             <div class="input-group">
 
                 <label>Email</label>
@@ -89,7 +73,6 @@
 
             </div>
 
-            <!-- PASSWORD -->
             <div class="input-group">
 
                 <label>Password</label>
@@ -118,7 +101,6 @@
 
             </div>
 
-            <!-- REMEMBER -->
             <div class="remember-box">
 
                 <label>
@@ -131,7 +113,6 @@
 
             </div>
 
-            <!-- FOOTER -->
             <div class="login-footer">
 
                 @if (Route::has('password.request'))
@@ -155,10 +136,6 @@
 </div>
 
 </x-guest-layout>
-
-<!-- ===================================== -->
-<!-- STYLE -->
-<!-- ===================================== -->
 
 <style>
 
@@ -484,87 +461,50 @@ body::after{
 }
 
 /* ===================================== */
-/* WRAPPER */
+/* LOGIN WRAPPER & CARD COMPACT */
 /* ===================================== */
 
 .login-wrapper{
     position:relative;
-
     width:100%;
-
     min-height:100vh;
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
-    padding:20px 60px;
-
+    padding:15px 20px; /* Diperkecil agar menghemat ruang */
     z-index:5;
 }
 
-/* ===================================== */
-/* CARD */
-/* ===================================== */
-
 .login-card{
     position:relative;
-
     width:100%;
-
-    max-width:1500px; /* SUPER LEBAR KE SAMPING */
-
-    min-height:auto;
-
-    padding:45px 120px; /* KANAN KIRI BESAR */
-
-    border-radius:36px;
-
-    background:
-    rgba(255,255,255,0.30);
-
+    max-width:400px; /* Ukuran card disesuaikan lebih pas */
+    padding:24px 28px; /* Mengurangi padding dalam yang kebesaran */
+    border-radius:24px;
+    background: rgba(255,255,255,0.28);
     backdrop-filter:blur(20px);
     -webkit-backdrop-filter:blur(20px);
-
-    border:
-    1px solid rgba(255,255,255,0.6);
-
+    border: 1px solid rgba(255,255,255,0.6);
     box-shadow:
-    0 25px 80px rgba(59,130,246,0.18),
-    0 0 60px rgba(139,92,246,0.15);
-
+    0 25px 70px rgba(59,130,246,0.15),
+    0 0 50px rgba(139,92,246,0.12);
     overflow:hidden;
-
     z-index:10;
-
-    margin:auto;
 }
 
 form{
     width:100%;
-}
-
-.input-box{
-    width:100%;
-}
-
-.input-box input{
-    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:12px; /* Merapatkan jarak komponen form */
 }
 
 .login-card::before{
     content:'';
-
     position:absolute;
-
     inset:-2px;
-
-    border-radius:34px;
-
+    border-radius:22px;
     padding:2px;
-
     background:
     linear-gradient(
         130deg,
@@ -573,62 +513,27 @@ form{
         #06b6d4,
         #3b82f6
     );
-
     background-size:300% 300%;
-
     animation:borderGlow 6s linear infinite;
-
     -webkit-mask:
         linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
-
     -webkit-mask-composite:xor;
             mask-composite:exclude;
-
     z-index:-1;
 }
 
-@keyframes borderGlow{
-
-    0%{
-        background-position:0% 50%;
-    }
-
-    50%{
-        background-position:100% 50%;
-    }
-
-    100%{
-        background-position:0% 50%;
-    }
-}
-
-@keyframes cardFloat{
-
-    0%,100%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-8px);
-    }
-}
-
 /* ===================================== */
-/* LOGO */
+/* LOGO & TEXT */
 /* ===================================== */
 
 .logo-box{
-    width:110px;
-    height:110px;
-
-    margin:0 auto 25px;
-
+    width:70px; /* Ukuran logo dirampingkan dari 110px */
+    height:70px;
+    margin:0 auto 10px;
     display:flex;
     justify-content:center;
     align-items:center;
-
-    animation:floatLogo 4s ease-in-out infinite;
 }
 
 .logo-box img{
@@ -636,75 +541,42 @@ form{
     object-fit:contain;
 }
 
-@keyframes floatLogo{
-
-    0%,100%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-8px);
-    }
-}
-
-/* ===================================== */
-/* TITLE */
-/* ===================================== */
-
 .login-card h1{
     text-align:center;
-
-    font-size:24px;
-
+    font-size:18px; /* Disesuaikan sedikit agar compact */
     font-weight:800;
-
     color:#1e293b;
-
-    margin-bottom:8px;
+    margin-bottom:4px;
 }
 
 .login-card h1 span{
     display:block;
-
     background:
     linear-gradient(
         90deg,
         #2563eb,
         #7c3aed
     );
-
     -webkit-background-clip:text;
-
     color:transparent;
 }
 
 .subtitle{
     text-align:center;
-
-    font-size:14px;
-
+    font-size:11px; /* Ukuran teks deskripsi diperkecil */
     color:#64748b;
-
-    margin-bottom:28px;
-
-    line-height:1.7;
+    margin-bottom:14px;
+    line-height:1.5;
 }
 
-/* ===================================== */
-/* BACK */
-/* ===================================== */
-
 .back-btn{
-    display:inline-block;
-
-    margin-bottom:30px;
-
+    display:block;
+    text-align:center;
+    margin-bottom:14px;
     text-decoration:none;
-
     color:#64748b;
-
+    font-size:11px;
     font-weight:600;
-
     transition:.3s;
 }
 
@@ -713,87 +585,57 @@ form{
 }
 
 /* ===================================== */
-/* INPUT */
+/* INPUT COMPACT */
 /* ===================================== */
 
 .input-group{
-    margin-bottom:24px;
+    margin-bottom:0px; /* Margin luar dihilangkan karena sudah diatur gap form */
 }
 
 .input-group label{
     display:block;
-
-    margin-bottom:10px;
-
-    font-size:16px;
-
+    margin-bottom:5px;
+    font-size:12px; /* Ukuran label disesuaikan */
     font-weight:700;
-
     color:#1e293b;
 }
 
 .input-box{
     width:100%;
-
-    height:56px;
-
-    border-radius:18px;
-
+    height:44px; /* Tinggi input box dirampingkan dari 56px */
+    border-radius:12px;
     background:
     linear-gradient(
         90deg,
         rgba(255,255,255,0.65),
         rgba(214,234,255,0.78)
     );
-
     display:flex;
     align-items:center;
-
-    gap:12px;
-
-    padding:0 18px;
-
-    border:
-    1px solid rgba(255,255,255,0.6);
-
-    transition:.3s;
-}
-    display:flex;
-    align-items:center;
-
-    gap:14px;
-
-    padding:0 18px;
-
-    border:
-    1px solid rgba(255,255,255,0.6);
-
+    gap:10px;
+    padding:0 14px;
+    border: 1px solid rgba(255,255,255,0.6);
     transition:.3s;
 }
 
 .input-box:hover{
-    transform:translateY(-2px);
+    transform:translateY(-1px);
 }
 
 .input-box:focus-within{
-    box-shadow:
-    0 0 0 4px rgba(124,58,237,0.10);
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.10);
 }
 
 .icon{
-    font-size:22px;
+    font-size:16px;
 }
 
 .input-box input{
     flex:1;
-
     border:none !important;
     outline:none !important;
-
     background:transparent !important;
-
-    font-size:16px;
-
+    font-size:13px;
     color:#334155;
 }
 
@@ -801,69 +643,50 @@ form{
     color:#94a3b8;
 }
 
-/* ===================================== */
-/* PASSWORD */
-/* ===================================== */
-
 .toggle-password{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-width:30px;
     cursor:pointer;
-
-    user-select:none;
-
-    font-size:20px;
-
+    font-size:16px;
     transition:.3s;
 }
 
-.toggle-password:hover{
-    transform:scale(1.15);
-}
-
 /* ===================================== */
-/* REMEMBER */
+/* REMEMBER & FOOTER */
 /* ===================================== */
 
 .remember-box{
-    margin-top:16px;
+    margin-top:2px;
 }
 
 .remember-box label{
     display:flex;
     align-items:center;
-
-    gap:10px;
-
+    gap:8px;
     color:#475569;
-
-    font-size:15px;
+    font-size:12px;
 }
 
 .remember-box input{
-    width:16px;
-    height:16px;
-
+    width:14px;
+    height:14px;
     accent-color:#7c3aed;
 }
 
-/* ===================================== */
-/* FOOTER */
-/* ===================================== */
-
 .login-footer{
-    margin-top:32px;
-
+    margin-top:8px;
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap:12px;
 }
 
 .forgot-link{
     color:#64748b;
-
     text-decoration:none;
-
-    font-size:14px;
-
+    font-size:12px;
     transition:.3s;
 }
 
@@ -872,42 +695,33 @@ form{
 }
 
 /* ===================================== */
-/* BUTTON */
+/* BUTTON COMPACT */
 /* ===================================== */
 
 .login-btn{
     border:none;
-
-    padding:14px 30px;
-
-    border-radius:16px;
-
+    min-width:110px;
+    height:42px; /* Tinggi button disesuaikan pas */
+    padding:0 20px;
+    border-radius:12px;
     background:
     linear-gradient(
         90deg,
         #2563eb,
         #9333ea
     );
-
     color:white;
-
     font-weight:700;
-
+    font-size:13px;
     letter-spacing:1px;
-
     cursor:pointer;
-
     transition:.3s;
-
-    box-shadow:
-    0 10px 25px rgba(124,58,237,0.25);
+    box-shadow: 0 8px 20px rgba(124,58,237,0.25);
 }
 
 .login-btn:hover{
-    transform:translateY(-3px);
-
-    box-shadow:
-    0 15px 35px rgba(124,58,237,0.35);
+    transform:translateY(-2px);
+    box-shadow: 0 12px 25px rgba(124,58,237,0.35);
 }
 
 /* ===================================== */
@@ -915,169 +729,9 @@ form{
 /* ===================================== */
 
 @media(max-width:768px){
-
-    .login-card{
-        padding:30px 22px;
-    }
-
-    .login-footer{
-        flex-direction:column;
-        gap:18px;
-    }
-}
-/* ===================================== */
-/* LOGIN WRAPPER */
-/* ===================================== */
-
-.login-wrapper{
-    position:relative;
-
-    width:100%;
-    min-height:100vh;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    padding:40px 20px;
-
-    z-index:5;
-}
-/* ===================================== */
-/* LOGIN CARD */
-/* ===================================== */
-
-.login-card{
-    position:relative;
-
-    width:100%;
-    max-width:450px; /* UKURAN FIX CANTIK */
-
-    padding:38px 32px;
-
-    border-radius:34px;
-
-    background:
-    rgba(255,255,255,0.28);
-
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-
-    border:
-    1px solid rgba(255,255,255,0.6);
-
-    box-shadow:
-    0 25px 70px rgba(59,130,246,0.15),
-    0 0 50px rgba(139,92,246,0.12);
-
-    overflow:hidden;
-
-    z-index:10;
-}
-
-/* ===================================== */
-/* FORM NORMAL */
-/* ===================================== */
-
-form{
-    width:100%;
-
-    display:flex;
-    flex-direction:column;
-
-    gap:18px;
-}
-
-/* ===================================== */
-/* INPUT */
-/* ===================================== */
-
-.input-box input{
-    width:100%;
-    flex:1;
-
-    border:none !important;
-    outline:none !important;
-
-    background:transparent !important;
-
-    font-size:16px;
-
-    color:#334155;
-}
-
-/* ===================================== */
-/* PASSWORD ICON */
-/* ===================================== */
-
-.toggle-password{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    min-width:34px;
-
-    cursor:pointer;
-
-    font-size:20px;
-
-    transition:.3s;
-}
-.login-footer{
-    margin-top:10px;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    gap:15px;
-}
-
-/* ===================================== */
-/* BUTTON */
-/* ===================================== */
-
-.login-btn{
-    border:none;
-
-    min-width:150px;
-
-    height:54px;
-
-    padding:0 30px;
-
-    border-radius:16px;
-
-    background:
-    linear-gradient(
-        90deg,
-        #2563eb,
-        #9333ea
-    );
-
-    color:white;
-
-    font-weight:700;
-
-    letter-spacing:1px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-    box-shadow:
-    0 10px 25px rgba(124,58,237,0.25);
-}
-
-/* ===================================== */
-/* MOBILE */
-/* ===================================== */
-
-@media(max-width:768px){
-
     .login-card{
         max-width:95%;
-        padding:32px 24px;
+        padding:20px 20px;
     }
 
     .login-footer{
@@ -1091,10 +745,6 @@ form{
 }
 
 </style>
-
-<!-- ===================================== -->
-<!-- SCRIPT -->
-<!-- ===================================== -->
 
 <script>
 
