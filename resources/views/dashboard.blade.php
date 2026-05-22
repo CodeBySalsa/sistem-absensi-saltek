@@ -102,23 +102,26 @@
                             Presence System • PT Salttek Dumpang Jaya
                         </div>
                         <h1 class="text-xs md:text-3xl lg:text-4xl font-black tracking-tight leading-tight uppercase italic mobile-title">HELLO, <span class="text-indigo-300">{{ Auth::user()->name }}!</span></h1>
+                        
+                        {{-- DISINI PERBAIKAN CARDNYA: Ditambahkan efek hover zoom transform & shadow glow lembut --}}
                         <div class="flex gap-1.5 md:gap-3 mt-2 md:mt-4">
-                            <div class="glass-stat hover-card px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
-                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase">Hadir</span>
-                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1">{{ $totalHadir ?? 0 }}</span>
+                            <div class="glass-stat cursor-pointer transform hover:scale-110 transition-all duration-300 ease-in-out hover:bg-emerald-500/20 hover:border-emerald-400/40 shadow-sm hover:shadow-emerald-500/20 px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
+                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase tracking-wider">Hadir</span>
+                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1 text-emerald-300">{{ $totalHadir ?? 0 }}</span>
                             </div>
-                            <div class="glass-stat hover-card px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
-                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase">Izin</span>
-                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1">{{ $ringkasanStatistik->total_izin ?? 0 }}</span>
+                            <div class="glass-stat cursor-pointer transform hover:scale-110 transition-all duration-300 ease-in-out hover:bg-blue-500/20 hover:border-blue-400/40 shadow-sm hover:shadow-blue-500/20 px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
+                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase tracking-wider">Izin</span>
+                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1 text-blue-300">{{ $ringkasanStatistik->total_izin ?? 0 }}</span>
                             </div>
-                            <div class="glass-stat hover-card px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
-                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase">Sakit</span>
-                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1">{{ $ringkasanStatistik->total_sakit ?? 0 }}</span>
+                            <div class="glass-stat cursor-pointer transform hover:scale-110 transition-all duration-300 ease-in-out hover:bg-rose-500/20 hover:border-rose-400/40 shadow-sm hover:shadow-rose-500/20 px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
+                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase tracking-wider">Sakit</span>
+                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1 text-rose-300">{{ $ringkasanStatistik->total_sakit ?? 0 }}</span>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="glass-card hover-card live-badge p-2 md:p-5 rounded-xl md:rounded-[1.5rem] flex items-center gap-2 md:gap-5 w-5/12 md:w-auto shadow-xl border-white/20 shrink-0">
+                    {{-- Status Kanan juga ditambahkan efek interaktif hover zoom --}}
+                    <div class="glass-card cursor-pointer transform hover:scale-105 transition-all duration-300 ease-in-out live-badge p-2 md:p-5 rounded-xl md:rounded-[1.5rem] flex items-center gap-2 md:gap-5 w-5/12 md:w-auto shadow-xl border-white/20 shrink-0">
                         <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center text-sm md:text-2xl shadow-inner shrink-0
                             @if($isMinggu) bg-slate-100 @elseif($cekAbsensi && $cekAbsensi->status == 'Terlambat') bg-rose-100 @elseif($cekAbsensi) bg-emerald-50 @else bg-amber-50 @endif">
                             @if($isMinggu) ☕ @elseif($cekAbsensi && $cekAbsensi->status == 'Terlambat') ⏰ @elseif($cekAbsensi && $cekAbsensi->jam_keluar) 🏁 @elseif($cekAbsensi) ✅ @else ⏳ @endif
@@ -129,7 +132,7 @@
                                 @if($isMinggu) HARI LIBUR @elseif($cekAbsensi) {{ $cekAbsensi->status }} @else Belum Presensi @endif
                             </h4>
                             <p class="text-[6px] md:text-[10px] text-indigo-600 font-bold mt-0.5 leading-none truncate font-mono">
-                                 @if($isMinggu) Istirahat @elseif($cekAbsensi) Log: {{ \Carbon\Carbon::parse($cekAbsensi->jam_masuk)->format('H:i') }} WIB @else Silakan Absensi @endif
+                                 @if($isMinggu) Istirahat @elseif($cekAbsensi) Log: {{ \Carbon\Carbon::parse($cekAbsening->jam_masuk)->format('H:i') }} WIB @else Silakan Absensi @endif
                             </p>
                         </div>
                     </div>
@@ -137,32 +140,77 @@
             @endif
 
             {{-- 3. ADMIN PANEL --}}
-            @if(Auth::user()->role == 'admin')
-                <div class="mb-6 bg-slate-900 rounded-[1.5rem] md:rounded-[3rem] p-1 shadow-2xl relative overflow-hidden group">
-                    <div class="relative z-10 bg-slate-900 rounded-[1.4rem] md:rounded-[2.9rem] p-4 md:p-10">
-                        <div class="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 md:gap-8">
-                            
-                            <div class="space-y-1.5 md:space-y-2">
-                                <h3 class="text-[7px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-indigo-400/80 italic leading-none">Control Center PT Salttek</h3>
-                                <h1 class="text-sm md:text-4xl font-black tracking-tighter text-white uppercase italic leading-tight">HALO, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">{{ Auth::user()->name }}</span></h1>
-                                <div class="flex flex-row gap-2 mt-2 md:mt-6">
-                                    <a href="{{ route('karyawan.index') }}" class="px-2.5 py-1.5 md:px-5 md:py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-[6px] md:text-xs font-black uppercase tracking-wider rounded-lg md:rounded-xl transition-all shadow-lg flex items-center gap-1 whitespace-nowrap"><span>👥</span> DATA KARYAWAN</a>
-                                    <a href="{{ route('karyawan.create') }}" class="px-2.5 py-1.5 md:px-5 md:py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-[6px] md:text-xs font-black uppercase tracking-wider rounded-lg md:rounded-xl transition-all shadow-lg flex items-center gap-1 whitespace-nowrap"><span>➕</span> TAMBAH KARYAWAN</a>
-                                </div>
-                            </div>
-                            
-                            <div class="grid grid-cols-4 gap-1.5 md:gap-6 mt-2 lg:mt-0 flex-1 md:flex-none">
-                                <div class="bg-slate-800/40 border border-white/5 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex flex-col items-center text-center"><h3 class="text-xs md:text-3xl font-black text-white tracking-tighter">{{ $totalKaryawan ?? 0 }}</h3><p class="text-[5px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">ANGGOTA</p></div>
-                                <div class="bg-emerald-500/10 border border-emerald-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex flex-col items-center text-center"><h3 class="text-xs md:text-3xl font-black text-emerald-400 tracking-tighter">{{ $hadirHariIni ?? 0 }}</h3><p class="text-[5px] md:text-[10px] font-bold text-emerald-500/70 uppercase tracking-wider mt-0.5">HADIR</p></div>
-                                <div class="bg-amber-500/10 border border-amber-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex flex-col items-center text-center"><h3 class="text-xs md:text-3xl font-black text-amber-400 tracking-tighter">{{ $totalIzin ?? 0 }}</h3><p class="text-[5px] md:text-[10px] font-bold text-amber-500/70 uppercase tracking-wider mt-0.5">IZIN</p></div>
-                                <div class="bg-rose-500/10 border border-rose-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex flex-col items-center text-center"><h3 class="text-xs md:text-3xl font-black text-rose-400 tracking-tighter">{{ $totalSakit ?? 0 }}</h3><p class="text-[5px] md:text-[10px] font-bold text-rose-500/70 uppercase tracking-wider mt-0.5">SAKIT</p></div>
-                            </div>
+@if(Auth::user()->role == 'admin')
+    <div class="mb-6 bg-slate-900 rounded-[1.5rem] md:rounded-[3rem] p-1 shadow-2xl relative overflow-hidden group">
+        <div class="relative z-10 bg-slate-900 rounded-[1.4rem] md:rounded-[2.9rem] p-4 md:p-10">
+            <div class="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 md:gap-8">
+                
+                <div class="space-y-1.5 md:space-y-2">
+                    <h3 class="text-[7px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-indigo-400/80 italic leading-none">Control Center PT Saltek</h3>
+                    <h1 class="text-sm md:text-4xl font-black tracking-tighter text-white uppercase italic leading-tight">HALO, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">{{ Auth::user()->name }}</span></h1>
+                    <div class="flex flex-row gap-2 mt-2 md:mt-6">
+                        <a href="{{ route('karyawan.index') }}" class="px-2.5 py-1.5 md:px-5 md:py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-[6px] md:text-xs font-black uppercase tracking-wider rounded-lg md:rounded-xl transition-all shadow-lg flex items-center gap-1 whitespace-nowrap">
+                            <span>👥</span> DATA KARYAWAN
+                        </a>
+                    </div>
+                </div> {{-- Penutup tag kiri yang tadi sempat hilang --}}
 
+                <div class="grid grid-cols-4 gap-1.5 md:gap-6 mt-2 lg:mt-0 flex-1 md:flex-none">
+                    
+                    <div class="bg-slate-800/40 border border-white/5 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex items-center justify-between transition-all duration-300 hover:scale-105 hover:shadow-lg gap-4 group cursor-pointer">
+                        <div>
+                            <h3 class="text-xs md:text-3xl font-black text-white tracking-tighter">{{ $totalKaryawan ?? 0 }}</h3>
+                            <p class="text-[5px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Anggota</p>
+                        </div>
+                        <div class="text-blue-400 bg-blue-500/10 p-1 md:p-2 rounded-lg hidden md:block transition-transform duration-300 group-hover:rotate-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
                         </div>
                     </div>
-                </div>
-            @endif
 
+                    <div class="bg-emerald-500/10 border border-emerald-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex items-center justify-between transition-all duration-300 hover:scale-105 hover:shadow-lg gap-4 group cursor-pointer">
+                        <div>
+                            <h3 class="text-xs md:text-3xl font-black text-emerald-400 tracking-tighter">{{ $hadirHariIni ?? 0 }}</h3>
+                            <p class="text-[5px] md:text-[10px] font-bold text-emerald-500/70 uppercase tracking-wider mt-0.5">Hadir</p>
+                        </div>
+                        <div class="text-emerald-400 bg-emerald-500/10 p-1 md:p-2 rounded-lg hidden md:block transition-transform duration-300 group-hover:rotate-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-500/10 border border-amber-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex items-center justify-between transition-all duration-300 hover:scale-105 hover:shadow-lg gap-4 group cursor-pointer">
+                        <div>
+                            <h3 class="text-xs md:text-3xl font-black text-amber-400 tracking-tighter">{{ $totalIzin ?? 0 }}</h3>
+                            <p class="text-[5px] md:text-[10px] font-bold text-amber-500/70 uppercase tracking-wider mt-0.5">Izin</p>
+                        </div>
+                        <div class="text-amber-400 bg-amber-500/10 p-1 md:p-2 rounded-lg hidden md:block transition-transform duration-300 group-hover:rotate-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-rose-500/10 border border-rose-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex items-center justify-between transition-all duration-300 hover:scale-105 hover:shadow-lg gap-4 group cursor-pointer">
+                        <div>
+                            <h3 class="text-xs md:text-3xl font-black text-rose-400 tracking-tighter">{{ $totalSakit ?? 0 }}</h3>
+                            <p class="text-[5px] md:text-[10px] font-bold text-rose-500/70 uppercase tracking-wider mt-0.5">Sakit</p>
+                        </div>
+                        <div class="text-rose-400 bg-rose-500/10 p-1 md:p-2 rounded-lg hidden md:block transition-transform duration-300 group-hover:rotate-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+@endif
             {{-- 4. USER CARDS --}}
             @if(Auth::user()->role !== 'admin')
                 <div class="grid grid-cols-3 gap-2 md:gap-6 mb-8">
@@ -247,13 +295,16 @@
                 </div>
             @endif
 
-            {{-- 5. TABEL UTAMA: LOG AKTIVITAS (DENGAN PENAMBAHAN KOLOM KETERANGAN/ALASAN) --}}
+            {{-- 5. DISINI PERBAIKAN POIN 2 & 3: TABEL UTAMA LOG AKTIVITAS (Didesain lebih interaktif & dinamis) --}}
             <div class="mt-8 bg-white rounded-xl md:rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden animate-fade-in w-full">
-                <div class="p-4 md:p-8 border-b border-slate-100 bg-indigo-50/30 flex items-center gap-2 md:gap-3">
-                    <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
-                    <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
-                        @if(Auth::user()->role == 'admin') LOG AKTIVITAS HARI INI @else LOG AKTIVITAS MINGGU INI @endif
-                    </h3>
+                <div class="p-4 md:p-8 border-b border-slate-100 bg-indigo-50/30 flex items-center justify-between">
+                    <div class="flex items-center gap-2 md:gap-3">
+                        <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
+                        <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
+                            @if(Auth::user()->role == 'admin') LOG AKTIVITAS HARI INI @else LOG AKTIVITAS MINGGU INI @endif
+                        </h3>
+                    </div>
+                    <span class="text-[8px] md:text-xs bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Live Log</span>
                 </div>
 
                 <div class="w-full overflow-hidden rounded-t-xl md:rounded-t-[2rem]">
@@ -266,29 +317,27 @@
                                 <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-1.5/12 md:w-1.5/12">Jam Masuk</th>
                                 <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-1.5/12 md:w-1.5/12">Jam Pulang</th>
                                 <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-2/12">Status Kehadiran</th>
-                                {{-- PERBAIKAN: Penambahan Head Kolom Alasan/Keterangan --}}
                                 <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left w-4/12 md:w-4/12">Keterangan / Alasan</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-50">
+                        <tbody class="divide-y divide-slate-100">
                             @if(Auth::user()->role == 'admin')
                                 @forelse($absensiHariIni as $absen)
-                                <tr class="hover:bg-indigo-50/20 transition-all">
+                                <tr class="hover:bg-slate-50/80 transition-all duration-200">
                                     <td class="mobile-padding md:p-6 font-bold text-slate-800 mobile-truncate text-left">{{ $absen->user->name }}</td>
                                     <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-blue-600">{{ $absen->jam_masuk ?? '--:--' }}</td>
                                     <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-emerald-600">{{ $absen->jam_keluar ?? '--:--' }}</td>
                                     <td class="mobile-padding md:p-6 text-center">
-                                        <span class="px-1.5 py-0.5 md:px-4 md:py-1.5 rounded-full text-[6px] md:text-[9px] font-black uppercase block md:inline text-center mobile-badge
-                                            {{ in_array($absen->status, ['Terlambat', 'Sakit']) ? 'bg-rose-100 text-rose-600' : ($absen->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600') }}">
+                                        <span class="px-1.5 py-0.5 md:px-4 md:py-1.5 rounded-full text-[6px] md:text-[9px] font-black uppercase block md:inline text-center mobile-badge shadow-sm
+                                            {{ in_array($absen->status, ['Terlambat', 'Sakit']) ? 'bg-rose-100 text-rose-600 border border-rose-200' : ($absen->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600 border border-emerald-200' : 'bg-amber-100 text-amber-600 border border-amber-200') }}">
                                             {{ $absen->status }}
                                         </span>
                                     </td>
-                                    {{-- PERBAIKAN: Logika Tampilan Alasan untuk Admin --}}
                                     <td class="mobile-padding md:p-6 text-left">
                                         @if(in_array($absen->status, ['Izin', 'Sakit']))
-                                            <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-[7px] md:text-xs">
+                                            <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-[7px] md:text-xs bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
                                                 <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $absen->status == 'Izin' ? 'bg-amber-500' : 'bg-rose-500' }}"></span>
-                                                <span class="truncate max-w-[100px] md:max-w-[250px]">{{ $absen->keterangan ?? 'Tanpa alasan tertulis' }}</span>
+                                                <span class="truncate max-w-[100px] md:max-w-[250px] italic text-slate-600">{{ $absen->keterangan ?? 'Tanpa alasan tertulis' }}</span>
                                             </div>
                                         @else
                                             <span class="text-slate-300 font-bold font-mono text-[7px] md:text-xs ml-2">—</span>
@@ -300,24 +349,23 @@
                                 @endforelse
                             @else
                                 @forelse($absensis as $log)
-                                <tr class="hover:bg-indigo-50/20 transition-all">
+                                <tr class="hover:bg-slate-50/80 transition-all duration-200">
                                     <td class="mobile-padding md:p-6 font-bold text-slate-800 mobile-truncate text-left">
                                         {{ \Carbon\Carbon::parse($log->tanggal)->translatedFormat('l, d M Y') }}
                                     </td>
                                     <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-blue-600">{{ $log->jam_masuk ?? '--:--' }}</td>
                                     <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-emerald-600">{{ $log->jam_keluar ?? '--:--' }}</td>
                                     <td class="mobile-padding md:p-6 text-center">
-                                        <span class="px-1.5 py-0.5 md:px-4 md:py-1.5 rounded-full text-[6px] md:text-[9px] font-black uppercase block md:inline text-center mobile-badge
-                                            {{ $log->status == 'Terlambat' ? 'bg-rose-100 text-rose-600' : ($log->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600') }}">
+                                        <span class="px-1.5 py-0.5 md:px-4 md:py-1.5 rounded-full text-[6px] md:text-[9px] font-black uppercase block md:inline text-center mobile-badge shadow-sm
+                                            {{ $log->status == 'Terlambat' ? 'bg-rose-100 text-rose-600 border border-rose-200' : ($log->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600 border border-emerald-200' : 'bg-amber-100 text-amber-600 border border-amber-200') }}">
                                             {{ $log->status }}
                                         </span>
                                     </td>
-                                    {{-- PERBAIKAN: Logika Tampilan Alasan untuk Karyawan sendiri --}}
                                     <td class="mobile-padding md:p-6 text-left">
                                         @if(in_array($log->status, ['Izin', 'Sakit']))
-                                            <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-[7px] md:text-xs">
+                                            <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-[7px] md:text-xs bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
                                                 <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $log->status == 'Izin' ? 'bg-amber-500' : 'bg-rose-500' }}"></span>
-                                                <span class="truncate max-w-[100px] md:max-w-[250px]">{{ $log->keterangan ?? 'Tanpa alasan tertulis' }}</span>
+                                                <span class="truncate max-w-[100px] md:max-w-[250px] italic text-slate-600">{{ $log->keterangan ?? 'Tanpa alasan tertulis' }}</span>
                                             </div>
                                         @else
                                             <span class="text-slate-300 font-bold font-mono text-[7px] md:text-xs ml-2">—</span>
@@ -333,14 +381,17 @@
                 </div>
             </div>
 
-            {{-- 6. REKAPITULASI BULANAN --}}
+            {{-- 6. DISINI PERBAIKAN POIN 3: REKAPITULASI BULANAN DENGAN BARIS INTERAKTIF --}}
             @if(Auth::user()->role == 'admin')
                 <div class="mt-8 bg-white rounded-xl md:rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden mb-10 animate-fade-in w-full">
-                    <div class="p-4 md:p-8 border-b border-slate-100 bg-indigo-50/30 flex items-center gap-2 md:gap-3">
-                        <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-950 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📊</div>
-                        <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
-                            REKAPITULASI ABSENSI KARYAWAN - {{ strtoupper($namaBulan) }} {{ date('Y') }}
-                        </h3>
+                    <div class="p-4 md:p-8 border-b border-slate-100 bg-indigo-50/30 flex items-center justify-between">
+                        <div class="flex items-center gap-2 md:gap-3">
+                            <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-950 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📊</div>
+                            <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
+                                REKAPITULASI ABSENSI KARYAWAN - {{ strtoupper($namaBulan) }} {{ date('Y') }}
+                            </h3>
+                        </div>
+                        <span class="text-[8px] md:text-xs bg-slate-900 text-white px-2.5 py-1 rounded-full font-mono font-bold shadow-sm">Monthly Report</span>
                     </div>
                     <div class="w-full overflow-hidden rounded-t-xl md:rounded-t-[2rem]">
                         <table class="w-full text-left mobile-table-text md:text-sm">
@@ -352,9 +403,9 @@
                                     <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center bg-rose-950/40 w-2/12 md:w-3/12">Sakit</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-50">
+                            <tbody class="divide-y divide-slate-100">
                                 @foreach($rekapBulanan as $rekap)
-                                <tr class="hover:bg-slate-50/50">
+                                <tr class="hover:bg-slate-50/80 transition-all duration-200">
                                     <td class="mobile-padding md:p-6 font-black text-slate-800 uppercase text-left mobile-truncate">{{ $rekap->nama_lengkap }}</td>
                                     <td class="mobile-padding md:p-6 text-center font-bold text-emerald-600 font-mono bg-emerald-50/20">{{ $rekap->total_hadir }}</td>
                                     <td class="mobile-padding md:p-6 text-center font-bold text-blue-600 font-mono bg-blue-50/20">{{ $rekap->total_izin }}</td>
