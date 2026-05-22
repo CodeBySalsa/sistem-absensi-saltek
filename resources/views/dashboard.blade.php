@@ -163,205 +163,89 @@
                 </div>
             @endif
 
-           {{-- Card 1: Pencapaian Anda --}}
-<div class="bg-indigo-50/50 rounded-[1.2rem] md:rounded-[2.5rem] p-3 md:p-8 shadow-xl border border-indigo-100 flex items-center justify-between gap-1 force-no-p hover-card">
-    
-    <div class="min-w-0">
-        <p class="text-[6px] md:text-[10px] font-black text-indigo-400 uppercase tracking-wider md:tracking-widest leading-none">
-            PENCAPAIAN ANDA
-        </p>
+            {{-- 4. USER CARDS --}}
+            @if(Auth::user()->role !== 'admin')
+                <div class="grid grid-cols-3 gap-2 md:gap-6 mb-8">
+                    
+                    {{-- Card 1: Pencapaian Anda --}}
+                    <div class="bg-indigo-50/50 rounded-[1.2rem] md:rounded-[2.5rem] p-3 md:p-8 shadow-xl border border-indigo-100 flex items-center justify-between gap-1 force-no-p">
+                        <div class="min-w-0">
+                            <p class="text-[6px] md:text-[10px] font-black text-indigo-400 uppercase tracking-wider md:tracking-widest leading-none">PENCAPAIAN ANDA</p>
+                            <h3 class="text-sm md:text-5xl font-black text-slate-800 leading-none mt-1 md:mt-2">{{ $totalHadir ?? 0 }}</h3>
+                            <p class="text-[5px] md:text-sm font-bold text-indigo-500 mt-1 italic mobile-sub leading-none">Hari Kerja</p>
+                        </div>
+                        <div class="bg-white p-1 md:p-3 rounded-lg md:rounded-2xl shadow-sm shrink-0">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2838/2838779.png" class="w-5 h-5 md:w-12 md:h-12 force-icon-size" alt="calendar">
+                        </div>
+                    </div>
 
-        <h3 class="text-sm md:text-5xl font-black text-slate-800 leading-none mt-1 md:mt-2">
-            {{ $totalHadir ?? 0 }}
-        </h3>
+                    {{-- Card 2: Info Kehadiran --}}
+                    <div class="bg-amber-50/50 rounded-[1.2rem] md:rounded-[2.5rem] p-3 md:p-8 shadow-xl border border-amber-100 flex flex-col justify-center items-center text-center force-no-p">
+                        @if($isMinggu)
+                            <div class="w-5 h-5 md:w-16 md:h-16 bg-white text-indigo-500 rounded-xl flex items-center justify-center text-xs md:text-3xl mb-1 md:shadow-sm">🏡</div>
+                            <h4 class="text-[5px] md:text-[11px] font-black text-slate-800 uppercase tracking-tight leading-tight">Weekend Off</h4>
+                        @else
+                            <p class="text-[5px] md:text-[10px] font-black text-amber-500 uppercase tracking-wider md:tracking-widest leading-none mb-1 md:mb-3">INFO KEHADIRAN</p>
+                            @if(!$cekAbsensi)
+                                <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="w-full space-y-1">
+                                    @csrf
+                                    <input type="hidden" name="status" id="status_input">
+                                    <input type="text" name="keterangan" id="keterangan_input" placeholder="Alasan..." required class="w-full text-[5px] md:text-xs font-bold border-none bg-white rounded-md md:rounded-2xl py-0.5 px-1 shadow-inner text-center">
+                                    <div class="grid grid-cols-2 gap-1">
+                                        <button type="button" onclick="konfirmasiStatus('Izin')" class="bg-amber-400 text-white font-black py-0.5 rounded text-[5px] md:text-[10px] uppercase">Izin</button>
+                                        <button type="button" onclick="konfirmasiStatus('Sakit')" class="bg-rose-500 text-white font-black py-0.5 rounded text-[5px] md:text-[10px] uppercase">Sakit</button>
+                                    </div>
+                                </form>
+                            @else
+                                <div class="flex flex-col items-center justify-center">
+                                    <div class="w-5 h-5 md:w-12 md:h-12 bg-white rounded-md md:rounded-xl flex items-center justify-center text-xs md:text-2xl shadow-sm mb-1">
+                                        @if($cekAbsensi->status == 'Izin') ✋ @elseif($cekAbsensi->status == 'Sakit') 🤒 @else ✨ @endif
+                                    </div>
+                                    <h4 class="text-[6px] md:text-[11px] font-black {{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? 'text-amber-600' : 'text-emerald-600' }} uppercase leading-none truncate">
+                                        {{ $cekAbsensi->status == 'Hadir' || $cekAbsensi->status == 'Terlambat' ? 'DATA AMAN' : $cekAbsensi->status }}
+                                    </h4>
+                                    <p class="text-[4px] md:text-[9px] font-bold text-slate-400 uppercase mt-0.5 tracking-tighter truncate">
+                                        {{ $cekAbsensi->status == 'Hadir' || $cekAbsensi->status == 'Terlambat' ? 'TERCATAT HARI INI' : 'DISETUJUI' }}
+                                    </p>
+                                </div>
+                            @endif
+                        @endif
+                    </div>
 
-        <p class="text-[5px] md:text-sm font-bold text-indigo-500 mt-1 italic mobile-sub leading-none">
-            Hari Kerja
-        </p>
-    </div>
-
-    <div class="bg-white p-1 md:p-3 rounded-lg md:rounded-2xl shadow-sm shrink-0 hover-card">
-        
-        {{-- ICON KALENDER --}}
-        <img 
-            src="https://cdn-icons-png.flaticon.com/512/2838/2838779.png"
-            class="w-5 h-5 md:w-12 md:h-12 force-icon-size calendar-icon"
-            alt="calendar"
-        >
-
-    </div>
-
-</div>
-
-
-{{-- Card 2: Info Kehadiran --}}
-<div class="bg-amber-50/50 rounded-[1.2rem] md:rounded-[2.5rem] p-3 md:p-8 shadow-xl border border-amber-100 flex flex-col justify-center items-center text-center force-no-p hover-card">
-
-    @if($isMinggu)
-
-        <div class="w-5 h-5 md:w-16 md:h-16 bg-white text-indigo-500 rounded-xl flex items-center justify-center text-xs md:text-3xl mb-1 md:shadow-sm home-float">
-            🏡
-        </div>
-
-        <h4 class="text-[5px] md:text-[11px] font-black text-slate-800 uppercase tracking-tight leading-tight">
-            Weekend Off
-        </h4>
-
-    @else
-
-        <p class="text-[5px] md:text-[10px] font-black text-amber-500 uppercase tracking-wider md:tracking-widest leading-none mb-1 md:mb-3">
-            INFO KEHADIRAN
-        </p>
-
-        @if(!$cekAbsensi)
-
-            <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="w-full space-y-1">
-                @csrf
-
-                <input type="hidden" name="status" id="status_input">
-
-                <input 
-                    type="text"
-                    name="keterangan"
-                    id="keterangan_input"
-                    placeholder="Alasan..."
-                    required
-                    class="w-full text-[5px] md:text-xs font-bold border-none bg-white rounded-md md:rounded-2xl py-0.5 px-1 shadow-inner text-center"
-                >
-
-                <div class="grid grid-cols-2 gap-1">
-
-                    <button 
-                        type="button"
-                        onclick="konfirmasiStatus('Izin')"
-                        class="bg-amber-400 text-white font-black py-0.5 rounded text-[5px] md:text-[10px] uppercase hover:scale-105 transition-all"
-                    >
-                        Izin
-                    </button>
-
-                    <button 
-                        type="button"
-                        onclick="konfirmasiStatus('Sakit')"
-                        class="bg-rose-500 text-white font-black py-0.5 rounded text-[5px] md:text-[10px] uppercase hover:scale-105 transition-all"
-                    >
-                        Sakit
-                    </button>
+                    {{-- Card 3: Card Utama Absensi --}}
+                    <div class="rounded-[1.2rem] md:rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden h-full">
+                        @if($isMinggu)
+                            <div class="bg-slate-100 p-2 md:p-6 flex flex-col items-center justify-center h-full text-center grayscale force-no-p">
+                                <h4 class="font-black text-slate-400 uppercase text-[5px] md:text-xs">SYSTEM OFF</h4>
+                            </div>
+                        @else
+                            @php $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->hour; @endphp
+                            @if(!$cekAbsensi)
+                                <div class="bg-white h-full p-2 md:p-6 flex flex-col items-center justify-center cursor-pointer text-center force-no-p" onclick="handleAbsensi()">
+                                 <div class="text-lg md:text-4xl mb-1 rocket-float">🚀</div>
+                                    <h4 class="font-black text-indigo-600 uppercase text-[6px] md:text-xs tracking-wider">Presensi Now</h4>
+                                </div>
+                            @elseif(!$cekAbsensi->jam_keluar && in_array($cekAbsensi->status, ['Hadir', 'Terlambat']))
+                                <div class="h-full flex flex-col items-center justify-center cursor-pointer text-center p-2 md:p-6 transition-all {{ $jamSekarang < 17 ? 'bg-rose-50/60' : 'bg-white' }}" onclick="handlePulang({{ $jamSekarang }})">
+                                    <div class="text-xl md:text-5xl shadow-sm rounded-full p-1 bg-white/50 shrink-0 mb-1">🏠</div>
+                                    <h4 class="font-black text-rose-600 uppercase text-[5px] md:text-[11px] leading-tight tracking-tight max-w-full truncate">
+                                        {{ $jamSekarang < 17 ? 'BELUM WAKTUNYA PULANG' : 'KLIK UNTUK PULANG' }}
+                                    </h4>
+                                    @if($jamSekarang < 17)
+                                        <p class="text-[4px] md:text-[9px] text-rose-400 font-bold uppercase tracking-tighter mt-0.5 leading-none">TERSEDIA PUKUL 17:00</p>
+                                    @endif
+                                </div>
+                            @else
+                                <div class="bg-emerald-50 h-full p-2 md:p-6 flex flex-col items-center justify-center text-center force-no-p">
+                                    <div class="text-lg md:text-4xl mb-1">🌟</div>
+                                    <h4 class="font-black text-emerald-600 uppercase text-[6px] md:text-xs">TUGAS SELESAI</h4>
+                                </div>
+                            @endif
+                        @endif
+                    </div>
 
                 </div>
-
-            </form>
-
-        @else
-
-            <div class="flex flex-col items-center justify-center">
-
-                <div class="w-5 h-5 md:w-12 md:h-12 bg-white rounded-md md:rounded-xl flex items-center justify-center text-xs md:text-2xl shadow-sm mb-1 home-float">
-
-                    @if($cekAbsensi->status == 'Izin')
-                        ✋
-                    @elseif($cekAbsensi->status == 'Sakit')
-                        🤒
-                    @else
-                        ✨
-                    @endif
-
-                </div>
-
-                <h4 class="text-[6px] md:text-[11px] font-black {{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? 'text-amber-600' : 'text-emerald-600' }} uppercase leading-none truncate">
-                    {{ $cekAbsensi->status == 'Hadir' || $cekAbsensi->status == 'Terlambat' ? 'DATA AMAN' : $cekAbsensi->status }}
-                </h4>
-
-                <p class="text-[4px] md:text-[9px] font-bold text-slate-400 uppercase mt-0.5 tracking-tighter truncate">
-                    {{ $cekAbsensi->status == 'Hadir' || $cekAbsensi->status == 'Terlambat' ? 'TERCATAT HARI INI' : 'DISETUJUI' }}
-                </p>
-
-            </div>
-
-        @endif
-
-    @endif
-
-</div>
-
-
-{{-- Card 3: Card Utama Absensi --}}
-<div class="rounded-[1.2rem] md:rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden h-full hover-card">
-
-    @if($isMinggu)
-
-        <div class="bg-slate-100 p-2 md:p-6 flex flex-col items-center justify-center h-full text-center grayscale force-no-p">
-            <h4 class="font-black text-slate-400 uppercase text-[5px] md:text-xs">
-                SYSTEM OFF
-            </h4>
-        </div>
-
-    @else
-
-        @php 
-            $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->hour; 
-        @endphp
-
-        @if(!$cekAbsensi)
-
-            <div 
-                class="bg-white h-full p-2 md:p-6 flex flex-col items-center justify-center cursor-pointer text-center force-no-p hover-card"
-                onclick="handleAbsensi()"
-            >
-
-                <div class="text-lg md:text-4xl mb-1 rocket-float">
-                    🚀
-                </div>
-
-                <h4 class="font-black text-indigo-600 uppercase text-[6px] md:text-xs tracking-wider">
-                    Presensi Now
-                </h4>
-
-            </div>
-
-        @elseif(!$cekAbsensi->jam_keluar && in_array($cekAbsensi->status, ['Hadir', 'Terlambat']))
-
-            <div 
-                class="h-full flex flex-col items-center justify-center cursor-pointer text-center p-2 md:p-6 transition-all {{ $jamSekarang < 17 ? 'bg-rose-50/60' : 'bg-white' }}"
-                onclick="handlePulang({{ $jamSekarang }})"
-            >
-
-                <div class="text-xl md:text-5xl shadow-sm rounded-full p-1 bg-white/50 shrink-0 mb-1 home-float">
-                    🏠
-                </div>
-
-                <h4 class="font-black text-rose-600 uppercase text-[5px] md:text-[11px] leading-tight tracking-tight max-w-full truncate">
-                    {{ $jamSekarang < 17 ? 'BELUM WAKTUNYA PULANG' : 'KLIK UNTUK PULANG' }}
-                </h4>
-
-                @if($jamSekarang < 17)
-
-                    <p class="text-[4px] md:text-[9px] text-rose-400 font-bold uppercase tracking-tighter mt-0.5 leading-none">
-                        TERSEDIA PUKUL 17:00
-                    </p>
-
-                @endif
-
-            </div>
-
-        @else
-
-            <div class="bg-emerald-50 h-full p-2 md:p-6 flex flex-col items-center justify-center text-center force-no-p">
-
-                <div class="text-lg md:text-4xl mb-1">
-                    🌟
-                </div>
-
-                <h4 class="font-black text-emerald-600 uppercase text-[6px] md:text-xs">
-                    TUGAS SELESAI
-                </h4>
-
-            </div>
-
-        @endif
-
-    @endif
-
-</div>
+            @endif
 
             {{-- 5. TABEL UTAMA: LOG AKTIVITAS (DENGAN PENAMBAHAN KOLOM KETERANGAN/ALASAN) --}}
             <div class="mt-8 bg-white rounded-xl md:rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden animate-fade-in w-full">
@@ -516,313 +400,5 @@
             if(clock) clock.textContent = new Date().toLocaleTimeString('id-ID', { hour12: false });
         }
         setInterval(updateClock, 1000);
-
-
-        /* ===================================================== */
-/* ANIMASI CARD KECIL DI BANNER */
-/* ===================================================== */
-
-.hover-card{
-    transition:all .35s ease;
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
-}
-
-.hover-card:hover{
-
-    transform:
-    translateY(-6px)
-    scale(1.08);
-
-    box-shadow:
-    0 20px 35px rgba(99,102,241,.25);
-
-}
-
-/* EFEK KILAU */
-
-.hover-card::before{
-
-    content:'';
-
-    position:absolute;
-    inset:0;
-
-    background:
-    linear-gradient(
-        120deg,
-        transparent,
-        rgba(255,255,255,.35),
-        transparent
-    );
-
-    transform:translateX(-120%);
-}
-
-.hover-card:hover::before{
-
-    animation:shineMove .9s linear;
-}
-
-@keyframes shineMove{
-
-    100%{
-        transform:translateX(120%);
-    }
-
-}
-
-/* ===================================================== */
-/* ICON KALENDER GERAK */
-/* ===================================================== */
-
-.calendar-icon{
-
-    transition:.35s ease;
-    cursor:pointer;
-}
-
-.calendar-icon:hover{
-
-    animation:calendarShake .8s ease infinite;
-
-    transform:scale(1.12);
-
-    filter:
-    drop-shadow(
-        0 12px 18px rgba(99,102,241,.25)
-    );
-
-}
-
-@keyframes calendarShake{
-
-    0%{
-        transform:rotate(0deg) scale(1);
-    }
-
-    25%{
-        transform:rotate(8deg) scale(1.12);
-    }
-
-    50%{
-        transform:rotate(-8deg) scale(1.16);
-    }
-
-    75%{
-        transform:rotate(4deg) scale(1.12);
-    }
-
-    100%{
-        transform:rotate(0deg) scale(1);
-    }
-
-}
-
-/* ===================================================== */
-/* ICON RUMAH GERAK */
-/* ===================================================== */
-
-.home-float{
-
-    transition:.35s ease;
-    cursor:pointer;
-}
-
-.home-float:hover{
-
-    animation:homeFloat .8s ease infinite;
-
-    transform:scale(1.12);
-
-    filter:
-    drop-shadow(
-        0 12px 18px rgba(244,63,94,.25)
-    );
-
-}
-
-@keyframes homeFloat{
-
-    0%{
-        transform:translateY(0px) rotate(0deg);
-    }
-
-    25%{
-        transform:translateY(-6px) rotate(-5deg);
-    }
-
-    50%{
-        transform:translateY(0px) rotate(5deg);
-    }
-
-    75%{
-        transform:translateY(-4px) rotate(-3deg);
-    }
-
-    100%{
-        transform:translateY(0px) rotate(0deg);
-    }
-
-}
-
-/* ===================================================== */
-/* TABLE PREMIUM */
-/* ===================================================== */
-
-.table-premium{
-
-    background:
-    linear-gradient(
-        135deg,
-        #ffffff,
-        #f8faff
-    );
-
-    border-radius:32px;
-
-    overflow:hidden;
-
-    box-shadow:
-    0 20px 40px rgba(15,23,42,.06);
-
-    border:1px solid #e2e8f0;
-}
-
-/* HEADER TABLE */
-
-.table-premium thead{
-
-    background:
-    linear-gradient(
-        135deg,
-        #0f172a,
-        #1e293b
-    ) !important;
-}
-
-/* ROW */
-
-.table-premium tbody tr{
-
-    transition:.35s ease;
-
-    position:relative;
-}
-
-/* HOVER */
-
-.table-premium tbody tr:hover{
-
-    background:
-    linear-gradient(
-        90deg,
-        rgba(99,102,241,.06),
-        rgba(59,130,246,.04)
-    );
-
-    transform:scale(1.01);
-
-}
-
-/* GARIS */
-
-.table-premium tbody tr td{
-
-    border-bottom:1px solid #eef2ff;
-}
-
-/* ===================================================== */
-/* TABLE REKAP WARNA */
-/* ===================================================== */
-
-.rekap-table tbody tr:nth-child(odd){
-
-    background:#f8fbff;
-}
-
-.rekap-table tbody tr:nth-child(even){
-
-    background:#ffffff;
-}
-
-.rekap-table tbody tr:hover{
-
-    background:
-    linear-gradient(
-        90deg,
-        rgba(168,85,247,.08),
-        rgba(59,130,246,.05)
-    );
-
-    transform:scale(1.01);
-
-    transition:.35s ease;
-}
-
-/* ===================================================== */
-/* KOLOM KETERANGAN */
-/* ===================================================== */
-
-.keterangan-col{
-
-    padding-left:20px !important;
-}
-
-.keterangan-text{
-
-    display:flex;
-    align-items:center;
-    gap:8px;
-
-    font-weight:700;
-
-    color:#334155;
-}
-
-/* ===================================================== */
-/* CARD TABLE HEADER */
-/* ===================================================== */
-
-.table-header-premium{
-
-    background:
-    linear-gradient(
-        135deg,
-        #eef2ff,
-        #f8faff
-    );
-
-    position:relative;
-
-    overflow:hidden;
-}
-
-.table-header-premium::before{
-
-    content:'';
-
-    position:absolute;
-    inset:0;
-
-    background:
-    linear-gradient(
-        120deg,
-        transparent,
-        rgba(255,255,255,.5),
-        transparent
-    );
-
-    animation:headerShine 6s linear infinite;
-}
-
-@keyframes headerShine{
-
-    100%{
-        transform:translateX(100%);
-    }
-
-}
     </script>
 </x-app-layout>
