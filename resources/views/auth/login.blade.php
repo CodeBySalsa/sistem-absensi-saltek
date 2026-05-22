@@ -145,15 +145,40 @@
     box-sizing:border-box;
 }
 
+/* Trik Utama: Mematikan total background putih luar bawaan layout Guest */
+div.min-h-screen.bg-gray-100,
+div.min-h-screen.flex.flex-col,
+.min-h-screen {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* Menghilangkan paksa kotak putih panjang luar bawaan laravel breeze/jetstream */
+div.w-full.sm\:max-w-md.mt-6.px-6.py-4.bg-white,
+div.sm\:max-w-md,
+.bg-white.shadow-md {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    max-w: 100% !important;
+    width: auto !important;
+}
+
 body{
-    overflow-x:hidden;
+    overflow: hidden !important; /* Kunci layar biar GA BISA DI-SCROLL sama sekali */
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
 
     background:
     linear-gradient(
         135deg,
         #eef4ff,
         #f8fbff
-    );
+    ) !important;
 
     font-family:
     'Plus Jakarta Sans',
@@ -461,27 +486,28 @@ body::after{
 }
 
 /* ===================================== */
-/* LOGIN WRAPPER & CARD COMPACT */
+/* WRAPPER & CARD COMPACT */
 /* ===================================== */
 
 .login-wrapper{
-    position:relative;
-    width:100%;
-    min-height:100vh;
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:15px 20px; /* Diperkecil agar menghemat ruang */
-    z-index:5;
+    padding:15px 20px;
+    z-index:9999 !important; /* Dipaksa naik ke paling atas agar layout luar tidak mengganggu */
 }
 
 .login-card{
     position:relative;
     width:100%;
-    max-width:400px; /* Ukuran card disesuaikan lebih pas */
-    padding:24px 28px; /* Mengurangi padding dalam yang kebesaran */
+    max-width:400px;
+    padding:24px 28px;
     border-radius:24px;
-    background: rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.28) !important;
     backdrop-filter:blur(20px);
     -webkit-backdrop-filter:blur(20px);
     border: 1px solid rgba(255,255,255,0.6);
@@ -496,7 +522,7 @@ form{
     width:100%;
     display:flex;
     flex-direction:column;
-    gap:12px; /* Merapatkan jarak komponen form */
+    gap:12px;
 }
 
 .login-card::before{
@@ -528,7 +554,7 @@ form{
 /* ===================================== */
 
 .logo-box{
-    width:70px; /* Ukuran logo dirampingkan dari 110px */
+    width:70px;
     height:70px;
     margin:0 auto 10px;
     display:flex;
@@ -543,7 +569,7 @@ form{
 
 .login-card h1{
     text-align:center;
-    font-size:18px; /* Disesuaikan sedikit agar compact */
+    font-size:18px;
     font-weight:800;
     color:#1e293b;
     margin-bottom:4px;
@@ -563,7 +589,7 @@ form{
 
 .subtitle{
     text-align:center;
-    font-size:11px; /* Ukuran teks deskripsi diperkecil */
+    font-size:11px;
     color:#64748b;
     margin-bottom:14px;
     line-height:1.5;
@@ -589,20 +615,20 @@ form{
 /* ===================================== */
 
 .input-group{
-    margin-bottom:0px; /* Margin luar dihilangkan karena sudah diatur gap form */
+    margin-bottom:0px;
 }
 
 .input-group label{
     display:block;
     margin-bottom:5px;
-    font-size:12px; /* Ukuran label disesuaikan */
+    font-size:12px;
     font-weight:700;
     color:#1e293b;
 }
 
 .input-box{
     width:100%;
-    height:44px; /* Tinggi input box dirampingkan dari 56px */
+    height:44px;
     border-radius:12px;
     background:
     linear-gradient(
@@ -701,12 +727,12 @@ form{
 .login-btn{
     border:none;
     min-width:110px;
-    height:42px; /* Tinggi button disesuaikan pas */
+    height:42px;
     padding:0 20px;
     border-radius:12px;
     background:
     linear-gradient(
-        90deg,
+        130deg,
         #2563eb,
         #9333ea
     );
@@ -729,6 +755,14 @@ form{
 /* ===================================== */
 
 @media(max-width:768px){
+    .login-wrapper {
+        position: relative;
+        height: auto;
+    }
+    body {
+        overflow: auto !important;
+        position: relative;
+    }
     .login-card{
         max-width:95%;
         padding:20px 20px;

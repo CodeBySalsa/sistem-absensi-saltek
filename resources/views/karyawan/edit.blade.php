@@ -7,21 +7,75 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ANIMASI ORB CAHAYA MENGAMBANG DI LUAR CARD */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.45;
+            pointer-events: none;
+            animation: floatAnimation 14s infinite alternate ease-in-out;
+        }
+        .orb-1 {
+            top: 10%;
+            left: -15%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, #6366f1, #a855f7);
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            bottom: 5%;
+            right: -15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #3b82f6, #06b6d4);
+            animation-delay: -5s;
+        }
+
+        @keyframes floatAnimation {
+            0% { transform: translateY(0px) translateX(0px) scale(1); }
+            50% { transform: translateY(50px) translateX(40px) scale(1.1); }
+            100% { transform: translateY(-10px) translateX(-30px) scale(0.95); }
+        }
+
+        /* EFFECT PREMIUM UNTUK CARD */
+        .premium-glass-card {
+            background: rgba(255, 255, 255, 0.75) !important;
+            backdrop-filter: blur(25px) !important;
+            -webkit-backdrop-filter: blur(25px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
+            box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.08) !important;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .premium-glass-card:hover {
+            box-shadow: 0 35px 70px -10px rgba(99, 102, 241, 0.15) !important;
+        }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen p-6 md:p-10">
+<body class="min-h-screen p-6 md:p-10 flex flex-col justify-center relative">
 
-    <div class="max-w-2xl mx-auto">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <div class="max-w-2xl mx-auto w-full relative z-10">
         <div class="flex justify-between items-center mb-8">
-            <a href="{{ route('karyawan.index') }}" class="text-blue-600 text-[10px] font-black hover:text-blue-800 flex items-center gap-2 tracking-[0.2em] group">
+            <a href="{{ route('karyawan.index') }}" class="px-4 py-2 bg-white/70 backdrop-blur-md border border-slate-200/60 rounded-xl text-blue-600 text-[10px] font-black hover:text-blue-800 hover:border-blue-200 flex items-center gap-2 tracking-[0.15em] group shadow-sm transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 KEMBALI KE DAFTAR
             </a>
             
-            <a href="{{ route('dashboard') }}" class="bg-white border border-slate-200 text-slate-600 text-[10px] font-black px-4 py-2 rounded-xl hover:bg-slate-100 transition-all flex items-center gap-2 tracking-[0.1em] shadow-sm">
+            <a href="{{ route('dashboard') }}" class="bg-white/70 backdrop-blur-md border border-slate-200 text-slate-600 text-[10px] font-black px-4 py-2 rounded-xl hover:bg-slate-100/90 transition-all flex items-center gap-2 tracking-[0.1em] shadow-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
@@ -29,20 +83,21 @@
             </a>
         </div>
 
-        <div class="bg-white p-8 md:p-12 rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden">
+        {{-- Kontainer Utama Berwarna (Premium Glass Card) --}}
+        <div class="premium-glass-card p-8 md:p-12 rounded-[3rem] relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
             
             <div class="mb-10 text-center relative">
-                <div class="inline-block p-4 bg-amber-50 rounded-3xl mb-4 border border-amber-100 shadow-sm shadow-amber-100">
+                <div class="inline-block p-4 bg-amber-50 rounded-3xl mb-4 border border-amber-100 shadow-sm shadow-amber-200/50">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                 </div>
-                <h1 class="text-3xl font-black text-slate-900 tracking-tight uppercase">Edit Data Karyawan</h1>
-                <p class="text-slate-500 font-medium mt-2 text-sm">Sedang memperbarui data: <span class="text-blue-600 font-bold">{{ $karyawan->nama_lengkap }}</span></p>
+                <h1 class="text-3xl font-black text-slate-900 tracking-tight uppercase bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Edit Data Karyawan</h1>
+                <p class="text-slate-500 font-medium mt-2 text-sm">Sedang memperbarui data: <span class="text-blue-600 font-bold bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-100/60">{{ $karyawan->nama_lengkap }}</span></p>
             </div>
 
-            <form action="{{ route('karyawan.update', $karyawan->id) }}" method="POST" class="space-y-7 relative">
+            <form action="{{ route('karyawan.update', $karyawan->id) }}" method="POST" class="space-y-6 relative">
                 @csrf
                 @method('PUT')
 
@@ -50,24 +105,24 @@
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nomor Induk Pegawai (NIP)</label>
                     <input type="text" name="nip" value="{{ old('nip', $karyawan->nip) }}" 
-                        class="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 placeholder:text-slate-300">
+                        class="w-full px-6 py-4 bg-white/60 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 placeholder:text-slate-300 shadow-sm">
                 </div>
 
                 {{-- Kolom Nama Lengkap --}}
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nama Lengkap</label>
                     <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap', $karyawan->nama_lengkap) }}" 
-                        class="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 placeholder:text-slate-300">
+                        class="w-full px-6 py-4 bg-white/60 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 placeholder:text-slate-300 shadow-sm">
                 </div>
 
-                {{-- PENAMBAHAN KOLOM NOMOR HP --}}
+                {{-- Kolom Nomor HP --}}
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nomor WhatsApp / HP</label>
                     <div class="relative">
                         <input type="text" name="no_hp" value="{{ old('no_hp', $karyawan->no_hp) }}" 
-                            class="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 placeholder:text-slate-300"
+                            class="w-full px-6 py-4 bg-white/60 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-blue-600 font-mono placeholder:text-slate-300 shadow-sm"
                             placeholder="Contoh: 08123456789">
-                        <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-slate-300">
+                        <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-slate-400">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                             </svg>
@@ -79,13 +134,13 @@
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Jabatan / Posisi</label>
                     <div class="relative">
-                        <select name="jabatan" class="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 appearance-none cursor-pointer">
+                        <select name="jabatan" class="w-full px-6 py-4 bg-white/60 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 appearance-none cursor-pointer shadow-sm">
                             <option value="Staff" {{ $karyawan->jabatan == 'Staff' ? 'selected' : '' }}>Staff</option>
                             <option value="Mahasiswa KKN" {{ $karyawan->jabatan == 'Mahasiswa KKN' ? 'selected' : '' }}>Mahasiswa KKN</option>
                             <option value="Teknisi Fiber Optic" {{ $karyawan->jabatan == 'Teknisi Fiber Optic' ? 'selected' : '' }}>Teknisi Fiber Optic</option>
                             <option value="Admin" {{ $karyawan->jabatan == 'Admin' ? 'selected' : '' }}>Admin</option>
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
+                        <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-slate-400">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
@@ -97,14 +152,14 @@
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Hubungkan ke Akun Login</label>
                     <div class="relative">
-                        <select name="user_id" class="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 appearance-none cursor-pointer">
+                        <select name="user_id" class="w-full px-6 py-4 bg-white/60 border-2 border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-slate-800 appearance-none cursor-pointer shadow-sm">
                             @foreach($users as $user)
                                 <option value="{{ $user->id }}" {{ $karyawan->user_id == $user->id ? 'selected' : '' }}>
                                     {{ $user->name }} ({{ $user->email }})
                                 </option>
                             @endforeach
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
+                        <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-slate-400">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
@@ -113,14 +168,14 @@
                 </div>
 
                 {{-- Tombol Aksi --}}
-                <div class="flex flex-col md:flex-row gap-4 pt-6">
-                    <button type="submit" class="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-blue-100 uppercase tracking-widest text-[11px] flex justify-center items-center gap-2 active:scale-[0.98]">
+                <div class="flex flex-col sm:flex-row gap-4 pt-6">
+                    <button type="submit" class="flex-[2] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-indigo-500/10 uppercase tracking-widest text-[11px] flex justify-center items-center gap-2 active:scale-[0.98] hover:-translate-y-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
                         Simpan Perubahan
                     </button>
-                    <a href="{{ route('karyawan.index') }}" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-black py-5 rounded-2xl transition-all text-center uppercase tracking-widest text-[11px] border border-slate-200">
+                    <a href="{{ route('karyawan.index') }}" class="flex-1 bg-white/80 hover:bg-slate-100 text-slate-600 font-black py-5 rounded-2xl transition-all text-center uppercase tracking-widest text-[11px] border border-slate-200 flex items-center justify-center">
                         Batal
                     </a>
                 </div>

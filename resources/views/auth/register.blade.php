@@ -6,11 +6,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <div class="register-wrapper">
 
-    <!-- BUBBLE -->
     <div class="bg-bubble bubble-left"></div>
     <div class="bg-bubble bubble-right"></div>
 
-    <!-- SPARKLES -->
     <div class="sparkles">
         <span></span>
         <span></span>
@@ -22,31 +20,25 @@
         <span></span>
     </div>
 
-    <!-- WAVES -->
     <div class="wave wave-top"></div>
     <div class="wave wave-bottom"></div>
 
     <div class="register-card">
 
-        <!-- LOGO -->
         <div class="logo-box">
             <img src="{{ asset('logo pt salttek dumpang jaya.jpeg') }}" alt="Logo PT Salttek">
         </div>
 
-        <!-- TITLE -->
         <h1>CREATE ACCOUNT</h1>
         <p class="subtitle">Sistem Absensi Digital Modern</p>
 
-        <!-- BACK -->
         <a href="{{ url('/') }}" class="back-btn">
             ← Kembali ke Beranda
         </a>
 
-        <!-- FORM -->
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
-            <!-- NAME -->
             <div class="input-group">
                 <label>Name</label>
 
@@ -67,7 +59,6 @@
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
 
-            <!-- EMAIL -->
             <div class="input-group">
                 <label>Email</label>
 
@@ -87,7 +78,6 @@
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
 
-            <!-- PASSWORD -->
             <div class="input-group">
                 <label>Password</label>
 
@@ -108,7 +98,6 @@
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
 
-            <!-- CONFIRM -->
             <div class="input-group">
                 <label>Confirm Password</label>
 
@@ -129,12 +118,10 @@
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
             </div>
 
-            <!-- BUTTON -->
             <button type="submit" class="register-btn">
                 REGISTER ACCOUNT
             </button>
 
-            <!-- LOGIN -->
             <div class="login-link">
                 Already have an account?
                 <a href="{{ route('login') }}">Login here</a>
@@ -150,6 +137,29 @@
 
 <style>
 
+/* ======================================================== */
+/* FIX: OVERRIDE UNTUK MENGHILANGKAN KOTAK PUTIH LAYOUT LUAR */
+/* ======================================================== */
+div.min-h-screen.bg-gray-100,
+div.min-h-screen.flex.flex-col,
+.min-h-screen {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+div.w-full.sm\:max-w-md.mt-6.px-6.py-4.bg-white,
+div.sm\:max-w-md,
+.bg-white.shadow-md {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    max-w: 100% !important;
+    width: auto !important;
+}
+
 *{
     margin:0;
     padding:0;
@@ -160,7 +170,7 @@ html,
 body{
     width:100%;
     min-height:100vh;
-    overflow-x:hidden;
+    overflow: hidden !important; /* FIX: Layar dikunci total biar TIDAK BISA DI-SCROLL */
     font-family:'Poppins',sans-serif;
     background:#f4f7ff;
 }
@@ -171,6 +181,7 @@ body{
 
 body{
     display:block !important;
+    position: fixed; /* FIX: Mengunci posisi dokumen */
 }
 
 main{
@@ -183,7 +194,7 @@ main{
 
     background:transparent !important;
 
-    padding:40px 20px !important;
+    padding:15px 20px !important; /* FIX: Menyesuaikan padding agar pas dengan layar laptop */
 
     position:relative;
     overflow:hidden;
@@ -194,10 +205,11 @@ main{
 /* =============================== */
 
 .register-wrapper{
-    position:relative;
+    position:fixed; /* FIX: Dibikin fixed memenuhi layar */
+    inset:0;
 
-    width:100%;
-    min-height:100vh;
+    width:100vw;
+    height:100vh;
 
     display:flex;
     justify-content:center;
@@ -205,7 +217,7 @@ main{
 
     overflow:hidden;
 
-    z-index:2;
+    z-index:9999 !important; /* FIX: Naik ke lapisan paling atas */
 }
 
 /* =============================== */
@@ -215,9 +227,9 @@ main{
     position:relative;
 
     width:100%;
-    max-width:770px; /* lebih lebar */
+    max-width:440px; /* FIX: Dipersempit setara card login agar proposional dan tidak meluber ke bawah */
 
-    padding:30px 45px; /* atas bawah kecil */
+    padding:24px 30px; /* FIX: Dibuat kompak agar pas dalam satu layar penuh */
 
     border-radius:32px;
 
@@ -238,12 +250,12 @@ main{
 /* =============================== */
 
 .logo-box{
-    width:115px;
-    height:115px;
+    width:75px; /* FIX: Ukuran logo disesuaikan lebih minimalis agar hemat ruang vertical */
+    height:75px;
 
-    margin:0 auto 25px;
+    margin:0 auto 12px;
 
-    border-radius:30px;
+    border-radius:20px;
 
     background:white;
 
@@ -256,7 +268,7 @@ main{
 }
 
 .logo-box img{
-    width:75px;
+    width:50px;
 }
 
 /* =============================== */
@@ -265,15 +277,15 @@ main{
 .register-card h1{
     text-align:center;
 
-    font-size:30px; /* kecilin ini */
+    font-size:22px; /* FIX: Sesuai request untuk diperkecil ukurannya */
 
     line-height:1.1;
 
-    margin-bottom:8px;
+    margin-bottom:4px;
 
     font-weight:800;
 
-    letter-spacing:-2px;
+    letter-spacing:-1px;
 
     background:linear-gradient(
         90deg,
@@ -290,9 +302,9 @@ main{
 
     color:#7b8ba7;
 
-    font-size:17px;
+    font-size:12px; /* FIX: Dikecilkan sedikit agar kompak */
 
-    margin-bottom:20px;
+    margin-bottom:12px;
 }
 
 /* =============================== */
@@ -300,13 +312,15 @@ main{
 /* =============================== */
 
 .back-btn{
-    display:inline-block;
+    display:block; /* FIX: Centered text block */
+    text-align: center;
 
-    margin-bottom:30px;
+    margin-bottom:16px;
 
     text-decoration:none;
 
     color:#64748b;
+    font-size: 12px;
 
     font-weight:600;
 
@@ -322,15 +336,15 @@ main{
 /* =============================== */
 
 .input-group{
-    margin-bottom:24px;
+    margin-bottom:10px; /* FIX: Jarak dirapatkan agar muat satu layar tanpa scroll */
 }
 
 .input-group label{
     display:block;
 
-    margin-bottom:10px;
+    margin-bottom:4px;
 
-    font-size:17px;
+    font-size:12px; /* FIX: Compact label */
 
     font-weight:700;
 
@@ -340,9 +354,9 @@ main{
 .input-box{
     width:100%;
 
-    height:50px;
+    height:42px; /* FIX: Tinggi kotak input dioptimasi agar pas */
 
-    border-radius:20px;
+    border-radius:12px;
 
     border:2px solid #e8edff;
 
@@ -351,9 +365,9 @@ main{
     display:flex;
     align-items:center;
 
-    gap:14px;
+    gap:10px;
 
-    padding:0 20px;
+    padding:0 14px;
 
     transition:.3s;
 
@@ -362,7 +376,7 @@ main{
 }
 
 .input-box:hover{
-    transform:translateY(-2px);
+    transform:translateY(-1px);
 }
 
 .input-box:focus-within{
@@ -374,11 +388,11 @@ main{
 }
 
 .input-box span{
-    font-size:20px;
+    font-size:16px;
 }
 
 .input-box small{
-    font-size:18px;
+    font-size:15px;
     opacity:.6;
     cursor:pointer;
 }
@@ -393,7 +407,7 @@ main{
 
     background:transparent !important;
 
-    font-size:16px;
+    font-size:13px;
 
     color:#334155;
 }
@@ -409,15 +423,15 @@ main{
 .register-btn{
     width:100%;
 
-    height:50px;
+    height:42px; /* FIX: Penyesuaian tinggi tombol */
 
     border:none;
 
-    border-radius:20px;
+    border-radius:12px;
 
-    margin-top:10px;
+    margin-top:8px;
 
-    font-size:18px;
+    font-size:14px;
 
     font-weight:700;
 
@@ -439,7 +453,7 @@ main{
 }
 
 .register-btn:hover{
-    transform:translateY(-3px);
+    transform:translateY(-2px);
 
     box-shadow:
     0 18px 40px rgba(124,58,237,0.35);
@@ -452,9 +466,10 @@ main{
 .login-link{
     text-align:center;
 
-    margin-top:24px;
+    margin-top:12px;
 
     color:#7c8aa5;
+    font-size: 12px;
 }
 
 .login-link a{
@@ -596,35 +611,44 @@ main{
 }
 
 /* =============================== */
-/* MOBILE */
+/* MOBILE RESPONSIVE RESET */
 /* =============================== */
 
 @media(max-width:768px){
-
+    html, body {
+        overflow: auto !important;
+        position: relative;
+    }
+    .register-wrapper {
+        position: relative;
+        height: auto;
+        padding: 20px 10px;
+    }
     .register-card{
-        padding:38px 24px;
+        padding:24px 20px;
+        max-width: 100%;
     }
 
     .register-card h1{
-        font-size:44px;
+        font-size:26px;
     }
 
     .input-box{
-        height:58px;
+        height:46px;
     }
 
     .register-btn{
-        height:58px;
-        font-size:18px;
+        height:46px;
+        font-size:16px;
     }
 
     .logo-box{
-        width:95px;
-        height:95px;
+        width:80px;
+        height:80px;
     }
 
     .logo-box img{
-        width:60px;
+        width:55px;
     }
 }
 
@@ -647,9 +671,6 @@ main{
     cursor:pointer;
     user-select:none;
 }
-
-</style>
-
 
 </style>
 
@@ -679,4 +700,3 @@ document.querySelectorAll('.toggle-password').forEach(function(button){
 });
 
 </script>
-
