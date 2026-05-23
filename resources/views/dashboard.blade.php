@@ -71,10 +71,15 @@
             .force-tight-gap { gap: 4px !important; }
             .force-icon-size { width: 22px !important; height: 22px !important; }
         }
+    
+        <div class="floating-emoji" style="left:10%; animation-delay:0s;">✨</div>
+        <div class="floating-emoji" style="left:30%; animation-delay:2s;">🚀</div>
+        <div class="floating-emoji" style="left:60%; animation-delay:4s;">⚡</div>
+        <div class="floating-emoji" style="left:80%; animation-delay:1s;">💎</div>
     </style>
 
     <div class="py-6 md:py-10 bg-slate-50/50 min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
             {{-- LOGIKA DETEKSI HARI MINGGU --}}
             @php
@@ -102,26 +107,23 @@
                             Presence System • PT Salttek Dumpang Jaya
                         </div>
                         <h1 class="text-xs md:text-3xl lg:text-4xl font-black tracking-tight leading-tight uppercase italic mobile-title">HELLO, <span class="text-indigo-300">{{ Auth::user()->name }}!</span></h1>
-                        
-                        {{-- DISINI PERBAIKAN CARDNYA: Ditambahkan efek hover zoom transform & shadow glow lembut --}}
                         <div class="flex gap-1.5 md:gap-3 mt-2 md:mt-4">
-                            <div class="glass-stat cursor-pointer transform hover:scale-110 transition-all duration-300 ease-in-out hover:bg-emerald-500/20 hover:border-emerald-400/40 shadow-sm hover:shadow-emerald-500/20 px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
-                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase tracking-wider">Hadir</span>
-                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1 text-emerald-300">{{ $totalHadir ?? 0 }}</span>
+                            <div class="glass-stat hover-card px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
+                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase">Hadir</span>
+                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1">{{ $totalHadir ?? 0 }}</span>
                             </div>
-                            <div class="glass-stat cursor-pointer transform hover:scale-110 transition-all duration-300 ease-in-out hover:bg-blue-500/20 hover:border-blue-400/40 shadow-sm hover:shadow-blue-500/20 px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
-                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase tracking-wider">Izin</span>
-                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1 text-blue-300">{{ $ringkasanStatistik->total_izin ?? 0 }}</span>
+                            <div class="glass-stat hover-card px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
+                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase">Izin</span>
+                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1">{{ $ringkasanStatistik->total_izin ?? 0 }}</span>
                             </div>
-                            <div class="glass-stat cursor-pointer transform hover:scale-110 transition-all duration-300 ease-in-out hover:bg-rose-500/20 hover:border-rose-400/40 shadow-sm hover:shadow-rose-500/20 px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
-                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase tracking-wider">Sakit</span>
-                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1 text-rose-300">{{ $ringkasanStatistik->total_sakit ?? 0 }}</span>
+                            <div class="glass-stat hover-card px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex flex-col items-center min-w-[45px] md:min-w-[70px]">
+                                <span class="text-[6px] md:text-[10px] font-bold text-indigo-200 uppercase">Sakit</span>
+                                <span class="text-xs md:text-lg font-black leading-none mt-0.5 md:mt-1">{{ $ringkasanStatistik->total_sakit ?? 0 }}</span>
                             </div>
                         </div>
                     </div>
                     
-                    {{-- Status Kanan juga ditambahkan efek interaktif hover zoom --}}
-                    <div class="glass-card cursor-pointer transform hover:scale-105 transition-all duration-300 ease-in-out live-badge p-2 md:p-5 rounded-xl md:rounded-[1.5rem] flex items-center gap-2 md:gap-5 w-5/12 md:w-auto shadow-xl border-white/20 shrink-0">
+                    <div class="glass-card hover-card live-badge p-2 md:p-5 rounded-xl md:rounded-[1.5rem] flex items-center gap-2 md:gap-5 w-5/12 md:w-auto shadow-xl border-white/20 shrink-0">
                         <div class="w-7 h-7 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center text-sm md:text-2xl shadow-inner shrink-0
                             @if($isMinggu) bg-slate-100 @elseif($cekAbsensi && $cekAbsensi->status == 'Terlambat') bg-rose-100 @elseif($cekAbsensi) bg-emerald-50 @else bg-amber-50 @endif">
                             @if($isMinggu) ☕ @elseif($cekAbsensi && $cekAbsensi->status == 'Terlambat') ⏰ @elseif($cekAbsensi && $cekAbsensi->jam_keluar) 🏁 @elseif($cekAbsensi) ✅ @else ⏳ @endif
@@ -132,7 +134,7 @@
                                 @if($isMinggu) HARI LIBUR @elseif($cekAbsensi) {{ $cekAbsensi->status }} @else Belum Presensi @endif
                             </h4>
                             <p class="text-[6px] md:text-[10px] text-indigo-600 font-bold mt-0.5 leading-none truncate font-mono">
-                                 @if($isMinggu) Istirahat @elseif($cekAbsensi) Log: {{ \Carbon\Carbon::parse($cekAbsening->jam_masuk)->format('H:i') }} WIB @else Silakan Absensi @endif
+                                 @if($isMinggu) Istirahat @elseif($cekAbsensi) Log: {{ \Carbon\Carbon::parse($cekAbsensi->jam_masuk)->format('H:i') }} WIB @else Silakan Absensi @endif
                             </p>
                         </div>
                     </div>
@@ -140,77 +142,32 @@
             @endif
 
             {{-- 3. ADMIN PANEL --}}
-@if(Auth::user()->role == 'admin')
-    <div class="mb-6 bg-slate-900 rounded-[1.5rem] md:rounded-[3rem] p-1 shadow-2xl relative overflow-hidden group">
-        <div class="relative z-10 bg-slate-900 rounded-[1.4rem] md:rounded-[2.9rem] p-4 md:p-10">
-            <div class="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 md:gap-8">
-                
-                <div class="space-y-1.5 md:space-y-2">
-                    <h3 class="text-[7px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-indigo-400/80 italic leading-none">Control Center PT Saltek</h3>
-                    <h1 class="text-sm md:text-4xl font-black tracking-tighter text-white uppercase italic leading-tight">HALO, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">{{ Auth::user()->name }}</span></h1>
-                    <div class="flex flex-row gap-2 mt-2 md:mt-6">
-                        <a href="{{ route('karyawan.index') }}" class="px-2.5 py-1.5 md:px-5 md:py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-[6px] md:text-xs font-black uppercase tracking-wider rounded-lg md:rounded-xl transition-all shadow-lg flex items-center gap-1 whitespace-nowrap">
-                            <span>👥</span> DATA KARYAWAN
-                        </a>
-                    </div>
-                </div> {{-- Penutup tag kiri yang tadi sempat hilang --}}
+            @if(Auth::user()->role == 'admin')
+                <div class="mb-6 bg-slate-900 rounded-[1.5rem] md:rounded-[3rem] p-1 shadow-2xl relative overflow-hidden group">
+                    <div class="relative z-10 bg-slate-900 rounded-[1.4rem] md:rounded-[2.9rem] p-4 md:p-10">
+                        <div class="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 md:gap-8">
+                            
+                            <div class="space-y-1.5 md:space-y-2">
+                                <h3 class="text-[7px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-indigo-400/80 italic leading-none">Control Center PT Salttek</h3>
+                                <h1 class="text-sm md:text-4xl font-black tracking-tighter text-white uppercase italic leading-tight">HALO, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">{{ Auth::user()->name }}</span></h1>
+                                <div class="flex flex-row gap-2 mt-2 md:mt-6">
+                                    <a href="{{ route('karyawan.index') }}" class="px-2.5 py-1.5 md:px-5 md:py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-[6px] md:text-xs font-black uppercase tracking-wider rounded-lg md:rounded-xl transition-all shadow-lg flex items-center gap-1 whitespace-nowrap"><span>👥</span> DATA KARYAWAN</a>
+                                    <a href="{{ route('karyawan.create') }}" class="px-2.5 py-1.5 md:px-5 md:py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-[6px] md:text-xs font-black uppercase tracking-wider rounded-lg md:rounded-xl transition-all shadow-lg flex items-center gap-1 whitespace-nowrap"><span>➕</span> TAMBAH KARYAWAN</a>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-4 gap-1.5 md:gap-6 mt-2 lg:mt-0 flex-1 md:flex-none">
+                                <div class="bg-slate-800/40 border border-white/5 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex flex-col items-center text-center"><h3 class="text-xs md:text-3xl font-black text-white tracking-tighter">{{ $totalKaryawan ?? 0 }}</h3><p class="text-[5px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">ANGGOTA</p></div>
+                                <div class="bg-emerald-500/10 border border-emerald-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex flex-col items-center text-center"><h3 class="text-xs md:text-3xl font-black text-emerald-400 tracking-tighter">{{ $hadirHariIni ?? 0 }}</h3><p class="text-[5px] md:text-[10px] font-bold text-emerald-500/70 uppercase tracking-wider mt-0.5">HADIR</p></div>
+                                <div class="bg-amber-500/10 border border-amber-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex flex-col items-center text-center"><h3 class="text-xs md:text-3xl font-black text-amber-400 tracking-tighter">{{ $totalIzin ?? 0 }}</h3><p class="text-[5px] md:text-[10px] font-bold text-amber-500/70 uppercase tracking-wider mt-0.5">IZIN</p></div>
+                                <div class="bg-rose-500/10 border border-rose-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex flex-col items-center text-center"><h3 class="text-xs md:text-3xl font-black text-rose-400 tracking-tighter">{{ $totalSakit ?? 0 }}</h3><p class="text-[5px] md:text-[10px] font-bold text-rose-500/70 uppercase tracking-wider mt-0.5">SAKIT</p></div>
+                            </div>
 
-                <div class="grid grid-cols-4 gap-1.5 md:gap-6 mt-2 lg:mt-0 flex-1 md:flex-none">
-                    
-                    <div class="bg-slate-800/40 border border-white/5 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex items-center justify-between transition-all duration-300 hover:scale-105 hover:shadow-lg gap-4 group cursor-pointer">
-                        <div>
-                            <h3 class="text-xs md:text-3xl font-black text-white tracking-tighter">{{ $totalKaryawan ?? 0 }}</h3>
-                            <p class="text-[5px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Anggota</p>
-                        </div>
-                        <div class="text-blue-400 bg-blue-500/10 p-1 md:p-2 rounded-lg hidden md:block transition-transform duration-300 group-hover:rotate-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
                         </div>
                     </div>
-
-                    <div class="bg-emerald-500/10 border border-emerald-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex items-center justify-between transition-all duration-300 hover:scale-105 hover:shadow-lg gap-4 group cursor-pointer">
-                        <div>
-                            <h3 class="text-xs md:text-3xl font-black text-emerald-400 tracking-tighter">{{ $hadirHariIni ?? 0 }}</h3>
-                            <p class="text-[5px] md:text-[10px] font-bold text-emerald-500/70 uppercase tracking-wider mt-0.5">Hadir</p>
-                        </div>
-                        <div class="text-emerald-400 bg-emerald-500/10 p-1 md:p-2 rounded-lg hidden md:block transition-transform duration-300 group-hover:rotate-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="bg-amber-500/10 border border-amber-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex items-center justify-between transition-all duration-300 hover:scale-105 hover:shadow-lg gap-4 group cursor-pointer">
-                        <div>
-                            <h3 class="text-xs md:text-3xl font-black text-amber-400 tracking-tighter">{{ $totalIzin ?? 0 }}</h3>
-                            <p class="text-[5px] md:text-[10px] font-bold text-amber-500/70 uppercase tracking-wider mt-0.5">Izin</p>
-                        </div>
-                        <div class="text-amber-400 bg-amber-500/10 p-1 md:p-2 rounded-lg hidden md:block transition-transform duration-300 group-hover:rotate-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="bg-rose-500/10 border border-rose-500/20 p-2 md:p-6 rounded-xl md:rounded-[2rem] flex items-center justify-between transition-all duration-300 hover:scale-105 hover:shadow-lg gap-4 group cursor-pointer">
-                        <div>
-                            <h3 class="text-xs md:text-3xl font-black text-rose-400 tracking-tighter">{{ $totalSakit ?? 0 }}</h3>
-                            <p class="text-[5px] md:text-[10px] font-bold text-rose-500/70 uppercase tracking-wider mt-0.5">Sakit</p>
-                        </div>
-                        <div class="text-rose-400 bg-rose-500/10 p-1 md:p-2 rounded-lg hidden md:block transition-transform duration-300 group-hover:rotate-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </div>
-                    </div>
-
                 </div>
+            @endif
 
-            </div>
-        </div>
-    </div>
-@endif
             {{-- 4. USER CARDS --}}
             @if(Auth::user()->role !== 'admin')
                 <div class="grid grid-cols-3 gap-2 md:gap-6 mb-8">
@@ -267,11 +224,12 @@
                                 <h4 class="font-black text-slate-400 uppercase text-[5px] md:text-xs">SYSTEM OFF</h4>
                             </div>
                         @else
+                            {{-- Perbaikan Poin Utama: Mengubah Typo penutup php menjadi valid @endphp --}}
                             @php $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->hour; @endphp
                             @if(!$cekAbsensi)
                                 <div class="bg-white h-full p-2 md:p-6 flex flex-col items-center justify-center cursor-pointer text-center force-no-p" onclick="handleAbsensi()">
                                  <div class="text-lg md:text-4xl mb-1 rocket-float">🚀</div>
-                                    <h4 class="font-black text-indigo-600 uppercase text-[6px] md:text-xs tracking-wider">Presensi Now</h4>
+                                    <h4 class="font-black text-indigo-600 uppercase text-[6px] md:text-xs tracking-wider">Presensi</h4>
                                 </div>
                             @elseif(!$cekAbsensi->jam_keluar && in_array($cekAbsensi->status, ['Hadir', 'Terlambat']))
                                 <div class="h-full flex flex-col items-center justify-center cursor-pointer text-center p-2 md:p-6 transition-all {{ $jamSekarang < 17 ? 'bg-rose-50/60' : 'bg-white' }}" onclick="handlePulang({{ $jamSekarang }})">
@@ -295,85 +253,61 @@
                 </div>
             @endif
 
-            {{-- 5. DISINI PERBAIKAN POIN 2 & 3: TABEL UTAMA LOG AKTIVITAS (Didesain lebih interaktif & dinamis) --}}
+            {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
             <div class="mt-8 bg-white rounded-xl md:rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden animate-fade-in w-full">
-                <div class="p-4 md:p-8 border-b border-slate-100 bg-indigo-50/30 flex items-center justify-between">
-                    <div class="flex items-center gap-2 md:gap-3">
-                        <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
-                        <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
-                            @if(Auth::user()->role == 'admin') LOG AKTIVITAS HARI INI @else LOG AKTIVITAS MINGGU INI @endif
-                        </h3>
-                    </div>
-                    <span class="text-[8px] md:text-xs bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Live Log</span>
+                <div class="p-4 md:p-8 border-b border-slate-100 bg-indigo-50/30 flex items-center gap-2 md:gap-3">
+                    <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
+                    <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
+                        @if(Auth::user()->role == 'admin') LOG AKTIVITAS HARI INI @else LOG AKTIVITAS MINGGU INI @endif
+                    </h3>
                 </div>
 
                 <div class="w-full overflow-hidden rounded-t-xl md:rounded-t-[2rem]">
                     <table class="w-full text-left mobile-table-text md:text-sm">
                         <thead class="bg-slate-900 text-white">
                             <tr>
-                                <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left w-3/12 md:w-3/12">
+                                <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left w-4/12 md:w-3/12">
                                     {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
                                 </th>
-                                <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-1.5/12 md:w-1.5/12">Jam Masuk</th>
-                                <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-1.5/12 md:w-1.5/12">Jam Pulang</th>
-                                <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-2/12">Status Kehadiran</th>
-                                <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left w-4/12 md:w-4/12">Keterangan / Alasan</th>
+                                <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-2/12">Jam Masuk</th>
+                                <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-2/12">Jam Pulang</th>
+                                <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-4/12 md:w-5/12">Status Kehadiran</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody class="divide-y divide-slate-50">
                             @if(Auth::user()->role == 'admin')
                                 @forelse($absensiHariIni as $absen)
-                                <tr class="hover:bg-slate-50/80 transition-all duration-200">
+                                <tr class="hover:bg-indigo-50/20 transition-all">
                                     <td class="mobile-padding md:p-6 font-bold text-slate-800 mobile-truncate text-left">{{ $absen->user->name }}</td>
                                     <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-blue-600">{{ $absen->jam_masuk ?? '--:--' }}</td>
                                     <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-emerald-600">{{ $absen->jam_keluar ?? '--:--' }}</td>
                                     <td class="mobile-padding md:p-6 text-center">
-                                        <span class="px-1.5 py-0.5 md:px-4 md:py-1.5 rounded-full text-[6px] md:text-[9px] font-black uppercase block md:inline text-center mobile-badge shadow-sm
-                                            {{ in_array($absen->status, ['Terlambat', 'Sakit']) ? 'bg-rose-100 text-rose-600 border border-rose-200' : ($absen->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600 border border-emerald-200' : 'bg-amber-100 text-amber-600 border border-amber-200') }}">
+                                        <span class="px-1.5 py-0.5 md:px-4 md:py-1.5 rounded-full text-[6px] md:text-[9px] font-black uppercase block md:inline text-center mobile-badge
+                                            {{ in_array($absen->status, ['Terlambat', 'Sakit']) ? 'bg-rose-100 text-rose-600' : ($absen->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600') }}">
                                             {{ $absen->status }}
                                         </span>
                                     </td>
-                                    <td class="mobile-padding md:p-6 text-left">
-                                        @if(in_array($absen->status, ['Izin', 'Sakit']))
-                                            <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-[7px] md:text-xs bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
-                                                <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $absen->status == 'Izin' ? 'bg-amber-500' : 'bg-rose-500' }}"></span>
-                                                <span class="truncate max-w-[100px] md:max-w-[250px] italic text-slate-600">{{ $absen->keterangan ?? 'Tanpa alasan tertulis' }}</span>
-                                            </div>
-                                        @else
-                                            <span class="text-slate-300 font-bold font-mono text-[7px] md:text-xs ml-2">—</span>
-                                        @endif
-                                    </td>
                                 </tr>
                                 @empty
-                                <tr><td colspan="5" class="p-8 text-center text-slate-400 italic mobile-table-text md:text-sm">Belum ada aktivitas hari ini.</td></tr>
+                                <tr><td colspan="4" class="p-8 text-center text-slate-400 italic mobile-table-text md:text-sm">Belum ada aktivitas hari ini.</td></tr>
                                 @endforelse
                             @else
                                 @forelse($absensis as $log)
-                                <tr class="hover:bg-slate-50/80 transition-all duration-200">
+                                <tr class="hover:bg-indigo-50/20 transition-all">
                                     <td class="mobile-padding md:p-6 font-bold text-slate-800 mobile-truncate text-left">
                                         {{ \Carbon\Carbon::parse($log->tanggal)->translatedFormat('l, d M Y') }}
                                     </td>
                                     <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-blue-600">{{ $log->jam_masuk ?? '--:--' }}</td>
                                     <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-emerald-600">{{ $log->jam_keluar ?? '--:--' }}</td>
                                     <td class="mobile-padding md:p-6 text-center">
-                                        <span class="px-1.5 py-0.5 md:px-4 md:py-1.5 rounded-full text-[6px] md:text-[9px] font-black uppercase block md:inline text-center mobile-badge shadow-sm
-                                            {{ $log->status == 'Terlambat' ? 'bg-rose-100 text-rose-600 border border-rose-200' : ($log->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600 border border-emerald-200' : 'bg-amber-100 text-amber-600 border border-amber-200') }}">
+                                        <span class="px-1.5 py-0.5 md:px-4 md:py-1.5 rounded-full text-[6px] md:text-[9px] font-black uppercase block md:inline text-center mobile-badge
+                                            {{ $log->status == 'Terlambat' ? 'bg-rose-100 text-rose-600' : ($log->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600') }}">
                                             {{ $log->status }}
                                         </span>
                                     </td>
-                                    <td class="mobile-padding md:p-6 text-left">
-                                        @if(in_array($log->status, ['Izin', 'Sakit']))
-                                            <div class="flex items-center gap-1.5 text-slate-700 font-semibold text-[7px] md:text-xs bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
-                                                <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $log->status == 'Izin' ? 'bg-amber-500' : 'bg-rose-500' }}"></span>
-                                                <span class="truncate max-w-[100px] md:max-w-[250px] italic text-slate-600">{{ $log->keterangan ?? 'Tanpa alasan tertulis' }}</span>
-                                            </div>
-                                        @else
-                                            <span class="text-slate-300 font-bold font-mono text-[7px] md:text-xs ml-2">—</span>
-                                        @endif
-                                    </td>
                                 </tr>
                                 @empty
-                                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic mobile-table-text md:text-sm">Belum ada aktivitas minggu ini.</td></tr>
+                                    <tr><td colspan="4" class="p-8 text-center text-slate-400 italic mobile-table-text md:text-sm">Belum ada aktivitas minggu ini.</td></tr>
                                 @endforelse
                             @endif
                         </tbody>
@@ -381,17 +315,15 @@
                 </div>
             </div>
 
-            {{-- 6. DISINI PERBAIKAN POIN 3: REKAPITULASI BULANAN DENGAN BARIS INTERAKTIF --}}
+            {{-- 6. REKAPITULASI BULANAN (PERBAIKAN: Judul Diperbesar, Diberi Jarak, dan Ditambahkan Ikon Grafik Ungu Premium) --}}
             @if(Auth::user()->role == 'admin')
                 <div class="mt-8 bg-white rounded-xl md:rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden mb-10 animate-fade-in w-full">
-                    <div class="p-4 md:p-8 border-b border-slate-100 bg-indigo-50/30 flex items-center justify-between">
-                        <div class="flex items-center gap-2 md:gap-3">
-                            <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-950 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📊</div>
-                            <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
-                                REKAPITULASI ABSENSI KARYAWAN - {{ strtoupper($namaBulan) }} {{ date('Y') }}
-                            </h3>
-                        </div>
-                        <span class="text-[8px] md:text-xs bg-slate-900 text-white px-2.5 py-1 rounded-full font-mono font-bold shadow-sm">Monthly Report</span>
+                    {{-- Desain Header Rekapitulasi Baru: Besar, Rapi, Sejajar dengan Ikon Grafik 📊 --}}
+                    <div class="p-4 md:p-8 border-b border-slate-100 bg-indigo-50/30 flex items-center gap-2 md:gap-3">
+                        <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-950 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📊</div>
+                        <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
+                            REKAPITULASI ABSENSI KARYAWAN - {{ strtoupper($namaBulan) }} {{ date('Y') }}
+                        </h3>
                     </div>
                     <div class="w-full overflow-hidden rounded-t-xl md:rounded-t-[2rem]">
                         <table class="w-full text-left mobile-table-text md:text-sm">
@@ -403,9 +335,9 @@
                                     <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center bg-rose-950/40 w-2/12 md:w-3/12">Sakit</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100">
+                            <tbody class="divide-y divide-slate-50">
                                 @foreach($rekapBulanan as $rekap)
-                                <tr class="hover:bg-slate-50/80 transition-all duration-200">
+                                <tr class="hover:bg-slate-50/50">
                                     <td class="mobile-padding md:p-6 font-black text-slate-800 uppercase text-left mobile-truncate">{{ $rekap->nama_lengkap }}</td>
                                     <td class="mobile-padding md:p-6 text-center font-bold text-emerald-600 font-mono bg-emerald-50/20">{{ $rekap->total_hadir }}</td>
                                     <td class="mobile-padding md:p-6 text-center font-bold text-blue-600 font-mono bg-blue-50/20">{{ $rekap->total_izin }}</td>
@@ -436,7 +368,7 @@
                 <form id="formUtamaAbsensi" action="{{ route('absensi.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="lat" id="lat"><input type="hidden" name="lng" id="lng">
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-black py-5 rounded-[1.5rem] shadow-xl uppercase active:scale-95 transition-all tracking-widest">Kirim Presensi 🚀</button>
+                    <button type="submit" class="pulse-btn class="w-full bg-indigo-600 text-white font-black py-5 rounded-[1.5rem] shadow-xl uppercase active:scale-95 transition-all tracking-widest">Kirim Presensi 🚀</button>
                 </form>
             </div>
         </div>
@@ -451,5 +383,3495 @@
             if(clock) clock.textContent = new Date().toLocaleTimeString('id-ID', { hour12: false });
         }
         setInterval(updateClock, 1000);
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371e3;
+            const dLat = (lat2-lat1) * Math.PI/180; const dLon = (lon2-lon1) * Math.PI/180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        function konfirmasiStatus(status) {
+            const ket = document.getElementById('keterangan_input').value;
+            if(!ket) { Swal.fire({ title: 'Isi Alasan', text: 'Silakan isi alasan singkat.', icon: 'warning' }); return; }
+            document.getElementById('status_input').value = status;
+            document.getElementById('formIzinSakit').submit();
+        }
+
+        function handleAbsensi() {
+            if (!navigator.geolocation) { Swal.fire('Gagal!', 'GPS tidak didukung.', 'error'); return; }
+            Swal.fire({ title: 'Mendeteksi Lokasi...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude; const lng = position.coords.longitude;
+                    const distance = calculateDistance(lat, lng, KANTOR_LAT, KANTOR_LNG);
+                    Swal.close();
+                    if (distance > MAX_RADIUS) {
+                        Swal.fire({ icon: 'error', title: 'Diluar Jangkauan!', text: `Jarak: ${Math.round(distance)}m.` });
+                    } else { showModalAbsen(lat, lng); }
+                },
+                () => { Swal.close(); Swal.fire('Error', 'GPS Gagal.', 'error'); },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        }
+
+        function handlePulang(jam) {
+            if (jam < 17) {
+                Swal.fire({ icon: 'warning', title: 'Belum Waktunya!', text: 'Absen pulang baru bisa dilakukan mulai pukul 17:00 WIB.', confirmButtonColor: '#e11d48' });
+                return;
+            }
+            handleAbsensi();
+        }
+
+        function showModalAbsen(lat, lng) {
+            currentLat = lat; currentLng = lng;
+            document.getElementById('lat').value = lat; document.getElementById('lng').value = lng;
+            document.getElementById('absensiModal').classList.remove('hidden');
+            setTimeout(() => { document.getElementById('modalContent').classList.remove('translate-y-full'); initMap(lat, lng); }, 50);
+        }
+
+        function initMap(lat, lng) {
+            if (map) { map.remove(); }
+            map = L.map('map-preview', { center: [lat, lng], zoom: 17 });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            L.marker([lat, lng]).addTo(map).bindPopup('Lokasi Anda').openPopup();
+            L.circle([KANTOR_LAT, KANTOR_LNG], { color: '#4f46e5', radius: MAX_RADIUS }).addTo(map);
+        }
+
+        function closeAbsensiModal() {
+            document.getElementById('modalContent').classList.add('translate-y-full');
+            setTimeout(() => { document.getElementById('absensiModal').classList.add('hidden'); }, 500);
+        }
+
+        function manualRecenter() {
+            if(map && currentLat && currentLng) { map.setView([currentLat, currentLng], 17); }
+        }
+
+
+        <!-- ====================================== -->
+<!-- PREMIUM EFFECT BACKGROUND -->
+<!-- ====================================== -->
+
+<div class="premium-bg">
+
+    <!-- SPARKLES -->
+    <span class="spark s1">✦</span>
+    <span class="spark s2">✦</span>
+    <span class="spark s3">✦</span>
+    <span class="spark s4">✦</span>
+    <span class="spark s5">✦</span>
+
+    <!-- BUBBLES -->
+    <span class="bubble b1"></span>
+    <span class="bubble b2"></span>
+    <span class="bubble b3"></span>
+    <span class="bubble b4"></span>
+
+</div>
+
     </script>
 </x-app-layout>
+
+<!-- ===================================================== -->
+<!-- PREMIUM INTERACTIVE UI -->
+<!-- ===================================================== -->
+
+<style>
+
+/* ===================================================== */
+/* GLOBAL */
+/* ===================================================== */
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#f5f7ff;
+}
+
+/* ===================================================== */
+/* CARD HOVER INTERACTIVE */
+/* ===================================================== */
+
+.hover-card{
+    transition:.35s ease;
+    cursor:pointer;
+}
+
+.hover-card:hover{
+    transform:
+    translateY(-10px)
+    scale(1.02);
+
+    box-shadow:
+    0 25px 45px rgba(79,70,229,.15);
+}
+
+/* ===================================================== */
+/* HERO */
+/* ===================================================== */
+
+.hero-premium{
+    position:relative;
+    overflow:hidden;
+
+    background:
+    linear-gradient(
+        135deg,
+        #1e1b4b 0%,
+        #312e81 40%,
+        #4338ca 100%
+    );
+
+    border:1px solid rgba(255,255,255,.06);
+
+    box-shadow:
+    0 20px 60px rgba(79,70,229,.18);
+
+    animation:fadeHero 1s ease;
+}
+
+@keyframes fadeHero{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.hero-premium::before{
+    content:'';
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.06),
+        transparent
+    );
+
+    transform:translateX(-100%);
+    animation:heroShine 8s linear infinite;
+}
+
+@keyframes heroShine{
+    100%{
+        transform:translateX(100%);
+    }
+}
+
+/* ===================================================== */
+/* GLASS */
+/* ===================================================== */
+
+.glass-card{
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.15);
+}
+
+.glass-stat{
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.1);
+    transition:.3s;
+}
+
+.glass-stat:hover{
+    transform:translateY(-6px);
+    background:rgba(255,255,255,.14);
+}
+
+/* ===================================================== */
+/* TABLE */
+/* ===================================================== */
+
+tbody tr{
+    transition:.3s;
+}
+
+tbody tr:hover{
+    background:#eef2ff;
+    transform:scale(1.005);
+}
+
+/* ===================================================== */
+/* BUTTON */
+/* ===================================================== */
+
+.pulse-btn{
+    background:linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+
+    transition:.3s;
+}
+
+.pulse-btn:hover{
+    transform:translateY(-4px);
+    box-shadow:
+    0 18px 35px rgba(79,70,229,.25);
+}
+
+/* ===================================================== */
+/* CLOCK */
+/* ===================================================== */
+
+#realtime-clock{
+    animation:clockGlow 2s infinite alternate;
+}
+
+@keyframes clockGlow{
+    from{
+        box-shadow:0 0 0 rgba(99,102,241,.1);
+    }
+    to{
+        box-shadow:0 0 20px rgba(99,102,241,.25);
+    }
+}
+
+/* ===================================================== */
+/* TOAST */
+/* ===================================================== */
+
+#liveToast{
+    position:fixed;
+    top:25px;
+    right:25px;
+
+    background:white;
+    width:320px;
+
+    border-radius:24px;
+
+    box-shadow:
+    0 25px 50px rgba(0,0,0,.12);
+
+    z-index:999999;
+
+    overflow:hidden;
+
+    animation:toastSlide .8s ease;
+}
+
+@keyframes toastSlide{
+    from{
+        opacity:0;
+        transform:translateX(80px);
+    }
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+.toast-top{
+    background:
+    linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+
+    padding:16px 20px;
+
+    color:white;
+
+    font-weight:800;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.toast-body{
+    padding:20px;
+}
+
+.toast-body h3{
+    font-size:15px;
+    font-weight:800;
+    color:#0f172a;
+    margin-bottom:5px;
+}
+
+.toast-body p{
+    font-size:13px;
+    color:#64748b;
+}
+
+.toast-btn{
+    margin-top:15px;
+
+    width:100%;
+
+    border:none;
+
+    background:#4f46e5;
+
+    color:white;
+
+    padding:12px;
+
+    border-radius:14px;
+
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.toast-btn:hover{
+    transform:translateY(-3px);
+}
+
+/* ===================================================== */
+/* MINI ASSISTANT */
+/* ===================================================== */
+
+#miniAssistant{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:99999;
+}
+
+#miniAssistant img{
+    width:82px;
+    cursor:pointer;
+
+    transition:.3s;
+
+    filter:
+    drop-shadow(
+        0 15px 25px rgba(79,70,229,.25)
+    );
+}
+
+#miniAssistant img:hover{
+    transform:
+    scale(1.08)
+    rotate(-5deg);
+}
+
+.assistant-chat{
+    position:absolute;
+
+    right:90px;
+    bottom:15px;
+
+    background:white;
+
+    padding:12px 16px;
+
+    border-radius:16px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+
+    color:#1e293b;
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,.08);
+}
+
+/* ===================================================== */
+/* POPUP */
+/* ===================================================== */
+
+#popupInfo{
+    position:fixed;
+
+    bottom:120px;
+    right:25px;
+
+    width:300px;
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:22px;
+
+    z-index:99999;
+
+    box-shadow:
+    0 20px 50px rgba(0,0,0,.12);
+
+    display:none;
+
+    animation:popupShow .5s ease;
+}
+
+@keyframes popupShow{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+#popupInfo h3{
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:8px;
+    color:#0f172a;
+}
+
+#popupInfo p{
+    font-size:13px;
+    color:#64748b;
+    line-height:1.6;
+}
+
+#popupInfo button{
+    margin-top:18px;
+
+    width:100%;
+
+    border:none;
+
+    padding:12px;
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+
+    color:white;
+
+    font-weight:700;
+}
+
+/* ===================================================== */
+/* ROCKET */
+/* ===================================================== */
+
+.rocket-float{
+    transition:.3s;
+}
+
+.rocket-float:hover{
+    transform:
+    translateY(-10px)
+    rotate(-8deg)
+    scale(1.1);
+}
+
+/* ===================================================== */
+/* CARD SHOW */
+/* ===================================================== */
+
+.grid > div{
+    animation:cardShow .7s ease both;
+}
+
+.grid > div:nth-child(2){
+    animation-delay:.2s;
+}
+
+.grid > div:nth-child(3){
+    animation-delay:.4s;
+}
+
+@keyframes cardShow{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ===================================================== */
+/* MOBILE */
+/* ===================================================== */
+
+@media(max-width:768px){
+
+    #liveToast{
+        width:90%;
+        right:5%;
+    }
+
+    #popupInfo{
+        width:90%;
+        right:5%;
+    }
+
+    #miniAssistant img{
+        width:70px;
+    }
+
+}
+
+.s6{
+    top:78%;
+    right:35%;
+    animation-delay:3s;
+}
+
+.s7{
+    top:40%;
+    left:50%;
+    animation-delay:1s;
+}
+
+.s8{
+    bottom:15%;
+    left:70%;
+    animation-delay:2s;
+}
+
+.b5{
+    width:100px;
+    height:100px;
+    left:55%;
+    animation-duration:16s;
+}
+
+.b6{
+    width:70px;
+    height:70px;
+    right:45%;
+    animation-duration:12s;
+}
+
+</style>
+
+<!-- ===================================================== -->
+<!-- PREMIUM TOAST -->
+<!-- ===================================================== -->
+
+<!-- ===================================================== -->
+<!-- REMINDER POPUP -->
+<!-- ===================================================== -->
+
+
+
+</div>
+<!-- ===================================================== -->
+<!-- MINI ASSISTANT -->
+<!-- ===================================================== -->
+
+
+</div>
+
+<!-- ===================================================== -->
+<!-- POPUP INFO -->
+<!-- ===================================================== -->
+
+<div id="popupInfo">
+
+    <h3>
+        🔔 Reminder Kehadiran
+    </h3>
+
+    <p>
+        Pastikan GPS aktif sebelum melakukan absensi agar lokasi terdeteksi dengan akurat 📍
+    </p>
+
+    <button onclick="handleAbsensi()">
+        Mulai Absensi
+    </button>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- SCRIPT -->
+<!-- ===================================================== -->
+
+<script>
+
+/* ===================================================== */
+/* AUTO HIDE TOAST */
+/* ===================================================== */
+
+setTimeout(() => {
+
+    const toast =
+    document.getElementById('liveToast');
+
+    if(toast){
+
+        toast.style.transition='.5s';
+
+        toast.style.opacity='0';
+
+        toast.style.transform='translateX(80px)';
+
+        setTimeout(() => {
+
+            toast.style.display='none';
+
+        },500);
+
+    }
+
+},7000);
+
+/* ===================================================== */
+/* ASSISTANT CLICK */
+/* ===================================================== */
+
+const assistant =
+document.getElementById('assistantImg');
+
+assistant.addEventListener('click',function(){
+
+    const popup =
+    document.getElementById('popupInfo');
+
+    if(
+        popup.style.display === 'block'
+    ){
+
+        popup.style.display='none';
+
+    }else{
+
+        popup.style.display='block';
+
+    }
+
+});
+
+/* ===================================================== */
+/* CLOSE POPUP OUTSIDE */
+/* ===================================================== */
+
+document.addEventListener('click',function(e){
+
+    const popup =
+    document.getElementById('popupInfo');
+
+    const assistant =
+    document.getElementById('miniAssistant');
+
+    if(
+        !assistant.contains(e.target)
+        &&
+        !popup.contains(e.target)
+    ){
+
+        popup.style.display='none';
+
+    }
+
+});
+
+/* ===================================================== */
+/* HOVER CARD EFFECT */
+/* ===================================================== */
+
+document.querySelectorAll('.hover-card')
+.forEach(card => {
+
+    card.addEventListener('mouseenter',() => {
+
+        card.style.transform =
+        'translateY(-10px) scale(1.02)';
+
+    });
+
+    card.addEventListener('mouseleave',() => {
+
+        card.style.transform =
+        'translateY(0px) scale(1)';
+
+    });
+
+});
+
+</script>
+
+
+<!-- ===================================================== -->
+<!-- PREMIUM INTERACTIVE UI -->
+<!-- ===================================================== -->
+
+<style>
+
+/* ===================================================== */
+/* GLOBAL */
+/* ===================================================== */
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#f5f7ff;
+}
+
+/* ===================================================== */
+/* CARD HOVER INTERACTIVE */
+/* ===================================================== */
+
+.hover-card{
+    transition:.35s ease;
+    cursor:pointer;
+}
+
+.hover-card:hover{
+    transform:
+    translateY(-10px)
+    scale(1.02);
+
+    box-shadow:
+    0 25px 45px rgba(79,70,229,.15);
+}
+
+/* ===================================================== */
+/* HERO */
+/* ===================================================== */
+
+.hero-premium{
+    position:relative;
+    overflow:hidden;
+
+    background:
+    linear-gradient(
+        135deg,
+        #1e1b4b 0%,
+        #312e81 40%,
+        #4338ca 100%
+    );
+
+    border:1px solid rgba(255,255,255,.06);
+
+    box-shadow:
+    0 20px 60px rgba(79,70,229,.18);
+
+    animation:fadeHero 1s ease;
+}
+
+@keyframes fadeHero{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.hero-premium::before{
+    content:'';
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.06),
+        transparent
+    );
+
+    transform:translateX(-100%);
+    animation:heroShine 8s linear infinite;
+}
+
+@keyframes heroShine{
+    100%{
+        transform:translateX(100%);
+    }
+}
+
+/* ===================================================== */
+/* GLASS */
+/* ===================================================== */
+
+.glass-card{
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.15);
+}
+
+.glass-stat{
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.1);
+    transition:.3s;
+}
+
+.glass-stat:hover{
+    transform:translateY(-6px);
+    background:rgba(255,255,255,.14);
+}
+
+/* ===================================================== */
+/* TABLE */
+/* ===================================================== */
+
+tbody tr{
+    transition:.3s;
+}
+
+tbody tr:hover{
+    background:#eef2ff;
+    transform:scale(1.005);
+}
+
+/* ===================================================== */
+/* BUTTON */
+/* ===================================================== */
+
+.pulse-btn{
+    background:linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+
+    transition:.3s;
+}
+
+.pulse-btn:hover{
+    transform:translateY(-4px);
+    box-shadow:
+    0 18px 35px rgba(79,70,229,.25);
+}
+
+/* ===================================================== */
+/* CLOCK */
+/* ===================================================== */
+
+#realtime-clock{
+    animation:clockGlow 2s infinite alternate;
+}
+
+@keyframes clockGlow{
+    from{
+        box-shadow:0 0 0 rgba(99,102,241,.1);
+    }
+    to{
+        box-shadow:0 0 20px rgba(99,102,241,.25);
+    }
+}
+
+/* ===================================================== */
+/* TOAST */
+/* ===================================================== */
+
+#liveToast{
+    position:fixed;
+    top:25px;
+    right:25px;
+
+    background:white;
+    width:320px;
+
+    border-radius:24px;
+
+    box-shadow:
+    0 25px 50px rgba(0,0,0,.12);
+
+    z-index:999999;
+
+    overflow:hidden;
+
+    animation:toastSlide .8s ease;
+}
+
+@keyframes toastSlide{
+    from{
+        opacity:0;
+        transform:translateX(80px);
+    }
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+.toast-top{
+    background:
+    linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+
+    padding:16px 20px;
+
+    color:white;
+
+    font-weight:800;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.toast-body{
+    padding:20px;
+}
+
+.toast-body h3{
+    font-size:15px;
+    font-weight:800;
+    color:#0f172a;
+    margin-bottom:5px;
+}
+
+.toast-body p{
+    font-size:13px;
+    color:#64748b;
+}
+
+.toast-btn{
+    margin-top:15px;
+
+    width:100%;
+
+    border:none;
+
+    background:#4f46e5;
+
+    color:white;
+
+    padding:12px;
+
+    border-radius:14px;
+
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.toast-btn:hover{
+    transform:translateY(-3px);
+}
+
+/* ===================================================== */
+/* MINI ASSISTANT */
+/* ===================================================== */
+
+#miniAssistant{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:99999;
+}
+
+#miniAssistant img{
+    width:82px;
+    cursor:pointer;
+
+    transition:.3s;
+
+    filter:
+    drop-shadow(
+        0 15px 25px rgba(79,70,229,.25)
+    );
+}
+
+#miniAssistant img:hover{
+    transform:
+    scale(1.08)
+    rotate(-5deg);
+}
+
+.assistant-chat{
+    position:absolute;
+
+    right:90px;
+    bottom:15px;
+
+    background:white;
+
+    padding:12px 16px;
+
+    border-radius:16px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+
+    color:#1e293b;
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,.08);
+}
+
+/* ===================================================== */
+/* POPUP */
+/* ===================================================== */
+
+#popupInfo{
+    position:fixed;
+
+    bottom:120px;
+    right:25px;
+
+    width:300px;
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:22px;
+
+    z-index:99999;
+
+    box-shadow:
+    0 20px 50px rgba(0,0,0,.12);
+
+    display:none;
+
+    animation:popupShow .5s ease;
+}
+
+@keyframes popupShow{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+#popupInfo h3{
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:8px;
+    color:#0f172a;
+}
+
+#popupInfo p{
+    font-size:13px;
+    color:#64748b;
+    line-height:1.6;
+}
+
+#popupInfo button{
+    margin-top:18px;
+
+    width:100%;
+
+    border:none;
+
+    padding:12px;
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+
+    color:white;
+
+    font-weight:700;
+}
+
+/* ===================================================== */
+/* ROCKET */
+/* ===================================================== */
+
+.rocket-float{
+    transition:.3s;
+}
+
+.rocket-float:hover{
+    transform:
+    translateY(-10px)
+    rotate(-8deg)
+    scale(1.1);
+}
+
+/* ===================================================== */
+/* CARD SHOW */
+/* ===================================================== */
+
+.grid > div{
+    animation:cardShow .7s ease both;
+}
+
+.grid > div:nth-child(2){
+    animation-delay:.2s;
+}
+
+.grid > div:nth-child(3){
+    animation-delay:.4s;
+}
+
+@keyframes cardShow{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ===================================================== */
+/* MOBILE */
+/* ===================================================== */
+
+@media(max-width:768px){
+
+    #liveToast{
+        width:90%;
+        right:5%;
+    }
+
+    #popupInfo{
+        width:90%;
+        right:5%;
+    }
+
+    #miniAssistant img{
+        width:70px;
+    }
+
+}
+
+</style>
+
+<!-- ===================================================== -->
+<!-- PREMIUM REMINDER MINI POPUP -->
+<!-- ===================================================== -->
+
+<!-- ===================================================== -->
+<!-- MINI POPUP REMINDER -->
+<!-- ===================================================== -->
+
+<!-- ===================================================== -->
+<!-- MINI POPUP REMINDER -->
+<!-- ===================================================== -->
+
+<div id="miniPopupReminder">
+
+    <div class="miniBell">
+        🔔
+    </div>
+
+    <div class="miniPopupContent">
+
+        <h4>Pengingat Absensi</h4>
+
+        <p>
+            Jangan lupa melakukan absensi hari ini ya ✨
+        </p>
+
+    </div>
+
+</div>
+</div>
+
+<!-- ===================================================== -->
+<!-- ROBOT ASSISTANT -->
+<!-- ===================================================== -->
+
+<div id="robotAssistant">
+
+    <div class="robotBubble">
+        Semangat bekerja🥰
+    </div>
+
+    <img 
+    src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
+    alt="robot">
+
+</div>
+
+<!-- ===================================================== -->
+<!-- STYLE -->
+<!-- ===================================================== -->
+
+<style>
+
+/* ===================================================== */
+/* MINI POPUP REMINDER */
+/* ===================================================== */
+
+#miniPopupReminder{
+
+    position:fixed;
+
+    top:22px;
+    right:22px;
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:10px 14px;
+
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+
+    z-index:99999;
+
+    min-width:240px;
+    max-width:260px;
+
+    border:1px solid #eef2ff;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.08);
+
+    animation:
+    popupFade .5s ease,
+    popupOut .5s ease 3s forwards;
+}
+
+/* ICON */
+
+.miniBell{
+
+    width:34px;
+    height:34px;
+
+    min-width:34px;
+
+    border-radius:12px;
+
+    background:#eef2ff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:15px;
+
+    animation:bellShake 2s infinite;
+}
+
+/* CONTENT */
+
+.miniPopupContent h4{
+
+    margin:0;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    color:#0f172a;
+}
+
+.miniPopupContent p{
+
+    margin-top:3px;
+
+    font-size:10px;
+
+    line-height:1.5;
+
+    color:#64748b;
+
+    font-weight:600;
+}
+
+/* ANIMATION */
+
+@keyframes popupFade{
+
+    from{
+        opacity:0;
+        transform:
+        translateY(-15px)
+        scale(.95);
+    }
+
+    to{
+        opacity:1;
+        transform:
+        translateY(0)
+        scale(1);
+    }
+}
+
+@keyframes popupOut{
+
+    to{
+        opacity:0;
+        transform:translateY(-10px);
+        visibility:hidden;
+    }
+}
+
+/* LONCENG */
+
+@keyframes bellShake{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    5%{
+        transform:rotate(10deg);
+    }
+
+    10%{
+        transform:rotate(-10deg);
+    }
+
+    15%{
+        transform:rotate(8deg);
+    }
+
+    20%{
+        transform:rotate(0deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    #miniPopupReminder{
+
+        right:10px;
+        left:10px;
+
+        max-width:none;
+        min-width:auto;
+
+    }
+
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    #miniPopupReminder{
+
+        right:10px;
+        left:10px;
+
+        max-width:none;
+        min-width:auto;
+
+    }
+
+}
+
+/* ===================================================== */
+/* ROBOT ASSISTANT */
+/* ===================================================== */
+
+#robotAssistant{
+    position:fixed;
+    bottom:18px;
+    right:18px;
+    z-index:9999;
+
+    animation:robotFloat 3s ease-in-out infinite;
+}
+
+#robotAssistant img{
+    width:85px;
+    cursor:pointer;
+
+    filter:
+    drop-shadow(0 15px 30px rgba(79,70,229,.35));
+
+    transition:.3s;
+}
+
+#robotAssistant img:hover{
+    transform:scale(1.08) rotate(-5deg);
+}
+
+.robotBubble{
+    position:absolute;
+    right:90px;
+    bottom:25px;
+
+    background:white;
+
+    padding:10px 16px;
+
+    border-radius:18px;
+
+    font-size:12px;
+    font-weight:700;
+
+    color:#1e293b;
+
+    white-space:nowrap;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.08);
+
+    animation:bubbleGlow 2s infinite alternate;
+}
+
+@keyframes bubbleGlow{
+    from{
+        box-shadow:
+        0 10px 25px rgba(79,70,229,.08);
+    }
+    to{
+        box-shadow:
+        0 15px 35px rgba(124,58,237,.20);
+    }
+}
+
+@keyframes robotFloat{
+    0%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(-12px);
+    }
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+/* ===================================================== */
+/* GLOBAL CARD STYLE */
+/* ===================================================== */
+
+.grid > div{
+
+    transition:.35s ease;
+    position:relative;
+    overflow:hidden;
+    border-radius:28px;
+
+}
+
+/* hover semua card */
+
+.grid > div:hover{
+
+    transform:
+    translateY(-8px)
+    scale(1.02);
+
+    box-shadow:
+    0 20px 40px rgba(79,70,229,.12);
+
+}
+
+/* glow effect */
+
+.grid > div::before{
+
+    content:'';
+
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.25),
+        transparent
+    );
+
+    transform:translateX(-100%);
+
+}
+
+.grid > div:hover::before{
+
+    animation:cardShine 1.2s linear;
+
+}
+
+@keyframes cardShine{
+
+    100%{
+        transform:translateX(100%);
+    }
+
+}
+
+/* ===================================================== */
+/* CARD PENCAPAIAN */
+/* ===================================================== */
+
+.pencapaian-card{
+
+    background:
+    linear-gradient(
+        135deg,
+        #eef2ff,
+        #dbeafe
+    ) !important;
+
+    border:1px solid rgba(99,102,241,.08);
+
+}
+
+/* icon kecil */
+
+.pencapaian-card img{
+
+    transition:.4s ease;
+    cursor:pointer;
+
+}
+
+/* bergerak saat disentuh */
+
+.pencapaian-card img:hover{
+
+    transform:
+    rotate(15deg)
+    scale(1.18);
+
+    filter:drop-shadow(0 10px 20px rgba(79,70,229,.25));
+
+}
+
+/* efek klik */
+
+.pencapaian-card img:active{
+
+    transform:
+    scale(.92);
+
+}
+
+/* sparkle */
+
+.pencapaian-card::after{
+
+    content:'✨';
+
+    position:absolute;
+
+    top:14px;
+    right:18px;
+
+    font-size:14px;
+
+    animation:sparkle 2s infinite;
+
+}
+
+@keyframes sparkle{
+
+    0%{
+        opacity:0;
+        transform:scale(.5);
+    }
+
+    50%{
+        opacity:1;
+        transform:scale(1.2);
+    }
+
+    100%{
+        opacity:0;
+        transform:scale(.5);
+    }
+
+}
+
+/* ===================================================== */
+/* CARD INFO KEHADIRAN */
+/* ===================================================== */
+
+.info-kehadiran-card{
+
+    background:
+    linear-gradient(
+        135deg,
+        #fff7ed,
+        #fef3c7
+    ) !important;
+
+    border:1px solid rgba(251,191,36,.12);
+
+}
+
+/* input alasan */
+
+#formIzinSakit input{
+
+    height:58px !important;
+
+    font-size:13px !important;
+
+    border-radius:18px !important;
+
+    padding:14px 18px !important;
+
+    background:#ffffff !important;
+
+    box-shadow:
+    inset 0 2px 6px rgba(0,0,0,.04);
+
+    border:none !important;
+
+}
+
+/* tombol izin sakit */
+
+#formIzinSakit button{
+
+    height:48px !important;
+
+    font-size:13px !important;
+
+    border-radius:16px !important;
+
+    transition:.3s ease;
+
+    font-weight:600;
+
+}
+
+/* hover tombol */
+
+#formIzinSakit button:hover{
+
+    transform:
+    translateY(-3px)
+    scale(1.03);
+
+    box-shadow:
+    0 10px 20px rgba(0,0,0,.08);
+
+}
+
+/* tombol izin */
+
+#formIzinSakit button:first-child{
+
+    background:
+    linear-gradient(
+        135deg,
+        #fbbf24,
+        #f59e0b
+    ) !important;
+
+    color:white !important;
+
+}
+
+/* tombol sakit */
+
+#formIzinSakit button:last-child{
+
+    background:
+    linear-gradient(
+        135deg,
+        #fb7185,
+        #f43f5e
+    ) !important;
+
+    color:white !important;
+
+}
+
+/* ===================================================== */
+/* CARD ABSENSI */
+/* ===================================================== */
+
+.absensi-card{
+
+    background:
+    linear-gradient(
+        135deg,
+        #eff6ff,
+        #dbeafe
+    ) !important;
+
+    border:1px solid rgba(59,130,246,.10);
+
+}
+
+/* rocket default diam */
+
+.rocket-float{
+
+    transition:.35s ease;
+    cursor:pointer;
+
+}
+
+/* bergerak hanya saat disentuh */
+
+.rocket-float:hover{
+
+    animation:rocketMove .8s ease infinite;
+
+}
+
+@keyframes rocketMove{
+
+    0%{
+        transform:translateY(0px) rotate(0deg);
+    }
+
+    25%{
+        transform:translateY(-8px) rotate(-6deg);
+    }
+
+    50%{
+        transform:translateY(0px) rotate(6deg);
+    }
+
+    75%{
+        transform:translateY(-5px) rotate(-4deg);
+    }
+
+    100%{
+        transform:translateY(0px) rotate(0deg);
+    }
+
+}
+
+/* ===================================================== */
+/* REALTIME STATUS */
+/* ===================================================== */
+
+.glass-card{
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,255,255,.95),
+        rgba(255,255,255,.82)
+    ) !important;
+
+    backdrop-filter:blur(12px);
+
+    transition:.4s ease;
+
+    border-radius:24px;
+
+}
+
+.glass-card:hover{
+
+    transform:
+    translateY(-6px);
+
+    box-shadow:
+    0 20px 40px rgba(79,70,229,.12);
+
+}
+
+/* ===================================================== */
+/* POPUP PENGINGAT */
+/* ===================================================== */
+
+#liveToast{
+
+    position:fixed;
+    top:25px;
+    right:25px;
+
+    width:260px;
+
+    background:#ffffff;
+
+    border-radius:20px;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.12);
+
+    z-index:9999;
+
+    overflow:hidden;
+
+    animation:
+    toastSlide .5s ease,
+    toastHide .5s ease 3s forwards;
+
+}
+
+/* isi popup */
+
+.toast-body{
+
+    padding:16px;
+
+}
+
+/* top popup */
+
+.toast-top{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:12px 16px;
+
+    background:#ffffff;
+
+    border-bottom:1px solid #f1f5f9;
+
+    font-size:14px;
+    font-weight:700;
+    color:#111827;
+
+}
+
+/* icon lonceng */
+
+.toast-top::before{
+
+    content:'🔔';
+
+    font-size:16px;
+
+    animation:ring 1s infinite;
+
+}
+
+/* animasi lonceng */
+
+@keyframes ring{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    25%{
+        transform:rotate(15deg);
+    }
+
+    50%{
+        transform:rotate(-15deg);
+    }
+
+    75%{
+        transform:rotate(10deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+
+}
+
+.toast-body h3{
+
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:6px;
+    color:#111827;
+
+}
+
+.toast-body p{
+
+    font-size:12px;
+    color:#64748b;
+    line-height:1.5;
+
+}
+
+/* animasi muncul */
+
+@keyframes toastSlide{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(-20px)
+        scale(.9);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0)
+        scale(1);
+
+    }
+
+}
+
+/* animasi hilang */
+
+@keyframes toastHide{
+
+    to{
+
+        opacity:0;
+        visibility:hidden;
+
+        transform:
+        translateY(-20px)
+        scale(.9);
+
+    }
+
+}
+
+/* ===================================================== */
+/* ROBOT */
+/* ===================================================== */
+
+.robot-chat{
+
+    position:fixed;
+    right:20px;
+    bottom:18px;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    z-index:999;
+
+}
+
+.robot-text{
+
+    background:#ffffff;
+
+    padding:10px 14px;
+
+    border-radius:16px;
+
+    font-size:12px;
+    font-weight:600;
+
+    color:#4f46e5;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,.08);
+
+    animation:robotFloat 2s infinite ease-in-out;
+
+}
+
+/* robot bergerak terus */
+
+.robot-img{
+
+    animation:robotMove 2s infinite ease-in-out;
+
+}
+
+@keyframes robotMove{
+
+    0%{
+        transform:translateY(0px) rotate(0deg);
+    }
+
+    50%{
+        transform:translateY(-8px) rotate(4deg);
+    }
+
+    100%{
+        transform:translateY(0px) rotate(0deg);
+    }
+
+}
+
+@keyframes robotFloat{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-4px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+
+}
+
+/* ===================================================== */
+/* MOBILE */
+/* ===================================================== */
+
+@media(max-width:768px){
+
+    #liveToast{
+
+        width:220px;
+        right:15px;
+        top:15px;
+
+    }
+
+    #formIzinSakit input{
+
+        height:50px !important;
+        font-size:11px !important;
+
+    }
+
+    #formIzinSakit button{
+
+        height:42px !important;
+        font-size:11px !important;
+
+    }
+
+    .robot-text{
+
+        display:none;
+
+    }
+
+}
+
+/* ===================================================== */
+/* CARD UMUM */
+/* ===================================================== */
+
+.grid > div{
+
+    transition:.35s;
+}
+
+.grid > div:hover{
+
+    transform:translateY(-5px);
+
+}
+
+/* ===================================================== */
+/* MOBILE */
+/* ===================================================== */
+
+@media(max-width:768px){
+
+    #miniPopupReminder{
+
+        width:88%;
+        right:6%;
+        top:15px;
+
+    }
+
+    #robotAssistant img{
+
+        width:70px;
+
+    }
+
+    .robotBubble{
+
+        font-size:10px;
+        right:75px;
+
+    }
+
+}
+
+</style>
+
+<!-- ===================================================== -->
+<!-- SCRIPT -->
+<!-- ===================================================== -->
+
+<script>
+
+/* ===================================================== */
+/* AUTO HIDE POPUP */
+/* ===================================================== */
+
+setTimeout(() => {
+
+    const popup = document.getElementById('miniPopupReminder');
+
+    if(popup){
+
+        popup.style.display = 'none';
+
+    }
+
+},3000);
+
+</script>
+</div>
+
+
+<!-- ===================================================== -->
+<!-- MINI ASSISTANT -->
+<!-- ===================================================== -->
+
+
+
+<!-- ===================================================== -->
+<!-- POPUP INFO -->
+<!-- ===================================================== -->
+
+<div id="popupInfo">
+
+    <h3>
+        🔔 Reminder Kehadiran
+    </h3>
+
+    <p>
+        Pastikan GPS aktif sebelum melakukan absensi agar lokasi terdeteksi dengan akurat 📍
+    </p>
+
+    <button onclick="handleAbsensi()">
+        Mulai Absensi
+    </button>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- SCRIPT -->
+<!-- ===================================================== -->
+
+<script>
+
+/* ===================================================== */
+/* AUTO HIDE TOAST */
+/* ===================================================== */
+
+setTimeout(() => {
+
+    const toast =
+    document.getElementById('liveToast');
+
+    if(toast){
+
+        toast.style.transition='.5s';
+
+        toast.style.opacity='0';
+
+        toast.style.transform='translateX(80px)';
+
+        setTimeout(() => {
+
+            toast.style.display='none';
+
+        },500);
+
+    }
+
+},7000);
+
+/* ===================================================== */
+/* ASSISTANT CLICK */
+/* ===================================================== */
+
+const assistant =
+document.getElementById('assistantImg');
+
+assistant.addEventListener('click',function(){
+
+    const popup =
+    document.getElementById('popupInfo');
+
+    if(
+        popup.style.display === 'block'
+    ){
+
+        popup.style.display='none';
+
+    }else{
+
+        popup.style.display='block';
+
+    }
+
+});
+
+/* ===================================================== */
+/* CLOSE POPUP OUTSIDE */
+/* ===================================================== */
+
+document.addEventListener('click',function(e){
+
+    const popup =
+    document.getElementById('popupInfo');
+
+    const assistant =
+    document.getElementById('miniAssistant');
+
+    if(
+        !assistant.contains(e.target)
+        &&
+        !popup.contains(e.target)
+    ){
+
+        popup.style.display='none';
+
+    }
+
+});
+
+/* ===================================================== */
+/* HOVER CARD EFFECT */
+/* ===================================================== */
+
+document.querySelectorAll('.hover-card')
+.forEach(card => {
+
+    card.addEventListener('mouseenter',() => {
+
+        card.style.transform =
+        'translateY(-10px) scale(1.02)';
+
+    });
+
+    card.addEventListener('mouseleave',() => {
+
+        card.style.transform =
+        'translateY(0px) scale(1)';
+
+    });
+
+});
+
+
+
+
+/* ===================================================== */
+/* POPUP ABSEN PULANG */
+/* ===================================================== */
+
+#toastPulang{
+
+    position:fixed;
+
+    top:25px;
+    right:25px;
+
+    width:260px;
+
+    background:#ffffff;
+
+    border-radius:20px;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.12);
+
+    z-index:9999;
+
+    overflow:hidden;
+
+    animation:
+    toastSlide .5s ease,
+    toastHide .5s ease 3s forwards;
+
+}
+
+/* top popup */
+
+#toastPulang .toast-top{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:12px 16px;
+
+    border-bottom:1px solid #f1f5f9;
+
+    font-size:14px;
+    font-weight:700;
+
+    color:#111827;
+
+    background:#ffffff;
+
+}
+
+/* icon lonceng */
+
+#toastPulang .toast-top::before{
+
+    content:'🔔';
+
+    font-size:16px;
+
+    animation:ring 1s infinite;
+
+}
+
+/* isi popup */
+
+#toastPulang .toast-body{
+
+    padding:16px;
+
+}
+
+#toastPulang .toast-body h3{
+
+    font-size:15px;
+    margin-bottom:6px;
+
+    color:#111827;
+
+}
+
+#toastPulang .toast-body p{
+
+    font-size:12px;
+    color:#64748b;
+
+    line-height:1.5;
+
+}
+
+/* animasi popup */
+
+@keyframes toastSlide{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(-20px)
+        scale(.9);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0)
+        scale(1);
+
+    }
+
+}
+
+@keyframes toastHide{
+
+    to{
+
+        opacity:0;
+        visibility:hidden;
+
+        transform:
+        translateY(-20px)
+        scale(.9);
+
+    }
+
+}
+
+/* animasi lonceng */
+
+@keyframes ring{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    25%{
+        transform:rotate(15deg);
+    }
+
+    50%{
+        transform:rotate(-15deg);
+    }
+
+    75%{
+        transform:rotate(10deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+
+}
+
+<div id="toastPulang">
+
+    <div class="toast-top">
+        Pengingat Pulang
+    </div>
+
+    <div class="toast-body">
+
+        <h3>
+            Hai {{ Auth::user()->name }} 👋
+        </h3>
+
+        <p>
+            Jangan lupa absen pulang ya ✨
+        </p>
+
+    </div>
+
+</div>
+
+/* ===================================================== */
+/* ICON KALENDER */
+/* ===================================================== */
+
+.calendar-icon{
+
+    cursor:pointer;
+    transition:.3s ease;
+
+}
+
+/* saat disentuh */
+
+.calendar-icon:hover{
+
+    animation:calendarDance .8s ease infinite;
+
+    filter:
+    drop-shadow(
+        0 10px 20px rgba(79,70,229,.35)
+    );
+
+}
+
+/* animasi kalender */
+
+@keyframes calendarDance{
+
+    0%{
+        transform:
+        rotate(0deg)
+        translateY(0px)
+        scale(1);
+    }
+
+    20%{
+        transform:
+        rotate(12deg)
+        translateY(-5px)
+        scale(1.08);
+    }
+
+    40%{
+        transform:
+        rotate(-12deg)
+        translateY(0px)
+        scale(1.12);
+    }
+
+    60%{
+        transform:
+        rotate(8deg)
+        translateY(-4px)
+        scale(1.08);
+    }
+
+    80%{
+        transform:
+        rotate(-8deg)
+        translateY(0px)
+        scale(1.05);
+    }
+
+    100%{
+        transform:
+        rotate(0deg)
+        translateY(0px)
+        scale(1);
+    }
+
+}
+
+/* ===================================================== */
+/* ICON RUMAH */
+/* ===================================================== */
+
+.home-float{
+
+    cursor:pointer;
+    transition:.3s ease;
+
+}
+
+/* saat disentuh */
+
+.home-float:hover{
+
+    animation:homeDance .8s ease infinite;
+
+    filter:
+    drop-shadow(
+        0 10px 22px rgba(59,130,246,.35)
+    );
+
+}
+
+/* animasi rumah */
+
+@keyframes homeDance{
+
+    0%{
+        transform:
+        translateY(0px)
+        rotate(0deg)
+        scale(1);
+    }
+
+    25%{
+        transform:
+        translateY(-8px)
+        rotate(-8deg)
+        scale(1.08);
+    }
+
+    50%{
+        transform:
+        translateY(0px)
+        rotate(8deg)
+        scale(1.12);
+    }
+
+    75%{
+        transform:
+        translateY(-5px)
+        rotate(-5deg)
+        scale(1.08);
+    }
+
+    100%{
+        transform:
+        translateY(0px)
+        rotate(0deg)
+        scale(1);
+    }
+
+}
+
+</script>
+
+<script>
+
+window.onload = function(){
+
+    let jam = new Date().getHours();
+
+    // popup masuk pagi
+    if(jam >= 6 && jam <= 10){
+
+        document.getElementById("liveToast")
+        .style.display = "block";
+
+    }
+
+    // popup pulang sore
+    if(jam >= 16 && jam <= 18){
+
+        document.getElementById("toastPulang")
+        .style.display = "block";
+
+    }
+
+}
+
+<!-- ===================================================== -->
+<!-- PREMIUM AESTHETIC DASHBOARD EFFECT -->
+<!-- TEMPel SEMUA INI DI PALING BAWAH -->
+<!-- ===================================================== -->
+
+<style>
+
+/* ===================================================== */
+/* BODY */
+/* ===================================================== */
+
+body{
+    background:
+    linear-gradient(
+        135deg,
+        #f5f7ff,
+        #eef2ff
+    );
+
+    overflow-x:hidden;
+}
+
+/* ===================================================== */
+/* FLOATING BACKGROUND */
+/* ===================================================== */
+
+body::before{
+    content:'';
+
+    position:fixed;
+
+    width:550px;
+    height:550px;
+
+    top:-180px;
+    left:-180px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(99,102,241,.22),
+        transparent 70%
+    );
+
+    filter:blur(60px);
+
+    z-index:-2;
+
+    animation:bgMove1 12s ease-in-out infinite alternate;
+}
+
+body::after{
+    content:'';
+
+    position:fixed;
+
+    width:500px;
+    height:500px;
+
+    bottom:-180px;
+    right:-150px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(168,85,247,.20),
+        transparent 70%
+    );
+
+    filter:blur(70px);
+
+    z-index:-2;
+
+    animation:bgMove2 14s ease-in-out infinite alternate;
+}
+
+@keyframes bgMove1{
+
+    0%{
+        transform:translate(0,0);
+    }
+
+    100%{
+        transform:translate(60px,40px);
+    }
+
+}
+
+@keyframes bgMove2{
+
+    0%{
+        transform:translate(0,0);
+    }
+
+    100%{
+        transform:translate(-60px,-40px);
+    }
+
+}
+
+/* ===================================================== */
+/* SPARKLES */
+/* ===================================================== */
+
+.sparkles{
+    position:fixed;
+    inset:0;
+
+    pointer-events:none;
+
+    overflow:hidden;
+
+    z-index:-1;
+}
+
+.spark{
+    position:absolute;
+
+    color:white;
+
+    font-size:20px;
+
+    text-shadow:
+    0 0 10px #fff,
+    0 0 25px #818cf8,
+    0 0 45px #c084fc;
+
+    animation:sparkle 4s ease-in-out infinite;
+}
+
+.spark:nth-child(1){
+    top:12%;
+    left:8%;
+}
+
+.spark:nth-child(2){
+    top:20%;
+    right:12%;
+    animation-delay:1s;
+}
+
+.spark:nth-child(3){
+    top:48%;
+    left:20%;
+    animation-delay:2s;
+}
+
+.spark:nth-child(4){
+    top:70%;
+    right:18%;
+    animation-delay:3s;
+}
+
+.spark:nth-child(5){
+    bottom:18%;
+    left:12%;
+    animation-delay:1.5s;
+}
+
+.spark:nth-child(6){
+    top:38%;
+    right:40%;
+    animation-delay:2.5s;
+}
+
+@keyframes sparkle{
+
+    0%,100%{
+        opacity:.2;
+
+        transform:
+        scale(.6)
+        rotate(0deg);
+    }
+
+    50%{
+        opacity:1;
+
+        transform:
+        scale(1.5)
+        rotate(180deg);
+    }
+
+}
+
+/* ===================================================== */
+/* BUBBLES */
+/* ===================================================== */
+
+.bubbles{
+    position:fixed;
+    inset:0;
+
+    overflow:hidden;
+
+    pointer-events:none;
+
+    z-index:-1;
+}
+
+.bubble{
+    position:absolute;
+
+    bottom:-180px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+        circle at 30% 30%,
+        rgba(255,255,255,.75),
+        rgba(99,102,241,.28),
+        rgba(168,85,247,.20)
+    );
+
+    border:
+    1px solid rgba(255,255,255,.4);
+
+    box-shadow:
+    inset 0 0 20px rgba(255,255,255,.35),
+    0 0 30px rgba(99,102,241,.18);
+
+    backdrop-filter:blur(8px);
+
+    animation:bubbleFloat linear infinite;
+}
+
+.b1{
+    width:120px;
+    height:120px;
+    left:5%;
+    animation-duration:18s;
+}
+
+.b2{
+    width:70px;
+    height:70px;
+    left:22%;
+    animation-duration:13s;
+    animation-delay:2s;
+}
+
+.b3{
+    width:150px;
+    height:150px;
+    right:10%;
+    animation-duration:22s;
+}
+
+.b4{
+    width:90px;
+    height:90px;
+    right:35%;
+    animation-duration:16s;
+    animation-delay:1s;
+}
+
+.b5{
+    width:55px;
+    height:55px;
+    left:70%;
+    animation-duration:11s;
+}
+
+@keyframes bubbleFloat{
+
+    0%{
+        transform:
+        translateY(0)
+        scale(.8);
+
+        opacity:0;
+    }
+
+    15%{
+        opacity:.8;
+    }
+
+    100%{
+        transform:
+        translateY(-130vh)
+        scale(1.3);
+
+        opacity:0;
+    }
+
+}
+
+/* ===================================================== */
+/* HERO */
+/* ===================================================== */
+
+.hero-premium{
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:38px !important;
+
+    padding:45px !important;
+
+    background:
+    linear-gradient(
+        135deg,
+        #1e1b4b,
+        #312e81,
+        #4338ca
+    ) !important;
+
+    box-shadow:
+    0 25px 60px rgba(79,70,229,.20);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    transition:.4s ease;
+}
+
+.hero-premium:hover{
+
+    transform:
+    translateY(-5px);
+
+}
+
+/* glow */
+
+.hero-premium::before{
+    content:'';
+
+    position:absolute;
+
+    width:400px;
+    height:400px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(255,255,255,.10),
+        transparent 70%
+    );
+
+    top:-120px;
+    left:-80px;
+}
+
+/* shine */
+
+.hero-premium::after{
+    content:'';
+
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.08),
+        transparent
+    );
+
+    transform:translateX(-100%);
+
+    animation:heroShine 8s linear infinite;
+}
+
+@keyframes heroShine{
+
+    100%{
+        transform:translateX(100%);
+    }
+
+}
+
+/* ===================================================== */
+/* HERO TEXT */
+/* ===================================================== */
+
+.hero-premium h1{
+    font-size:55px !important;
+
+    font-weight:900 !important;
+
+    color:white !important;
+
+    letter-spacing:-1px;
+}
+
+.hero-premium h1 span{
+    color:#c4b5fd;
+}
+
+/* ===================================================== */
+/* STAT */
+/* ===================================================== */
+
+.glass-stat{
+    background:
+    rgba(255,255,255,.10) !important;
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:24px !important;
+
+    transition:.35s;
+}
+
+.glass-stat:hover{
+
+    transform:
+    translateY(-6px)
+    scale(1.03);
+
+    background:
+    rgba(255,255,255,.16) !important;
+}
+
+/* ===================================================== */
+/* CARD UMUM */
+/* ===================================================== */
+
+.grid > div{
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:30px !important;
+
+    transition:.35s ease;
+
+    border:
+    1px solid rgba(255,255,255,.6);
+
+    backdrop-filter:blur(12px);
+}
+
+.grid > div:hover{
+
+    transform:
+    translateY(-8px)
+    scale(1.02);
+
+    box-shadow:
+    0 20px 45px rgba(79,70,229,.12);
+}
+
+/* shine hover */
+
+.grid > div::before{
+
+    content:'';
+
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.25),
+        transparent
+    );
+
+    transform:translateX(-100%);
+}
+
+.grid > div:hover::before{
+
+    animation:cardShine 1.2s linear;
+}
+
+@keyframes cardShine{
+
+    100%{
+        transform:translateX(100%);
+    }
+
+}
+
+/* ===================================================== */
+/* CARD WARNA */
+/* ===================================================== */
+
+.pencapaian-card{
+
+    background:
+    linear-gradient(
+        135deg,
+        #eef2ff,
+        #dbeafe
+    ) !important;
+}
+
+.info-kehadiran-card{
+
+    background:
+    linear-gradient(
+        135deg,
+        #fff7ed,
+        #fef3c7
+    ) !important;
+}
+
+.absensi-card{
+
+    background:
+    linear-gradient(
+        135deg,
+        #eff6ff,
+        #dbeafe
+    ) !important;
+}
+
+/* ===================================================== */
+/* ICON GERAK */
+/* ===================================================== */
+
+.calendar-icon,
+.home-float,
+.rocket-float{
+
+    transition:.35s ease;
+
+    cursor:pointer;
+}
+
+.calendar-icon:hover,
+.home-float:hover,
+.rocket-float:hover{
+
+    transform:
+    translateY(-10px)
+    rotate(-8deg)
+    scale(1.12);
+
+    filter:
+    drop-shadow(
+        0 15px 25px rgba(79,70,229,.25)
+    );
+}
+
+/* ===================================================== */
+/* BUTTON */
+/* ===================================================== */
+
+button{
+    transition:.35s ease !important;
+}
+
+button:hover{
+
+    transform:
+    translateY(-4px)
+    scale(1.03);
+
+}
+
+/* ===================================================== */
+/* ROBOT */
+/* ===================================================== */
+
+#robotAssistant{
+    position:fixed;
+
+    right:22px;
+    bottom:18px;
+
+    z-index:999;
+}
+
+#robotAssistant img{
+
+    width:90px;
+
+    animation:robotFloat 3s ease-in-out infinite;
+
+    filter:
+    drop-shadow(
+        0 18px 30px rgba(79,70,229,.25)
+    );
+}
+
+.robotBubble{
+
+    position:absolute;
+
+    right:95px;
+    bottom:22px;
+
+    background:white;
+
+    padding:12px 16px;
+
+    border-radius:18px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    color:#4338ca;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.08);
+
+    animation:bubbleGlow 2s infinite alternate;
+}
+
+@keyframes robotFloat{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-12px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+
+}
+
+@keyframes bubbleGlow{
+
+    from{
+        box-shadow:
+        0 10px 25px rgba(79,70,229,.08);
+    }
+
+    to{
+        box-shadow:
+        0 15px 35px rgba(124,58,237,.20);
+    }
+
+}
+
+/* ===================================================== */
+/* POPUP */
+/* ===================================================== */
+
+#miniPopupReminder{
+
+    position:fixed;
+
+    top:24px;
+    right:24px;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:12px 16px;
+
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+
+    min-width:250px;
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,.08);
+
+    z-index:99999;
+
+    animation:
+    popupFade .5s ease,
+    popupHide .5s ease 4s forwards;
+}
+
+.miniBell{
+
+    width:38px;
+    height:38px;
+
+    border-radius:14px;
+
+    background:#eef2ff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:16px;
+
+    animation:bellShake 2s infinite;
+}
+
+@keyframes bellShake{
+
+    0%{
+        transform:rotate(0deg);
+    }
+
+    20%{
+        transform:rotate(10deg);
+    }
+
+    40%{
+        transform:rotate(-10deg);
+    }
+
+    60%{
+        transform:rotate(8deg);
+    }
+
+    100%{
+        transform:rotate(0deg);
+    }
+
+}
+
+@keyframes popupFade{
+
+    from{
+        opacity:0;
+        transform:
+        translateY(-20px)
+        scale(.95);
+    }
+
+    to{
+        opacity:1;
+        transform:
+        translateY(0)
+        scale(1);
+    }
+
+}
+
+@keyframes popupHide{
+
+    to{
+        opacity:0;
+        visibility:hidden;
+        transform:translateY(-20px);
+    }
+
+}
+
+/* ===================================================== */
+/* MOBILE */
+/* ===================================================== */
+
+@media(max-width:768px){
+
+    .hero-premium h1{
+        font-size:34px !important;
+    }
+
+    .hero-premium{
+        padding:28px !important;
+    }
+
+    .robotBubble{
+        display:none;
+    }
+
+    #miniPopupReminder{
+        right:10px;
+        left:10px;
+        min-width:auto;
+    }
+
+}
+
+</style>
+
+<!-- ===================================================== -->
+<!-- SPARKLES -->
+<!-- ===================================================== -->
+
+<div class="sparkles">
+
+    <span class="spark">✦</span>
+    <span class="spark">✦</span>
+    <span class="spark">✦</span>
+    <span class="spark">✦</span>
+    <span class="spark">✦</span>
+    <span class="spark">✦</span>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- BUBBLES -->
+<!-- ===================================================== -->
+
+<div class="bubbles">
+
+    <span class="bubble b1"></span>
+    <span class="bubble b2"></span>
+    <span class="bubble b3"></span>
+    <span class="bubble b4"></span>
+    <span class="bubble b5"></span>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- POPUP -->
+<!-- ===================================================== -->
+
+<div id="miniPopupReminder">
+
+    <div class="miniBell">
+        🔔
+    </div>
+
+    <div class="miniPopupContent">
+
+        <h4>
+            Pengingat Absensi
+        </h4>
+
+        <p>
+            Jangan lupa absensi hari ini ya ✨
+        </p>
+
+    </div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- ROBOT -->
+<!-- ===================================================== -->
+
+<div id="robotAssistant">
+
+    <div class="robotBubble">
+        Semangat bekerja 🥰
+    </div>
+
+    <img
+    src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png"
+    alt="robot">
+
+</div>
+
+<!-- ===================================================== -->
+<!-- SCRIPT -->
+<!-- ===================================================== -->
+
+<script>
+
+setTimeout(() => {
+
+    const popup =
+    document.getElementById(
+        'miniPopupReminder'
+    );
+
+    if(popup){
+
+        popup.style.display = 'none';
+
+    }
+
+},4000);
+
+</script>
+
+</script>
