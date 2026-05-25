@@ -8,10 +8,10 @@ nixPackages = ["php84", "php84Packages.composer"]
 
 [phases.build]
 cmds = [
+    "npm install",
+    "npm run build",
     "composer install --no-dev --optimize-autoloader",
-    "php artisan config:cache",
-    "php artisan route:cache",
-    "php artisan migrate --force" 
+    "php artisan migrate --force"
 ]
 
 [start]
