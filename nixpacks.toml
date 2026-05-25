@@ -1,18 +1,16 @@
 [variables]
 PHP_VERSION = "8.4"
-# Menambahkan variabel ini agar Nixpacks lebih spesifik
-NIXPACKS_PHP_VERSION = "8.4"
+NODE_VERSION = "20"
 
 [phases.setup]
-nixPackages = ["php84", "php84Packages.composer"]
+nixPackages = ["php84", "php84Packages.composer", "nodejs_20"]
 
 [phases.build]
 cmds = [
     "npm install",
     "npm run build",
-    "composer install --no-dev --optimize-autoloader",
-    "php artisan migrate --force"
+    "composer install --no-dev --optimize-autoloader"
 ]
 
-[start]
-cmd = "php -S 0.0.0.0:$PORT -t public"
+[phases.start]
+cmds = ["php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"]
