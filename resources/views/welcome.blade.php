@@ -83,10 +83,6 @@
         /* FLOATING BUBBLES */
         /* ===================================== */
 
-/* ===================================== */
-/* FLOATING BUBBLES */
-/* ===================================== */
-
 .bubble{
     position:absolute;
     bottom:-200px;
@@ -381,7 +377,7 @@
 
             border-radius:40px;
 
-            padding:42px;
+            padding:32px; /* Disesuaikan agar lebih kompak */
 
             background:rgba(255,255,255,0.95);
 
@@ -717,7 +713,6 @@
 
 <body>
 
-    <!-- BACKGROUND EFFECT -->
     <div class="animated-bg">
 
         <span class="bubble x1"></span>
@@ -733,7 +728,6 @@
 
     </div>
 
-    <!-- MICRO PARTICLES -->
     <div class="micro-particles">
         <span></span>
         <span></span>
@@ -742,19 +736,16 @@
         <span></span>
     </div>
 
-    <!-- MAIN -->
     <div class="min-h-screen flex items-center justify-center p-6 relative">
 
-        <div class="login-wrapper w-full max-w-md">
+        <div class="login-wrapper w-full max-w-sm md:max-w-md">
 
             <div class="login-card">
 
-                <!-- LOGO -->
                 <div class="logo-box">
                     <img src="{{ asset('logo pt salttek dumpang jaya.jpeg') }}" alt="Logo">
                 </div>
 
-                <!-- TITLE -->
                 <h1>
                     PT SALTTEK <br>
                     <span class="gradient-text">
@@ -762,13 +753,11 @@
                     </span>
                 </h1>
 
-                <!-- DESCRIPTION -->
                 <p class="desc">
                     Sistem Monitoring Absensi Digital <br>
                     & Manajemen Karyawan Terintegrasi.
                 </p>
 
-                <!-- BUTTON -->
                 <div class="mt-10 space-y-4">
 
                     @if (Route::has('login'))
@@ -805,7 +794,6 @@
 
                 </div>
 
-                <!-- FOOTER -->
                 <div class="footer">
                     MEDAN • SUMATERA UTARA • 2026
                 </div>

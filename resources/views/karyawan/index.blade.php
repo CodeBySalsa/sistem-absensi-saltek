@@ -33,9 +33,18 @@
             transform: translateY(-2px);
             box-shadow: 0 12px 20px rgba(99, 102, 241, 0.05);
         }
+
+        /* PERUBAHAN WARNA DISINI */
+        .premium-container {
+            background: #f0f7ff; 
+            border: 1px solid #bae6fd;
+        }
+        .table-header {
+            background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 100%);
+        }
     </style>
 </head>
-<body class="bg-slate-50 p-4 md:p-10">
+<body class="bg-slate-200 p-4 md:p-10">
     <div class="max-w-7xl mx-auto space-y-4 md:space-y-6">
 
         {{-- Navigasi Kembali ke Dashboard --}}
@@ -49,15 +58,15 @@
         </div>
 
         {{-- Kontainer Utama Dashboard --}}
-        <div class="bg-white p-4 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100/80">
+        <div class="premium-container p-4 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl shadow-blue-200/50 border border-blue-100">
             
-            {{-- Judul Atas & Tombol Tambah Karyawan Terkunci Selalu Menyamping Rapi --}}
-            <div class="flex flex-row justify-between items-center mb-6 md:mb-10 gap-2 pb-5 border-b border-slate-100">
+            {{-- Judul Atas & Tombol Tambah Karyawan --}}
+            <div class="flex flex-row justify-between items-center mb-6 md:mb-10 gap-2 pb-5 border-b border-blue-200">
                 <div class="w-7/12 md:w-auto">
-                    <h1 class="text-xs sm:text-2xl md:text-3xl font-black tracking-tight uppercase leading-tight whitespace-nowrap overflow-hidden text-ellipsis bg-gradient-to-r from-slate-900 to-indigo-900 bg-clip-text text-transparent">
+                    <h1 class="text-xs sm:text-2xl md:text-3xl font-black tracking-tight uppercase leading-tight whitespace-nowrap overflow-hidden text-ellipsis text-slate-900">
                         Daftar Karyawan PT Saltek
                     </h1>
-                    <p class="text-[7px] md:text-sm text-slate-400 font-medium mt-0.5 md:mt-2 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <p class="text-[7px] md:text-sm text-slate-500 font-medium mt-0.5 md:mt-2 whitespace-nowrap overflow-hidden text-ellipsis">
                         Manajemen data anggota staf operasional.
                     </p>
                 </div>
@@ -77,55 +86,42 @@
                 </div>
             @endif
 
-            {{-- Pembungkus tabel luar melengkung rapi dengan pelindung luapan data --}}
-            <div class="overflow-hidden rounded-xl md:rounded-3xl border border-slate-100 w-full">
-                
-                {{-- Container internal scrollable agar data di HP memanjang luas horizontal --}}
+            <div class="overflow-hidden rounded-xl md:rounded-3xl border border-blue-100 w-full">
                 <div class="w-full overflow-x-auto">
-                    <table class="w-full premium-table bg-white mobile-table-text md:text-sm min-w-[600px] md:min-w-0">
-                        <thead class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white">
+                    <table class="w-full premium-table mobile-table-text md:text-sm min-w-[600px] md:min-w-0">
+                        <thead class="table-header text-white">
                             <tr>
                                 <th class="mobile-padding md:p-5 text-left text-[7px] md:text-[10px] font-extrabold uppercase tracking-[0.2em] w-2/12 rounded-l-xl md:rounded-l-2xl">NIP</th>
                                 <th class="mobile-padding md:p-5 text-left text-[7px] md:text-[10px] font-extrabold uppercase tracking-[0.2em] w-3/12">Nama Lengkap</th>
                                 <th class="mobile-padding md:p-5 text-left text-[7px] md:text-[10px] font-extrabold uppercase tracking-[0.2em] w-2/12">Jabatan</th>
                                 <th class="mobile-padding md:p-5 text-left text-[7px] md:text-[10px] font-extrabold uppercase tracking-[0.2em] w-3/12">No. WhatsApp</th>
-                                <th class="mobile-padding md:p-5 text-center text-[7px] md:text-[10px] font-extrabold uppercase tracking-[0.2em] border-l border-slate-800/50 w-2/12 rounded-r-xl md:rounded-r-2xl">Aksi</th>
+                                <th class="mobile-padding md:p-5 text-center text-[7px] md:text-[10px] font-extrabold uppercase tracking-[0.2em] w-2/12 rounded-r-xl md:rounded-r-2xl">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="text-slate-600 font-semibold divide-y divide-slate-50">
+                        <tbody class="text-slate-600 font-semibold divide-y divide-blue-100">
                             @foreach ($karyawans as $k)
-                            <tr class="hover:bg-slate-50/80 transition-colors">
-                                {{-- NIP --}}
-                                <td class="mobile-padding md:p-5 font-mono text-slate-400 tracking-normal text-left rounded-l-xl md:rounded-l-2xl">{{ $k->nip }}</td>
-                                
-                                {{-- Nama Lengkap (Rata kiri lurus ideal) --}}
+                            <tr class="{{ $loop->even ? 'bg-blue-50/50' : 'bg-white' }} hover:bg-blue-100 transition-colors">
+                                <td class="mobile-padding md:p-5 font-mono text-slate-400 tracking-normal text-left">{{ $k->nip }}</td>
                                 <td class="mobile-padding md:p-5 font-bold text-slate-800 text-left mobile-truncate">{{ $k->nama_lengkap }}</td>
-                                
-                                {{-- Jabatan --}}
                                 <td class="mobile-padding md:p-5 text-left">
-                                    <span class="px-2 py-0.5 md:px-4 md:py-1.5 bg-indigo-50 text-indigo-600 text-[6px] md:text-[9.5px] font-black uppercase rounded-md md:rounded-full border border-indigo-100/40 inline-block mobile-badge whitespace-nowrap tracking-wide shadow-sm shadow-indigo-100/20">
+                                    <span class="px-2 py-0.5 md:px-4 md:py-1.5 bg-blue-100 text-blue-700 text-[6px] md:text-[9.5px] font-black uppercase rounded-md md:rounded-full border border-blue-200 inline-block mobile-badge whitespace-nowrap tracking-wide">
                                         {{ $k->jabatan }}
                                     </span>
                                 </td>
-                                
-                                {{-- No WhatsApp (Dibuat tegak/normal agar formal dan elegan) --}}
-                                <td class="mobile-padding md:p-5 text-blue-600 font-bold tracking-wide text-left font-mono not-italic hover:text-blue-700">
+                                <td class="mobile-padding md:p-5 text-blue-600 font-bold tracking-wide text-left font-mono not-italic">
                                     {{ $k->no_hp ?? '-' }}
                                 </td>
-
-                                {{-- Aksi Edit & Hapus --}}
-                                <td class="mobile-padding md:p-5 text-center border-l border-slate-100 rounded-r-xl md:rounded-r-2xl">
+                                <td class="mobile-padding md:p-5 text-center">
                                     <div class="flex justify-center items-center gap-1.5 md:gap-3">
-                                        <a href="{{ route('karyawan.edit', $k->id) }}" class="p-1 md:p-2.5 bg-amber-50 text-amber-600 rounded-md md:rounded-xl hover:bg-amber-400 hover:text-amber-950 transition-all border border-amber-100 flex items-center justify-center shrink-0 shadow-sm shadow-amber-100" title="Edit">
+                                        <a href="{{ route('karyawan.edit', $k->id) }}" class="p-1 md:p-2.5 bg-amber-50 text-amber-600 rounded-md md:rounded-xl hover:bg-amber-400 hover:text-white transition-all border border-amber-100 flex items-center justify-center shrink-0 shadow-sm" title="Edit">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 md:h-4 md:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </a>
-
                                         <form action="{{ route('karyawan.destroy', $k->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data {{ $k->nama_lengkap }}?');" class="inline flex items-center justify-center shrink-0">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="p-1 md:p-2.5 bg-rose-50 text-rose-600 rounded-md md:rounded-xl hover:bg-rose-500 hover:text-white transition-all border border-rose-100 flex items-center justify-center shadow-sm shadow-rose-100" title="Hapus">
+                                            <button type="submit" class="p-1 md:p-2.5 bg-rose-50 text-rose-600 rounded-md md:rounded-xl hover:bg-rose-500 hover:text-white transition-all border border-rose-100 flex items-center justify-center shadow-sm" title="Hapus">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 md:h-4 md:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
@@ -138,7 +134,6 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>
