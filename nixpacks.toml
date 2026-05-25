@@ -1,5 +1,7 @@
 [variables]
 PHP_VERSION = "8.4"
+# Menambahkan variabel ini agar Nixpacks lebih spesifik
+NIXPACKS_PHP_VERSION = "8.4"
 
 [phases.setup]
 nixPackages = ["php84", "php84Packages.composer"]
@@ -8,8 +10,7 @@ nixPackages = ["php84", "php84Packages.composer"]
 cmds = [
     "composer install --no-dev --optimize-autoloader",
     "php artisan config:cache",
-    "php artisan route:cache",
-    "php artisan view:cache"
+    "php artisan route:cache"
 ]
 
 [start]
