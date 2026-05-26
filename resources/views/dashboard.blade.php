@@ -221,31 +221,38 @@
 </div>
 
         {{-- CARD 2: KLIK ABSENSI --}}
-        <div class="rounded-[2rem] shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-95">
-            @if($isMinggu)
-                <div class="bg-slate-800 text-white h-full flex flex-col items-center justify-center p-6 text-center">
-                    <span class="text-4xl mb-2">⏱️</span>
-                    <h4 class="font-black uppercase text-sm tracking-widest">SYSTEM OFF</h4>
-                </div>
-            @else
-                @php $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->hour; @endphp
-                @if(!$cekAbsensi)
-                    <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white h-full p-6 flex flex-col items-center justify-center cursor-pointer text-center" onclick="handleAbsensi()">
-                        <div class="text-6xl mb-3 animate-bounce">🚀</div>
-                        <h4 class="font-black uppercase text-sm tracking-widest">KLIK PRESENSI</h4>
-                    </div>
-                @else
-                    <div class="h-full flex flex-col items-center justify-center cursor-pointer text-center p-6 {{ $jamSekarang < 17 ? 'bg-rose-100 text-rose-700' : 'bg-blue-600 text-white' }}" onclick="handlePulang({{ $jamSekarang }})">
-                        <div class="text-6xl mb-3">🏠</div>
-                        <h4 class="font-black uppercase text-sm tracking-tight">
-                            {{ $jamSekarang < 17 ? 'BELUM WAKTUNYA' : 'KLIK PULANG' }}
-                        </h4>
-                    </div>
-                @endif
-            @endif
+<div class="rounded-[2rem] shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-95">
+    @if($isMinggu)
+        <div class="bg-slate-800 text-white h-full flex flex-col items-center justify-center p-6 text-center">
+            <span class="text-4xl mb-2">⏱️</span>
+            <h4 class="font-black uppercase text-sm tracking-widest">SYSTEM OFF</h4>
         </div>
-    </div>
-@endif
+    @else
+        @php $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->hour; @endphp
+        
+        @if(!$cekAbsensi)
+            {{-- Tombol Presensi (Hanya muncul jika belum absen) --}}
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white h-full p-6 flex flex-col items-center justify-center cursor-pointer text-center" onclick="handleAbsensi()">
+                <div class="text-6xl mb-3 animate-bounce">🚀</div>
+                <h4 class="font-black uppercase text-sm tracking-widest">KLIK PRESENSI</h4>
+            </div>
+        @elseif(in_array($cekAbsensi->status, ['Izin', 'Sakit']))
+            {{-- Jika Izin/Sakit, tampilkan status saja (Tanpa tombol pulang) --}}
+            <div class="bg-gray-200 text-gray-600 h-full p-6 flex flex-col items-center justify-center text-center">
+                <div class="text-5xl mb-3">🛡️</div>
+                <h4 class="font-black uppercase text-sm tracking-tight">STATUS: {{ $cekAbsensi->status }}</h4>
+            </div>
+        @else
+            {{-- Tombol Pulang (Hanya muncul jika statusnya Hadir) --}}
+            <div class="h-full flex flex-col items-center justify-center cursor-pointer text-center p-6 {{ $jamSekarang < 17 ? 'bg-rose-100 text-rose-700' : 'bg-blue-600 text-white' }}" onclick="handlePulang({{ $jamSekarang }})">
+                <div class="text-6xl mb-3">🏠</div>
+                <h4 class="font-black uppercase text-sm tracking-tight">
+                    {{ $jamSekarang < 17 ? 'BELUM WAKTUNYA' : 'KLIK PULANG' }}
+                </h4>
+            </div>
+        @endif
+    @endif
+</div>
                       {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
 <div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
     <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
