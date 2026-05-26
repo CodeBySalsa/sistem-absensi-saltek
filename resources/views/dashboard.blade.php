@@ -192,68 +192,71 @@
                 </div>
             @endif
 
-            {{-- 4. USER CARDS (2 COLUMNS VERSION) --}}
+           {{-- 4. USER CARDS (2 COLUMNS VERSION) --}}
 @if(Auth::user()->role === 'karyawan')
     {{-- Grid diatur 2 kolom agar seimbang --}}
     <div class="grid grid-cols-2 gap-4 mb-8">
         
-       {{-- CARD 1: INFO KEHADIRAN / FORM --}}
-<div class="relative overflow-hidden rounded-[2rem] {{ !$cekAbsensi ? 'bg-gradient-to-br from-amber-50 to-orange-100/80 border border-amber-200/60' : 'bg-gradient-to-br from-emerald-50 to-teal-100/80 border border-emerald-200/60' }} p-6 shadow-sm transition-all duration-300 hover:scale-[1.03] active:scale-95 flex flex-col justify-center items-center text-center">
-    @if(!$cekAbsensi)
-        <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-3">INFO KEHADIRAN</p>
-        <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="w-full space-y-2">
-            @csrf
-            <input type="hidden" name="status" id="status_input">
-            <input type="text" name="keterangan" placeholder="Alasan..." required class="w-full text-xs font-bold border border-amber-200 rounded-xl py-2.5 px-3 text-center outline-none focus:ring-2 focus:ring-amber-300">
-            <div class="flex gap-2">
-                <button type="button" onclick="event.stopPropagation(); konfirmasiStatus('Izin')" class="flex-1 bg-amber-400 text-white font-black py-2 rounded-xl text-xs hover:bg-amber-500 transition-all">IZIN</button>
-                <button type="button" onclick="event.stopPropagation(); konfirmasiStatus('Sakit')" class="flex-1 bg-rose-500 text-white font-black py-2 rounded-xl text-xs hover:bg-rose-600 transition-all">SAKIT</button>
-            </div>
-        </form>
-    @else
-        <div class="flex flex-col items-center">
-            <div class="text-4xl mb-2">{{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? '✋' : '✨' }}</div>
-            <h4 class="text-sm font-black {{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? 'text-amber-700' : 'text-emerald-700' }} uppercase">
-                {{ $cekAbsensi->status == 'Hadir' ? 'DATA AMAN' : $cekAbsensi->status }}
-            </h4>
+        {{-- CARD 1: INFO KEHADIRAN / FORM --}}
+        <div class="relative overflow-hidden rounded-[2rem] {{ !$cekAbsensi ? 'bg-gradient-to-br from-amber-50 to-orange-100/80 border border-amber-200/60' : 'bg-gradient-to-br from-emerald-50 to-teal-100/80 border border-emerald-200/60' }} p-6 shadow-sm transition-all duration-300 hover:scale-[1.03] active:scale-95 flex flex-col justify-center items-center text-center">
+            @if(!$cekAbsensi)
+                <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-3">INFO KEHADIRAN</p>
+                <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="w-full space-y-2">
+                    @csrf
+                    <input type="hidden" name="status" id="status_input">
+                    <input type="text" name="keterangan" placeholder="Alasan..." required class="w-full text-xs font-bold border border-amber-200 rounded-xl py-2.5 px-3 text-center outline-none focus:ring-2 focus:ring-amber-300">
+                    <div class="flex gap-2">
+                        <button type="button" onclick="event.stopPropagation(); konfirmasiStatus('Izin')" class="flex-1 bg-amber-400 text-white font-black py-2 rounded-xl text-xs hover:bg-amber-500 transition-all">IZIN</button>
+                        <button type="button" onclick="event.stopPropagation(); konfirmasiStatus('Sakit')" class="flex-1 bg-rose-500 text-white font-black py-2 rounded-xl text-xs hover:bg-rose-600 transition-all">SAKIT</button>
+                    </div>
+                </form>
+            @else
+                <div class="flex flex-col items-center">
+                    <div class="text-4xl mb-2">{{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? '✋' : '✨' }}</div>
+                    <h4 class="text-sm font-black {{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? 'text-amber-700' : 'text-emerald-700' }} uppercase">
+                        {{ $cekAbsensi->status == 'Hadir' ? 'DATA AMAN' : $cekAbsensi->status }}
+                    </h4>
+                </div>
+            @endif
         </div>
-    @endif
-</div>
 
         {{-- CARD 2: KLIK ABSENSI --}}
-<div class="rounded-[2rem] shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-95">
-    @if($isMinggu)
-        <div class="bg-slate-800 text-white h-full flex flex-col items-center justify-center p-6 text-center">
-            <span class="text-4xl mb-2">⏱️</span>
-            <h4 class="font-black uppercase text-sm tracking-widest">SYSTEM OFF</h4>
+        <div class="rounded-[2rem] shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-95">
+            @if($isMinggu)
+                <div class="bg-slate-800 text-white h-full flex flex-col items-center justify-center p-6 text-center">
+                    <span class="text-4xl mb-2">⏱️</span>
+                    <h4 class="font-black uppercase text-sm tracking-widest">SYSTEM OFF</h4>
+                </div>
+            @else
+                @php $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->hour; @endphp
+                
+                @if(!$cekAbsensi)
+                    {{-- Tombol Presensi (Hanya muncul jika belum absen) --}}
+                    <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white h-full p-6 flex flex-col items-center justify-center cursor-pointer text-center" onclick="handleAbsensi()">
+                        <div class="text-6xl mb-3 animate-bounce">🚀</div>
+                        <h4 class="font-black uppercase text-sm tracking-widest">KLIK PRESENSI</h4>
+                    </div>
+                @elseif(in_array($cekAbsensi->status, ['Izin', 'Sakit']))
+                    {{-- Jika Izin/Sakit, tampilkan status saja (Tanpa tombol pulang) --}}
+                    <div class="bg-gray-200 text-gray-600 h-full p-6 flex flex-col items-center justify-center text-center">
+                        <div class="text-5xl mb-3">🛡️</div>
+                        <h4 class="font-black uppercase text-sm tracking-tight">STATUS: {{ $cekAbsensi->status }}</h4>
+                    </div>
+                @else
+                    {{-- Tombol Pulang (Hanya muncul jika statusnya Hadir) --}}
+                    <div class="h-full flex flex-col items-center justify-center cursor-pointer text-center p-6 {{ $jamSekarang < 17 ? 'bg-rose-100 text-rose-700' : 'bg-blue-600 text-white' }}" onclick="handlePulang({{ $jamSekarang }})">
+                        <div class="text-6xl mb-3">🏠</div>
+                        <h4 class="font-black uppercase text-sm tracking-tight">
+                            {{ $jamSekarang < 17 ? 'BELUM WAKTUNYA' : 'KLIK PULANG' }}
+                        </h4>
+                    </div>
+                @endif
+            @endif
         </div>
-    @else
-        @php $jamSekarang = \Carbon\Carbon::now('Asia/Jakarta')->hour; @endphp
-        
-        @if(!$cekAbsensi)
-            {{-- Tombol Presensi (Hanya muncul jika belum absen) --}}
-            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white h-full p-6 flex flex-col items-center justify-center cursor-pointer text-center" onclick="handleAbsensi()">
-                <div class="text-6xl mb-3 animate-bounce">🚀</div>
-                <h4 class="font-black uppercase text-sm tracking-widest">KLIK PRESENSI</h4>
-            </div>
-        @elseif(in_array($cekAbsensi->status, ['Izin', 'Sakit']))
-            {{-- Jika Izin/Sakit, tampilkan status saja (Tanpa tombol pulang) --}}
-            <div class="bg-gray-200 text-gray-600 h-full p-6 flex flex-col items-center justify-center text-center">
-                <div class="text-5xl mb-3">🛡️</div>
-                <h4 class="font-black uppercase text-sm tracking-tight">STATUS: {{ $cekAbsensi->status }}</h4>
-            </div>
-        @else
-            {{-- Tombol Pulang (Hanya muncul jika statusnya Hadir) --}}
-            <div class="h-full flex flex-col items-center justify-center cursor-pointer text-center p-6 {{ $jamSekarang < 17 ? 'bg-rose-100 text-rose-700' : 'bg-blue-600 text-white' }}" onclick="handlePulang({{ $jamSekarang }})">
-                <div class="text-6xl mb-3">🏠</div>
-                <h4 class="font-black uppercase text-sm tracking-tight">
-                    {{ $jamSekarang < 17 ? 'BELUM WAKTUNYA' : 'KLIK PULANG' }}
-                </h4>
-            </div>
-        @endif
-    @endif
-</div>
-                      {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
+    </div>
+@endif
+
+{{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
 <div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
     <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
         <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
@@ -315,62 +318,54 @@
         </table>
     </div>
 </div>
-           {{-- 6. REKAPITULASI BULANAN --}}
-            @if(Auth::user()->role == 'admin')
-                <div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden mb-10 animate-fade-in w-full">
-                    
-                    <div class="p-4 md:p-8 border-b border-indigo-100/70 flex items-center gap-2 md:gap-3">
-                        <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-950 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📊</div>
-                        <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
-                            REKAPITULASI ABSENSI KARYAWAN - {{ strtoupper($namaBulan ?? '') }} {{ date('Y') }}
-                        </h3>
-                    </div>
 
-                    <div class="w-full overflow-hidden rounded-t-xl md:rounded-t-[2rem]">
-                        <table class="w-full text-left mobile-table-text md:text-sm border-collapse">
-                            <thead>
-                                <tr class="bg-slate-900 text-white">
-                                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left w-4/12 md:w-3/12 pl-5 md:pl-8">Nama Karyawan</th>
-                                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-emerald-400">Hadir</th>
-                                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-blue-400">Izin</th>
-                                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-rose-400">Sakit</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-200/70">
-                                @foreach($rekapBulanan ?? [] as $rekap)
-                                    <tr class="odd:bg-slate-100/80 even:bg-indigo-50/50 hover:bg-indigo-100 transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-md hover:relative hover:z-10 cursor-pointer group">
-                                        
-                                        <td class="mobile-padding md:p-6 font-bold text-slate-800 uppercase text-left mobile-truncate tracking-wide group-hover:text-indigo-900 transition-colors pl-5 md:pl-8">
-                                            {{ $rekap->nama_lengkap }}
-                                        </td>
-                                        
-                                        <td class="mobile-padding md:p-6 text-center">
-                                            <span class="text-emerald-600 font-black font-mono text-[11px] md:text-sm group-hover:scale-110 transition-transform inline-block duration-300">
-                                                {{ $rekap->total_hadir }}
-                                            </span>
-                                        </td>
-                                        
-                                        <td class="mobile-padding md:p-6 text-center">
-                                            <span class="text-blue-600 font-black font-mono text-[11px] md:text-sm group-hover:scale-110 transition-transform inline-block duration-300">
-                                                {{ $rekap->total_izin }}
-                                            </span>
-                                        </td>
-                                        
-                                        <td class="mobile-padding md:p-6 text-center">
-                                            <span class="text-rose-600 font-black font-mono text-[11px] md:text-sm group-hover:scale-110 transition-transform inline-block duration-300">
-                                                {{ $rekap->total_sakit }}
-                                            </span>
-                                        </td>
-
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            @endif
+{{-- 6. REKAPITULASI BULANAN --}}
+@if(Auth::user()->role == 'admin')
+    <div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden mb-10 animate-fade-in w-full">
+        <div class="p-4 md:p-8 border-b border-indigo-100/70 flex items-center gap-2 md:gap-3">
+            <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-950 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📊</div>
+            <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
+                REKAPITULASI ABSENSI KARYAWAN - {{ strtoupper($namaBulan ?? '') }} {{ date('Y') }}
+            </h3>
+        </div>
+        <div class="w-full overflow-hidden rounded-t-xl md:rounded-t-[2rem]">
+            <table class="w-full text-left mobile-table-text md:text-sm border-collapse">
+                <thead>
+                    <tr class="bg-slate-900 text-white">
+                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left w-4/12 md:w-3/12 pl-5 md:pl-8">Nama Karyawan</th>
+                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-emerald-400">Hadir</th>
+                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-blue-400">Izin</th>
+                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-rose-400">Sakit</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200/70">
+                    @foreach($rekapBulanan ?? [] as $rekap)
+                        <tr class="odd:bg-slate-100/80 even:bg-indigo-50/50 hover:bg-indigo-100 transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-md hover:relative hover:z-10 cursor-pointer group">
+                            <td class="mobile-padding md:p-6 font-bold text-slate-800 uppercase text-left mobile-truncate tracking-wide group-hover:text-indigo-900 transition-colors pl-5 md:pl-8">
+                                {{ $rekap->nama_lengkap }}
+                            </td>
+                            <td class="mobile-padding md:p-6 text-center">
+                                <span class="text-emerald-600 font-black font-mono text-[11px] md:text-sm group-hover:scale-110 transition-transform inline-block duration-300">
+                                    {{ $rekap->total_hadir }}
+                                </span>
+                            </td>
+                            <td class="mobile-padding md:p-6 text-center">
+                                <span class="text-blue-600 font-black font-mono text-[11px] md:text-sm group-hover:scale-110 transition-transform inline-block duration-300">
+                                    {{ $rekap->total_izin }}
+                                </span>
+                            </td>
+                            <td class="mobile-padding md:p-6 text-center">
+                                <span class="text-rose-600 font-black font-mono text-[11px] md:text-sm group-hover:scale-110 transition-transform inline-block duration-300">
+                                    {{ $rekap->total_sakit }}
+                                </span>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
+@endif
 
    {{-- MODAL ABSENSI --}}
 <div id="absensiModal" class="fixed inset-0 z-[999] hidden">
