@@ -5,7 +5,7 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-2 group">
                         <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-md border border-slate-100 p-1 transition-transform duration-200 group-hover:scale-105">
-                            <img src="{{ asset('logo pt salttek dumpang jaya.jpeg') }}" alt="Logo PT Salttek" class="w-full h-full object-contain">
+                           <img src="{{ asset('logo.jpeg') }}" alt="Logo PT Salttek" class="w-full h-full object-contain">
                         </div>
                     </a>
                 </div>

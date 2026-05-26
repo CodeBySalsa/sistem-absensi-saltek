@@ -52,7 +52,13 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    /*
+    |--------------------------------------------------------------------------
+    | Application URL
+    |--------------------------------------------------------------------------
+    */
+    'url' => env('APP_URL', 'https://sistem-absensi-saltek-production.up.railway.app'),
+    'asset_url' => env('ASSET_URL', null), // Tambahkan ini jika belum ada
 
     /*
     |--------------------------------------------------------------------------
