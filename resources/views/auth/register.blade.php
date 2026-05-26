@@ -25,9 +25,9 @@
 
     <div class="register-card">
 
-        <div class="logo-box">
-            <img src="{{ asset('logo pt salttek dumpang jaya.jpeg') }}" alt="Logo PT Salttek">
-        </div>
+       <div class="logo-box">
+    <img src="{{ asset('logo.jpeg') }}" alt="Logo PT Salttek">
+</div>
 
         <h1>CREATE ACCOUNT</h1>
         <p class="subtitle">Sistem Absensi Digital Modern</p>
