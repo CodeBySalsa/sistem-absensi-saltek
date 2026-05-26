@@ -197,28 +197,28 @@
     {{-- Grid diatur 2 kolom agar seimbang --}}
     <div class="grid grid-cols-2 gap-4 mb-8">
         
-        {{-- CARD 1: INFO KEHADIRAN / FORM --}}
-        <div class="relative overflow-hidden rounded-[2rem] {{ !$cekAbsensi ? 'bg-gradient-to-br from-amber-50 to-orange-100/80 border border-amber-200/60' : 'bg-gradient-to-br from-emerald-50 to-teal-100/80 border border-emerald-200/60' }} p-6 shadow-sm transition-all duration-300 hover:scale-[1.03] active:scale-95 flex flex-col justify-center items-center text-center cursor-pointer">
-            @if(!$cekAbsensi)
-                <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-3">INFO KEHADIRAN</p>
-                <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="w-full space-y-2" onclick="event.stopPropagation();">
-                    @csrf
-                    <input type="hidden" name="status" id="status_input">
-                    <input type="text" name="keterangan" placeholder="Alasan..." required class="w-full text-xs font-bold border border-amber-200 rounded-xl py-2.5 px-3 text-center outline-none focus:ring-2 focus:ring-amber-300">
-                    <div class="flex gap-2">
-                        <button type="button" onclick="konfirmasiStatus('Izin')" class="flex-1 bg-amber-400 text-white font-black py-2 rounded-xl text-xs hover:bg-amber-500 transition-all">IZIN</button>
-                        <button type="button" onclick="konfirmasiStatus('Sakit')" class="flex-1 bg-rose-500 text-white font-black py-2 rounded-xl text-xs hover:bg-rose-600 transition-all">SAKIT</button>
-                    </div>
-                </form>
-            @else
-                <div class="flex flex-col items-center">
-                    <div class="text-4xl mb-2">{{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? '✋' : '✨' }}</div>
-                    <h4 class="text-sm font-black {{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? 'text-amber-700' : 'text-emerald-700' }} uppercase">
-                        {{ $cekAbsensi->status == 'Hadir' ? 'DATA AMAN' : $cekAbsensi->status }}
-                    </h4>
-                </div>
-            @endif
+       {{-- CARD 1: INFO KEHADIRAN / FORM --}}
+<div class="relative overflow-hidden rounded-[2rem] {{ !$cekAbsensi ? 'bg-gradient-to-br from-amber-50 to-orange-100/80 border border-amber-200/60' : 'bg-gradient-to-br from-emerald-50 to-teal-100/80 border border-emerald-200/60' }} p-6 shadow-sm transition-all duration-300 hover:scale-[1.03] active:scale-95 flex flex-col justify-center items-center text-center">
+    @if(!$cekAbsensi)
+        <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-3">INFO KEHADIRAN</p>
+        <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="w-full space-y-2">
+            @csrf
+            <input type="hidden" name="status" id="status_input">
+            <input type="text" name="keterangan" placeholder="Alasan..." required class="w-full text-xs font-bold border border-amber-200 rounded-xl py-2.5 px-3 text-center outline-none focus:ring-2 focus:ring-amber-300">
+            <div class="flex gap-2">
+                <button type="button" onclick="event.stopPropagation(); konfirmasiStatus('Izin')" class="flex-1 bg-amber-400 text-white font-black py-2 rounded-xl text-xs hover:bg-amber-500 transition-all">IZIN</button>
+                <button type="button" onclick="event.stopPropagation(); konfirmasiStatus('Sakit')" class="flex-1 bg-rose-500 text-white font-black py-2 rounded-xl text-xs hover:bg-rose-600 transition-all">SAKIT</button>
+            </div>
+        </form>
+    @else
+        <div class="flex flex-col items-center">
+            <div class="text-4xl mb-2">{{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? '✋' : '✨' }}</div>
+            <h4 class="text-sm font-black {{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? 'text-amber-700' : 'text-emerald-700' }} uppercase">
+                {{ $cekAbsensi->status == 'Hadir' ? 'DATA AMAN' : $cekAbsensi->status }}
+            </h4>
         </div>
+    @endif
+</div>
 
         {{-- CARD 2: KLIK ABSENSI --}}
         <div class="rounded-[2rem] shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-95">
@@ -647,38 +647,34 @@
     // KONFIRMASI IZIN / SAKIT
     // =========================
 
-    function konfirmasiStatus(status) {
+   function konfirmasiStatus(status) {
+    // Mencari input berdasarkan atribut 'name'
+    const ketInput = document.querySelector('input[name="keterangan"]').value;
 
-        const ketInput = document.getElementById('keterangan_input').value;
-
-        if (!ketInput.trim()) {
-
-            Swal.fire({
-                icon: 'warning',
-                title: 'Perhatian',
-                text: 'Silakan isi kolom keterangan/alasan terlebih dahulu.'
-            });
-
-            return;
-        }
-
+    if (!ketInput.trim()) {
         Swal.fire({
-            title: `Ajukan ${status}?`,
-            text: `Apakah Anda yakin ingin mengajukan keterangan ${status} hari ini?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#4338ca',
-            cancelButtonColor: '#64748b',
-            confirmButtonText: 'Ya, Ajukan!'
-        }).then((result) => {
-
-            if (result.isConfirmed) {
-
-                document.getElementById('status_input').value = status;
-                document.getElementById('formIzinSakit').submit();
-            }
+            icon: 'warning',
+            title: 'Perhatian',
+            text: 'Silakan isi kolom keterangan/alasan terlebih dahulu.'
         });
+        return;
     }
+
+    Swal.fire({
+        title: `Ajukan ${status}?`,
+        text: `Apakah Anda yakin ingin mengajukan keterangan ${status} hari ini?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#4338ca',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Ya, Ajukan!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('status_input').value = status;
+            document.getElementById('formIzinSakit').submit();
+        }
+    });
+}
 
     // =========================
     // HANDLE PULANG
