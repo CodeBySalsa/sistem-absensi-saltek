@@ -743,8 +743,8 @@
             <div class="login-card">
 
                 <div class="logo-box">
-                    <img src="{{ asset('logo pt salttek dumpang jaya.jpeg') }}" alt="Logo">
-                </div>
+    <img src="{{ asset('logo.jpeg') }}" alt="Logo PT Salttek">
+</div>
 
                 <h1>
                     PT SALTTEK <br>
