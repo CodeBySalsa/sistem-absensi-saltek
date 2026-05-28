@@ -227,7 +227,8 @@
                     </h4>
                 </div>
             @endif
-        
+        </div>
+
         {{-- CARD 2: KLIK ABSENSI --}}
         <div class="rounded-[2rem] shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-95">
             @if($isMinggu)
