@@ -85,6 +85,16 @@
 
         {{-- Statistik Ringkas - Update agar bisa diklik --}}
 <div class="grid grid-cols-3 gap-2 md:gap-6 mb-8 md:mb-10">
+
+{{-- Card Total Anggota --}}
+<div class="bg-blue-50 border border-blue-100 p-2 md:p-6 rounded-xl md:rounded-[2rem] shadow-lg shadow-blue-200/20 flex items-center gap-1 md:gap-5 transition-all duration-300 hover:scale-105 hover:bg-blue-100 cursor-default">
+    <div class="text-sm md:text-2xl w-6 h-6 md:w-14 md:h-14 bg-blue-500 text-white rounded-lg flex items-center justify-center shrink-0 shadow-md">👥</div>
+    <div>
+        <p class="text-[6px] md:text-[10px] font-black text-blue-800 uppercase tracking-widest">Total Anggota</p>
+        <h3 class="text-xs md:text-2xl font-black text-blue-900">{{ $totalKaryawan }}</h3>
+    </div>
+</div>
+
     
     {{-- Card Hadir --}}
     <a href="#log-kehadiran" class="bg-emerald-50 border border-emerald-100 p-2 md:p-6 rounded-xl md:rounded-[2rem] shadow-lg shadow-emerald-200/20 flex items-center gap-1 md:gap-5 transition-all duration-300 hover:scale-105 hover:bg-emerald-100 cursor-pointer">

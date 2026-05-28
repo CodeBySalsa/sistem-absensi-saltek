@@ -51,3 +51,20 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// ... (bagian atas tetap sama)
+
+use App\Http\Controllers\PimpinanController; // 1. Tambahkan use di atas
+
+// ... (di dalam GROUP 1: KARYAWAN & MONITORING)
+Route::middleware(['auth', 'verified'])->group(function () {
+    
+    // ... (route lainnya)
+
+    // 4. Halaman Monitoring Pimpinan (Wajib Login)
+    // Kita arahkan ke PimpinanController yang baru dibuat
+    Route::get('/pimpinan', [PimpinanController::class, 'index'])->name('pimpinan.index');
+    
+});
+
+// ... (sisanya tetap sama)
