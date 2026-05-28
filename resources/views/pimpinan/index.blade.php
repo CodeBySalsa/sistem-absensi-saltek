@@ -26,16 +26,16 @@
         {{-- Menu Atas: Penempatan Logo Baru di Sebelah Kiri & Tombol Kontrol Kanan --}}
         <div class="flex justify-between items-center mb-6">
             
-            {{-- Sektor Kiri: Penyematan Logo Besar Gagah PT Salttek Dumpang Jaya --}}
-            <div class="flex items-center gap-3">
-                <div class="logo-box">
-    <img src="{{ asset('logo.jpeg') }}" alt="Logo PT Salttek">
+            {{-- Sektor Kiri: Logo dengan ukuran yang dibatasi --}}
+<div class="flex items-center gap-3">
+    <div class="w-14 h-14 md:w-16 md:h-16 bg-white rounded-2xl flex items-center justify-center shadow-md border border-slate-100 p-2 shrink-0">
+        <img src="{{ asset('logo.jpeg') }}" alt="Logo PT Salttek" class="w-full h-full object-contain">
+    </div>
+    <div class="hidden sm:block">
+        <h3 class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">Aplikasi Presensi</h3>
+        <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-tight mt-0.5">PT Salttek Dumpang Jaya</h2>
+    </div>
 </div>
-                <div class="hidden sm:block">
-                    <h3 class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">Aplikasi Presensi</h3>
-                    <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-tight mt-0.5">PT Salttek Dumpang Jaya</h2>
-                </div>
-            </div>
 
             {{-- Sektor Kanan: Tombol Menu Asli Bawaan Kamu --}}
             <div class="flex items-center gap-2 md:gap-3 shrink-0">
