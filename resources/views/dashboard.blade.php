@@ -192,42 +192,41 @@
                 </div>
             @endif
 
-           {{-- 4. USER CARDS (2 COLUMNS VERSION) --}}
-@if(Auth::user()->role === 'karyawan')
-    {{-- Grid diatur 2 kolom agar seimbang --}}
-    <div class="grid grid-cols-2 gap-4 mb-8">
-        
-        {{-- CARD 1: INFO KEHADIRAN / FORM --}}
-        <div class="relative overflow-hidden rounded-[2rem] {{ !$cekAbsensi ? 'bg-gradient-to-br from-amber-50 to-orange-100/80 border border-amber-200/60' : 'bg-gradient-to-br from-emerald-50 to-teal-100/80 border border-emerald-200/60' }} p-6 shadow-sm transition-all duration-300 hover:scale-[1.03] active:scale-95 flex flex-col justify-center items-center text-center">
-            @if(!$cekAbsensi)
-                <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-3">INFO KEHADIRAN</p>
-                <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="w-full space-y-2">
-                    @csrf
-                    <input type="hidden" name="status" id="status_input">
-                    <input type="text" name="keterangan" placeholder="Alasan..." required class="w-full text-xs font-bold border border-amber-200 rounded-xl py-2.5 px-3 text-center outline-none focus:ring-2 focus:ring-amber-300">
-                    <div class="flex gap-2">
-                        {{-- Ikon Izin: Kalender --}}
-                        <button type="button" onclick="event.stopPropagation(); konfirmasiStatus('Izin')" class="flex-1 bg-amber-400 text-white font-black py-2 rounded-xl text-[10px] hover:bg-amber-500 transition-all flex items-center justify-center gap-1">
-                            <span>📅</span> IZIN
-                        </button>
-                        {{-- Ikon Sakit: Termometer --}}
-                        <button type="button" onclick="event.stopPropagation(); konfirmasiStatus('Sakit')" class="flex-1 bg-rose-500 text-white font-black py-2 rounded-xl text-[10px] hover:bg-rose-600 transition-all flex items-center justify-center gap-1">
-                            <span>🌡️</span> SAKIT
-                        </button>
-                    </div>
-                </form>
-            @else
-                <div class="flex flex-col items-center">
-                    {{-- Ikon dinamis berdasarkan status yang sudah dipilih --}}
-                    <div class="text-4xl mb-2">
-                        @if($cekAbsensi->status == 'Izin') 📅 @elseif($cekAbsensi->status == 'Sakit') 🌡️ @else ✨ @endif
-                    </div>
-                    <h4 class="text-sm font-black {{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? 'text-amber-700' : 'text-emerald-700' }} uppercase">
-                        {{ $cekAbsensi->status == 'Hadir' ? 'DATA AMAN' : $cekAbsensi->status }}
-                    </h4>
-                </div>
-            @endif
+           {{-- CARD 1: INFO KEHADIRAN / FORM (Versi Update Emot) --}}
+<div class="relative overflow-hidden rounded-[2rem] {{ !$cekAbsensi ? 'bg-gradient-to-br from-amber-50 to-orange-100/80 border border-amber-200/60' : 'bg-gradient-to-br from-emerald-50 to-teal-100/80 border border-emerald-200/60' }} p-6 shadow-sm transition-all duration-300 hover:scale-[1.03] active:scale-95 flex flex-col justify-center items-center text-center">
+    @if(!$cekAbsensi)
+        <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-3">INFO KEHADIRAN</p>
+        <form id="formIzinSakit" action="{{ route('absensi.izinSakit') }}" method="POST" class="w-full space-y-2">
+            @csrf
+            <input type="hidden" name="status" id="status_input">
+            <input type="text" name="keterangan" placeholder="Alasan..." required class="w-full text-xs font-bold border border-amber-200 rounded-xl py-2.5 px-3 text-center outline-none focus:ring-2 focus:ring-amber-300">
+            <div class="flex gap-2">
+                <button type="button" onclick="event.stopPropagation(); konfirmasiStatus('Izin')" class="flex-1 bg-amber-400 text-white font-black py-2 rounded-xl text-[10px] hover:bg-amber-500 transition-all flex items-center justify-center gap-1">
+                    <span>📅</span> IZIN
+                </button>
+                <button type="button" onclick="event.stopPropagation(); konfirmasiStatus('Sakit')" class="flex-1 bg-rose-500 text-white font-black py-2 rounded-xl text-[10px] hover:bg-rose-600 transition-all flex items-center justify-center gap-1">
+                    <span>🌡️</span> SAKIT
+                </button>
+            </div>
+        </form>
+    @else
+        <div class="flex flex-col items-center">
+            {{-- EMOTICON DINAMIS CARD 1 --}}
+            <div class="text-5xl mb-2 animate-pulse">
+                @if($cekAbsensi->status == 'Izin')
+                    ✋ @elseif($cekAbsensi->status == 'Sakit')
+                    🤒 @elseif($cekAbsensi->status == 'Hadir')
+                    ✅
+                @else
+                    ✨
+                @endif
+            </div>
+            <h4 class="text-sm font-black {{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? 'text-amber-700' : 'text-emerald-700' }} uppercase">
+                {{ $cekAbsensi->status == 'Hadir' ? 'DATA AMAN' : $cekAbsensi->status }}
+            </h4>
         </div>
+    @endif
+</div>
 
         {{-- CARD 2: KLIK ABSENSI --}}
         <div class="rounded-[2rem] shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-95">
