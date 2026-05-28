@@ -28,9 +28,9 @@
             
             {{-- Sektor Kiri: Penyematan Logo Besar Gagah PT Salttek Dumpang Jaya --}}
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 md:w-14 md:h-14 bg-white rounded-2xl flex items-center justify-center shadow-md border border-slate-100 p-1 transition-transform duration-200 hover:scale-105">
-                    <img src="{{ asset('logo pt salttek dumpang jaya.jpeg') }}" alt="Logo PT Salttek" class="w-full h-full object-contain">
-                </div>
+                <div class="logo-box">
+    <img src="{{ asset('logo.jpeg') }}" alt="Logo PT Salttek">
+</div>
                 <div class="hidden sm:block">
                     <h3 class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">Aplikasi Presensi</h3>
                     <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-tight mt-0.5">PT Salttek Dumpang Jaya</h2>
