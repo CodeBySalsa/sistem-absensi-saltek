@@ -58,27 +58,34 @@
             </div>
         </div>
 
-        {{-- Banner Premium Eksekutif - Total Anggota digabung di sini --}}
-<div class="relative bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-4 md:p-12 rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl mb-6 md:mb-10 overflow-hidden flex flex-row justify-between items-center">
+       {{-- Banner Premium Eksekutif - Pastikan posisi bersih --}}
+<div class="relative bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-4 md:p-12 rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl shadow-indigo-950/10 mb-6 md:mb-10 overflow-hidden flex flex-row justify-between items-center gap-2">
+    {{-- Dekorasi Background --}}
+    <div class="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full blur-3xl opacity-30"></div>
+    <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-emerald-500 rounded-full blur-3xl opacity-20"></div>
     
+    {{-- Konten Utama --}}
     <div class="relative z-10 w-7/12">
-        <span class="px-2 py-0.5 bg-blue-500/20 text-blue-300 text-[6px] md:text-[10px] font-black uppercase tracking-widest rounded-full border border-blue-500/30 inline-block mb-3">Executive Dashboard</span>
-        <h1 class="text-sm md:text-3xl lg:text-4xl font-extrabold tracking-tight uppercase leading-tight">PT Salttek Dumpang Jaya</h1>
-        <p class="text-indigo-200/80 font-medium text-[8px] md:text-sm mt-2">Total Karyawan Terdaftar: <span class="font-bold text-white">{{ $totalKaryawan }} Orang</span></p>
+        <span class="px-2 py-0.5 bg-blue-500/20 text-blue-300 text-[6px] md:text-[10px] font-black uppercase tracking-widest rounded-full border border-blue-500/30 inline-block mb-1 md:mb-3">
+            Pimpinan Access Control
+        </span>
+        <h1 class="text-sm md:text-3xl lg:text-4xl font-extrabold tracking-tight uppercase leading-tight mobile-title">
+            PT Salttek Dumpang Jaya
+        </h1>
+        <p class="text-indigo-200/80 font-medium text-[8px] md:text-sm mt-1 md:mt-2 mobile-sub">
+            Total Karyawan Terdaftar: <span class="font-bold text-white">{{ $totalKaryawan }} Orang</span>
+        </p>
     </div>
 
-    <div class="relative z-10 w-5/12 text-right">
-        <p class="text-[6px] md:text-[9px] font-black text-indigo-300 uppercase tracking-widest mb-0.5">Hari & Tanggal</p>
-        <p class="font-bold text-[8px] md:text-base text-white">{{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
+    {{-- Tanggal (Satu-satunya elemen tanggal di banner) --}}
+    <div class="relative z-10 w-5/12 md:w-auto bg-white/5 backdrop-blur-md px-2 py-1.5 md:px-6 md:py-4 rounded-xl border border-white/10 text-right shrink-0">
+        <p class="text-[6px] md:text-[9px] font-black text-indigo-300 uppercase tracking-widest mb-0.5 whitespace-nowrap">Hari & Tanggal</p>
+        <p class="font-bold text-[8px] md:text-base text-white mobile-sub whitespace-nowrap">
+            {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+        </p>
     </div>
 </div>
 
-    {{-- Card Hari & Tanggal (Diberi efek hover) --}}
-    <div class="relative z-10 w-5/12 md:w-auto bg-white/5 backdrop-blur-md px-2 py-1.5 md:px-6 md:py-4 rounded-xl border border-white/10 text-right shrink-0 transition-all duration-300 hover:scale-105 hover:bg-white/10 hover:shadow-lg cursor-default">
-        <p class="text-[6px] md:text-[9px] font-black text-indigo-300 uppercase tracking-widest mb-0.5 whitespace-nowrap">Hari & Tanggal Monitor</p>
-        <p class="font-bold text-[8px] md:text-base text-white mobile-sub whitespace-nowrap">{{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
-    </div>
-</div>
 
       {{-- Statistik Ringkas - Kembali 3 Kolom --}}
 <div class="grid grid-cols-3 gap-2 md:gap-6 mb-8 md:mb-10">
