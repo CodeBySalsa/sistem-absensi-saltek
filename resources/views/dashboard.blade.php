@@ -147,7 +147,7 @@
                             
                             <div class="space-y-1.5 md:space-y-2">
                                 <h3 class="text-[7px] md:text-[11px] font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-indigo-400/80 italic leading-none">Control Center PT Salttek</h3>
-                                <h1 class="text-sm md:text-4xl font-black tracking-tighter text-white uppercase italic leading-tight">HALO, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">{{ Auth::user()->karyawan->nama_lengkap ?? Auth::user()->name }}</span></h1>
+                                <h1 class="text-sm md:text-4xl font-black tracking-tighter text-white uppercase italic leading-tight">HALO, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">{{ Auth::user()->name }}</span></h1>
                                 <div class="flex flex-row gap-2 mt-2 md:mt-6">
                                     <a href="{{ route('karyawan.index') }}" class="px-2.5 py-1.5 md:px-5 md:py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-[6px] md:text-xs font-black uppercase tracking-wider rounded-lg md:rounded-xl transition-all shadow-lg flex items-center gap-1 whitespace-nowrap"><span>👥</span> DATA KARYAWAN</a>
                                     <a href="{{ route('karyawan.create') }}" class="px-2.5 py-1.5 md:px-5 md:py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-[6px] md:text-xs font-black uppercase tracking-wider rounded-lg md:rounded-xl transition-all shadow-lg flex items-center gap-1 whitespace-nowrap"><span>➕</span> TAMBAH KARYAWAN</a>
@@ -355,7 +355,7 @@
     </div>
 
 </div>
-@endif
+
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
 <div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
@@ -384,7 +384,7 @@
                     {{-- JIKA ADMIN LOGIN --}}
                     @forelse($absensiHariIni as $absen)
                     <tr class="odd:bg-slate-100/80 even:bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
-                        <td class="mobile-padding md:p-6 font-bold text-slate-800 text-[8px] md:text-sm">{{ $absen->user->name }}</td>
+                        <td class="mobile-padding md:p-6 font-bold text-slate-800 text-[8px] md:text-sm">{{$absen->karyawan->nama_lengkap ?? $absen->user->name }}</td>
                         <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-blue-600">{{ $absen->jam_masuk ?? '--:--' }}</td>
                         <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-emerald-600">{{ $absen->jam_keluar ?? '--:--' }}</td>
                         <td class="mobile-padding md:p-6 text-center">
