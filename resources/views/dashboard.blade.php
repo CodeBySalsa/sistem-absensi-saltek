@@ -265,7 +265,7 @@
             @endif
         </div>
     </div>
-@endif
+
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
 <div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
