@@ -735,7 +735,7 @@
             </div>
         </div>
     </div>
-
+@endif
 
     <style>
         .robot-body { animation: robotFloat 3s ease-in-out infinite; }
@@ -1043,7 +1043,7 @@
         setAdminMood('happy');
     }
 </script>
-
+@endif
 
 </x-app-layout>
 
