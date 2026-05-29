@@ -193,10 +193,10 @@
             @endif
 
          {{-- WRAPPER CARD --}}
-<div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6 items-stretch">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 items-stretch">
 
     {{-- CARD 1: INFO KEHADIRAN / FORM (Versi Update Emot) --}}
-    <div class="relative overflow-hidden rounded-[2rem] {{ !$cekAbsensi ? 'bg-gradient-to-br from-amber-50 to-orange-100/80 border border-amber-200/60' : 'bg-gradient-to-br from-emerald-50 to-teal-100/80 border border-emerald-200/60' }} p-6 shadow-sm transition-all duration-300 hover:scale-[1.03] active:scale-95 flex flex-col justify-center items-center text-center h-full">
+    <div class="relative overflow-hidden rounded-[2rem] {{ !$cekAbsensi ? 'bg-gradient-to-br from-amber-50 to-orange-100/80 border border-amber-200/60' : 'bg-gradient-to-br from-emerald-50 to-teal-100/80 border border-emerald-200/60' }} p-5 min-h-[170px] md:min-h-[200px] shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-95 flex flex-col justify-center items-center text-center h-full">
         
         @if(!$cekAbsensi)
             <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-3">
@@ -216,19 +216,19 @@
                     name="keterangan"
                     placeholder="Alasan..."
                     required
-                    class="w-full text-xs font-bold border border-amber-200 rounded-2xl py-3 px-4 text-center outline-none focus:ring-2 focus:ring-amber-300 bg-white">
+                    class="w-full text-xs font-bold border border-amber-200 rounded-2xl py-2.5 px-4 text-center outline-none focus:ring-2 focus:ring-amber-300 bg-white">
 
                 <div class="grid grid-cols-2 gap-3">
 
                     <button type="button"
                         onclick="event.stopPropagation(); konfirmasiStatus('Izin')"
-                        class="bg-amber-400 text-white font-black py-3 rounded-2xl text-xs hover:bg-amber-500 transition-all flex items-center justify-center gap-2 shadow-md">
+                        class="bg-amber-400 text-white font-black py-2.5 rounded-2xl text-xs hover:bg-amber-500 transition-all flex items-center justify-center gap-2 shadow-md">
                         <span>📅</span> IZIN
                     </button>
 
                     <button type="button"
                         onclick="event.stopPropagation(); konfirmasiStatus('Sakit')"
-                        class="bg-rose-500 text-white font-black py-3 rounded-2xl text-xs hover:bg-rose-600 transition-all flex items-center justify-center gap-2 shadow-md">
+                        class="bg-rose-500 text-white font-black py-2.5 rounded-2xl text-xs hover:bg-rose-600 transition-all flex items-center justify-center gap-2 shadow-md">
                         <span>🌡️</span> SAKIT
                     </button>
 
@@ -239,7 +239,7 @@
 
             <div class="flex flex-col items-center justify-center h-full">
 
-                <div class="text-6xl mb-3 animate-pulse">
+                <div class="text-5xl mb-2 animate-pulse">
                     @if($cekAbsensi->status == 'Izin')
                         📝
                     @elseif($cekAbsensi->status == 'Sakit')
@@ -251,7 +251,7 @@
                     @endif
                 </div>
 
-                <h4 class="text-lg font-black {{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? 'text-amber-700' : 'text-emerald-700' }} uppercase">
+                <h4 class="text-base font-black {{ in_array($cekAbsensi->status, ['Izin', 'Sakit']) ? 'text-amber-700' : 'text-emerald-700' }} uppercase">
                     {{ $cekAbsensi->status == 'Hadir' ? 'DATA AMAN' : $cekAbsensi->status }}
                 </h4>
 
@@ -261,13 +261,13 @@
     </div>
 
     {{-- CARD 2: KLIK ABSENSI --}}
-    <div class="rounded-[2rem] shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-95 h-full">
+    <div class="rounded-[2rem] shadow-lg overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-95 h-full">
 
         @if($isMinggu)
 
-            <div class="bg-slate-800 text-white h-full flex flex-col items-center justify-center p-6 text-center min-h-[260px]">
-                <span class="text-5xl mb-3">⏱️</span>
-                <h4 class="font-black uppercase text-lg tracking-widest">
+            <div class="bg-slate-800 text-white h-full flex flex-col items-center justify-center p-5 text-center min-h-[170px] md:min-h-[200px]">
+                <span class="text-4xl mb-2">⏱️</span>
+                <h4 class="font-black uppercase text-base tracking-widest">
                     SYSTEM OFF
                 </h4>
             </div>
@@ -280,14 +280,14 @@
 
             @if(!$cekAbsensi)
 
-                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white h-full min-h-[260px] p-6 flex flex-col items-center justify-center cursor-pointer text-center"
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white h-full min-h-[170px] md:min-h-[200px] p-5 flex flex-col items-center justify-center cursor-pointer text-center"
                     onclick="handleAbsensi()">
 
-                    <div class="text-7xl mb-4 animate-bounce">
+                    <div class="text-6xl mb-3 animate-bounce">
                         🚀
                     </div>
 
-                    <h4 class="font-black uppercase text-lg tracking-widest">
+                    <h4 class="font-black uppercase text-base tracking-widest">
                         KLIK PRESENSI
                     </h4>
 
@@ -295,13 +295,13 @@
 
             @elseif(in_array($cekAbsensi->status, ['Izin', 'Sakit']))
 
-                <div class="bg-gray-200 text-gray-600 h-full min-h-[260px] p-6 flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-200 text-gray-600 h-full min-h-[170px] md:min-h-[200px] p-5 flex flex-col items-center justify-center text-center">
 
-                    <div class="text-6xl mb-4">
+                    <div class="text-5xl mb-3">
                         🌡️
                     </div>
 
-                    <h4 class="font-black uppercase text-lg tracking-tight">
+                    <h4 class="font-black uppercase text-base tracking-tight">
                         STATUS: {{ $cekAbsensi->status }}
                     </h4>
 
@@ -309,14 +309,14 @@
 
             @else
 
-                <div class="h-full min-h-[260px] flex flex-col items-center justify-center cursor-pointer text-center p-6 {{ $jamSekarang < 17 ? 'bg-rose-100 text-rose-700' : 'bg-blue-600 text-white' }}"
+                <div class="h-full min-h-[170px] md:min-h-[200px] flex flex-col items-center justify-center cursor-pointer text-center p-5 {{ $jamSekarang < 17 ? 'bg-rose-100 text-rose-700' : 'bg-blue-600 text-white' }}"
                     onclick="handlePulang({{ $jamSekarang }})">
 
-                    <div class="text-7xl mb-4">
+                    <div class="text-6xl mb-3">
                         🏠
                     </div>
 
-                    <h4 class="font-black uppercase text-lg tracking-tight">
+                    <h4 class="font-black uppercase text-base tracking-tight">
                         {{ $jamSekarang < 17 ? 'BELUM WAKTUNYA' : 'KLIK PULANG' }}
                     </h4>
 
