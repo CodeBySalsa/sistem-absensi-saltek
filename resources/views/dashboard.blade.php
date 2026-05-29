@@ -187,9 +187,9 @@
         <p class="text-[5px] md:text-[10px] font-bold text-rose-500/70 uppercase tracking-wider mt-1">SAKIT</p>
     </div>
 </div>
-                        </div>
-                    </div>
-                </div>
+   </div>
+         </div>
+        </div>
             @endif
 
            {{-- CARD 1: INFO KEHADIRAN / FORM (Versi Update Emot) --}}
@@ -733,7 +733,7 @@
             </div>
         </div>
     </div>
-
+@endif
     <style>
         .robot-body { animation: robotFloat 3s ease-in-out infinite; }
         @keyframes robotFloat {
