@@ -192,7 +192,7 @@
         </div>
             @endif
 
-           {{-- CARD 1: INFO KEHADIRAN / FORM (Versi Update Emot) --}}
+          {{-- CARD 1: INFO KEHADIRAN / FORM (Versi Update Emot) --}}
         <div class="relative overflow-hidden rounded-[2rem] {{ !$cekAbsensi ? 'bg-gradient-to-br from-amber-50 to-orange-100/80 border border-amber-200/60' : 'bg-gradient-to-br from-emerald-50 to-teal-100/80 border border-emerald-200/60' }} p-6 shadow-sm transition-all duration-300 hover:scale-[1.03] active:scale-95 flex flex-col justify-center items-center text-center">
             @if(!$cekAbsensi)
                 <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-3">INFO KEHADIRAN</p>
@@ -214,8 +214,10 @@
                     {{-- EMOTICON DINAMIS CARD 1 --}}
                     <div class="text-5xl mb-2 animate-pulse">
                         @if($cekAbsensi->status == 'Izin')
-                            ✋ @elseif($cekAbsensi->status == 'Sakit')
-                            🤒 @elseif($cekAbsensi->status == 'Hadir')
+                            📝
+                        @elseif($cekAbsensi->status == 'Sakit')
+                            🤒
+                        @elseif($cekAbsensi->status == 'Hadir')
                             ✅
                         @else
                             ✨
@@ -734,6 +736,7 @@
         </div>
     </div>
 @endif
+
     <style>
         .robot-body { animation: robotFloat 3s ease-in-out infinite; }
         @keyframes robotFloat {
