@@ -109,9 +109,9 @@ class KaryawanController extends Controller
         $bulanIni = Carbon::now('Asia/Jakarta')->month;
         $tahunIni = Carbon::now('Asia/Jakarta')->year;
 
-        $absensiHariIni = Absensi::with('karyawan')
-                            ->whereDate('tanggal', $hariIni)
-                            ->get();
+        $absensiHariIni = Absensi::with('karyawan.user') // Pastikan relasi ini ada di Model Absensi
+                    ->whereDate('tanggal', $hariIni)
+                    ->get();
 
         $totalHadir = $absensiHariIni->whereIn('status', ['Hadir', 'Terlambat', 'Selesai'])->count();
         $totalIzin = $absensiHariIni->where('status', 'Izin')->count();
