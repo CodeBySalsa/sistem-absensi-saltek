@@ -1042,6 +1042,7 @@
         setAdminMood('happy');
     }
 </script>
+@endif
 
 </x-app-layout>
 
