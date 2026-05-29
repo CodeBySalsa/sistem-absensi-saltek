@@ -329,7 +329,6 @@
         </table>
     </div>
 </div>
-
 {{-- 6. REKAPITULASI BULANAN --}}
 @if(Auth::user()->role == 'admin')
     <div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden mb-10 animate-fade-in w-full">
