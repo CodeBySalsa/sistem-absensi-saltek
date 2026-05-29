@@ -193,6 +193,7 @@
             @endif
 
       {{-- WRAPPER CARD --}}
+      @if(Auth::user()->role === 'karyawan')
 <div class="grid grid-cols-2 gap-3 mt-6 items-stretch">
 
     {{-- CARD 1 --}}
@@ -354,6 +355,7 @@
     </div>
 
 </div>
+@endif
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
 <div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
