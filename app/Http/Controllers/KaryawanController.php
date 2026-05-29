@@ -39,30 +39,36 @@ class KaryawanController extends Controller
             'hadirHariIni', 
             'izinSakit'
         ));
-    }
 
-    // Fungsi untuk menampilkan halaman tambah karyawan
-    public function create()
-    {
-        $users = User::all();
-        return view('karyawan.create', compact('users'));
-    }
+   public function create()
+{
+    // Mengambil user yang ID-nya belum ada di tabel karyawans
+    $karyawanUserIds = Karyawan::pluck('user_id')->toArray();
+    $users = User::whereNotIn('id', $karyawanUserIds)->get();
+    
+    return view('karyawan.create', compact('users'));
+}
+
 
     // Fungsi untuk menyimpan data karyawan baru
     public function store(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'required|unique:karyawans,user_id',
-            'nama_lengkap' => 'required',
-            'jabatan' => 'required',
-            'nip' => 'required|unique:karyawans,nip',
-            'no_hp' => 'nullable', // Tambahkan validasi No HP (boleh kosong)
-        ]);
+{
+    $request->validate([
+        'user_id' => 'required|unique:karyawans,user_id',
+        'nama_lengkap' => 'required',
+        'jabatan' => 'required',
+        'nip' => 'required|unique:karyawans,nip',
+        'no_hp' => 'required|unique:karyawans,no_hp', // Tambahkan unique di sini
+    ], [
+        'user_id.unique' => 'Akun ini sudah terdaftar sebagai karyawan.',
+        'nip.unique' => 'NIP ini sudah digunakan oleh karyawan lain.',
+        'no_hp.unique' => 'Nomor WhatsApp ini sudah terdaftar di sistem.',
+    ]);
 
-        Karyawan::create($request->all());
+    Karyawan::create($request->all());
 
-        return redirect()->route('karyawan.index')->with('success', 'Data karyawan berhasil ditambahkan!');
-    }
+    return redirect()->route('karyawan.index')->with('success', 'Data karyawan berhasil ditambahkan!');
+}
 
     // --- BAGIAN EDIT, UPDATE, DESTROY ---
 
@@ -75,24 +81,22 @@ class KaryawanController extends Controller
     }
 
     // Fungsi untuk menyimpan perubahan data
-    public function update(Request $request, $id)
-    {
-        $karyawan = Karyawan::findOrFail($id);
+   public function update(Request $request, $id)
+{
+    $karyawan = Karyawan::findOrFail($id);
 
-        $request->validate([
-            'user_id' => 'required|unique:karyawans,user_id,' . $id,
-            'nama_lengkap' => 'required',
-            'jabatan' => 'required',
-            'nip' => 'required|unique:karyawans,nip,' . $id,
-            'no_hp' => 'nullable', // Pastikan no_hp masuk validasi agar bisa di-update
-        ]);
+    $request->validate([
+        'user_id' => 'required|unique:karyawans,user_id,' . $id,
+        'nama_lengkap' => 'required',
+        'jabatan' => 'required',
+        'nip' => 'required|unique:karyawans,nip,' . $id,
+        'no_hp' => 'required|unique:karyawans,no_hp,' . $id, // Tambahkan unique dengan id
+    ]);
 
-        // Menggunakan $request->all() akan otomatis mengambil no_hp dari form edit.blade.php
-        $karyawan->update($request->all());
+    $karyawan->update($request->all());
 
-        return redirect()->route('karyawan.index')->with('success', 'Data karyawan berhasil diperbarui!');
-    }
-
+    return redirect()->route('karyawan.index')->with('success', 'Data berhasil diperbarui!');
+}
     // Fungsi untuk menghapus data
     public function destroy($id)
     {
