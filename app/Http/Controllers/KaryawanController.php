@@ -34,13 +34,18 @@ class KaryawanController extends Controller
         ));
     } // <--- KURUNG KURAWAL INI TADI HILANG
 
-    public function create()
-    {
-        $karyawanUserIds = Karyawan::pluck('user_id')->toArray();
-        $users = User::whereNotIn('id', $karyawanUserIds)->get();
-        
-        return view('karyawan.create', compact('users'));
-    }
+   public function create()
+{
+    // 1. Ambil semua ID user yang sudah terdaftar sebagai karyawan agar tidak muncul lagi
+    $karyawanUserIds = Karyawan::pluck('user_id')->toArray();
+    
+    // 2. Ambil user yang role-nya adalah 'karyawan' DAN belum terdaftar di tabel karyawan
+    $users = User::where('role', 'karyawan') // Hanya ambil yang rolenya 'karyawan'
+                 ->whereNotIn('id', $karyawanUserIds)
+                 ->get();
+    
+    return view('karyawan.create', compact('users'));
+}
 
     public function store(Request $request)
     {
