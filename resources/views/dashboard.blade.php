@@ -359,8 +359,7 @@
 @endif
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
-<div class="mt-8 w-full max-w-7xl mx-auto bg-indigo-50 rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
-
+<div class="mt-8 w-full bg-indigo-50 rounded-3xl shadow-xl border border-indigo-100 overflow-hidden">
     <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
         <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
         <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
@@ -369,18 +368,17 @@
     </div>
 
     <div class="w-full overflow-x-auto">
-        <table class="w-full text-left md:text-sm">
-
+        <table class="w-full table-fixed text-left md:text-sm">
             {{-- PERUBAHAN DISINI: Warna kembali ke gelap (slate-900) dan ditambahkan radius atas --}}
-            <thead class="bg-slate-900 text-white rounded-t-[2.5rem]">
+            <thead class="bg-slate-900 text-white ">
                 <tr>
-                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left rounded-tl-[2.5rem]">
+                    <th class="w-[30%] p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left rounded-tl-[2.5rem]">
                         {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
                     </th>
                     <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Jam Masuk</th>
                     <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Jam Pulang</th>
                     <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Status</th>
-                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center rounded-tr-[2.5rem]">Keterangan</th>
+                    <th class="w-[25%] p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center rounded-tr-[2.5rem]">Keterangan</th>
                 </tr>
             </thead>
             
