@@ -366,8 +366,8 @@
         </h3>
     </div>
 
-    <div class="w-full overflow-hidden rounded-t-xl md:rounded-t-[2rem]">
-    <table class="w-full table-fixed text-left md:text-sm border-collapse">
+   <div class="w-full overflow-x-auto rounded-t-xl md:rounded-t-[2rem]">
+    <table class="w-full min-w-full text-left md:text-sm border-collapse">
             <thead>
     <tr class="bg-slate-900 text-white">
 
@@ -393,7 +393,7 @@
 
     </tr>
 </thead>
-            <tbody class="divide-y divide-slate-200/70">
+            <tbody class="divide-y divide-slate-200/70 bg-white">
                 {{-- Isi TBody tetap sama sesuai data Anda --}}
                 @if(Auth::user()->role == 'admin')
                     @forelse($absensiHariIni as $absen)
@@ -481,7 +481,7 @@
 
 {{-- 6. REKAPITULASI BULANAN --}}
 @if(Auth::user()->role == 'admin')
-    <div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden mb-10 animate-fade-in w-full">
+    <div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden w-full">
         <div class="p-4 md:p-8 border-b border-indigo-100/70 flex items-center gap-2 md:gap-3">
             <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-950 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📊</div>
             <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
