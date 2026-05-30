@@ -359,7 +359,7 @@
 @endif
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
-<div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
+<div class="mt-8 max-w-5xl mx-auto bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
 
     <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
         <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">
