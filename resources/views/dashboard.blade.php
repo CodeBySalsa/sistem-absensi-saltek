@@ -358,7 +358,7 @@
 @endif
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
-<div class="mt-8 w-full bg-indigo-50 rounded-3xl shadow-xl border border-indigo-100 overflow-hidden">
+<div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden w-full">
     <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
         <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
         <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
@@ -366,33 +366,35 @@
         </h3>
     </div>
 
-    <div class="w-full overflow-hidden rounded-t-xl md:rounded-t-[2rem]">
-    <table class="w-full table-fixed text-left md:text-sm border-collapse">
-            <thead>
-    <tr class="bg-slate-900 text-white">
+    <div class="w-full overflow-x-auto rounded-t-xl md:rounded-t-[2rem]">
+    <table class="w-full min-w-[650px] md:min-w-full text-left md:text-sm border-collapse">
 
-        <th class="w-[30%] p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left rounded-tl-xl md:rounded-tl-[2rem]">
-            {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
-        </th>
+        <thead>
+            <tr class="bg-slate-900 text-white">
 
-        <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
-            Jam Masuk
-        </th>
+                <th class="w-[30%] p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left rounded-tl-xl md:rounded-tl-[2rem]">
+                    {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
+                </th>
 
-        <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
-            Jam Pulang
-        </th>
+                <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
+                    Jam Masuk
+                </th>
 
-        <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
-            Status
-        </th>
+                <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
+                    Jam Pulang
+                </th>
 
-        <th class="w-[25%] p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center rounded-tr-xl md:rounded-tr-[2rem]">
-            Keterangan
-        </th>
+                <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
+                    Status
+                </th>
 
-    </tr>
-</thead>
+                <th class="w-[25%] p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center rounded-tr-xl md:rounded-tr-[2rem]">
+                    Keterangan
+                </th>
+
+            </tr>
+        </thead>
+
             <tbody class="divide-y divide-slate-200/70">
                 {{-- Isi TBody tetap sama sesuai data Anda --}}
                 @if(Auth::user()->role == 'admin')
