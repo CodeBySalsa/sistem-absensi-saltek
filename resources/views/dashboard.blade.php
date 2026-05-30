@@ -481,84 +481,90 @@
 
 {{-- 6. REKAPITULASI BULANAN --}}
 @if(Auth::user()->role == 'admin')
-<div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden w-full pb-2 md:pb-0">
 
-    <div class="p-4 md:p-8 border-b border-indigo-100/70 flex items-center gap-2 md:gap-3">
-        <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-950 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">
-            📊
-        </div>
+<div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden w-full">
 
-        <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
-            REKAPITULASI ABSENSI KARYAWAN - {{ strtoupper($namaBulan ?? '') }} {{ date('Y') }}
-        </h3>
+```
+<div class="p-4 md:p-8 border-b border-indigo-100/70 flex items-center gap-2 md:gap-3">
+    <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-950 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">
+        📊
     </div>
 
-    <div class="w-full px-2 md:px-0 pb-2 md:pb-0">
-        <div class="overflow-hidden rounded-[1.5rem] md:rounded-[2rem]">
+    <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
+        REKAPITULASI ABSENSI KARYAWAN - {{ strtoupper($namaBulan ?? '') }} {{ date('Y') }}
+    </h3>
+</div>
 
-            <table class="w-full text-left mobile-table-text md:text-sm">
+<div class="w-full px-2 md:px-0 pb-2 md:pb-0">
 
-                <thead>
-                    <tr class="bg-slate-900 text-white">
-                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left w-4/12 md:w-3/12 pl-5 md:pl-8 rounded-tl-xl md:rounded-tl-[2rem]">
-                            Nama Karyawan
-                        </th>
+    <div class="overflow-hidden rounded-xl md:rounded-[2rem]">
 
-                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-emerald-400">
-                            Hadir
-                        </th>
+        <table class="w-full text-left mobile-table-text md:text-sm">
 
-                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-blue-400">
-                            Izin
-                        </th>
+            <thead>
+                <tr class="bg-slate-900 text-white">
+                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left w-4/12 md:w-3/12 pl-5 md:pl-8">
+                        Nama Karyawan
+                    </th>
 
-                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-rose-400 rounded-tr-xl md:rounded-tr-[2rem]">
-                            Sakit
-                        </th>
-                    </tr>
-                </thead>
+                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-emerald-400">
+                        Hadir
+                    </th>
 
-                <tbody class="divide-y divide-slate-200/70">
+                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-blue-400">
+                        Izin
+                    </th>
 
-                    @foreach($rekapBulanan ?? [] as $rekap)
+                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-rose-400">
+                        Sakit
+                    </th>
+                </tr>
+            </thead>
 
-                    <tr class="odd:bg-slate-100/80 even:bg-indigo-50/50 hover:bg-indigo-100 transition-all duration-300">
+            <tbody class="divide-y divide-slate-200/70 bg-white">
 
-                        <td class="mobile-padding md:p-6 font-bold text-slate-800 uppercase text-left tracking-wide pl-5 md:pl-8">
-                            {{ $rekap->nama_lengkap }}
-                        </td>
+                @foreach($rekapBulanan ?? [] as $rekap)
 
-                        <td class="mobile-padding md:p-6 text-center">
-                            <span class="text-emerald-600 font-black font-mono text-[11px] md:text-sm">
-                                {{ $rekap->total_hadir }}
-                            </span>
-                        </td>
+                <tr class="odd:bg-slate-100 even:bg-white hover:bg-indigo-100 transition-all duration-300">
 
-                        <td class="mobile-padding md:p-6 text-center">
-                            <span class="text-blue-600 font-black font-mono text-[11px] md:text-sm">
-                                {{ $rekap->total_izin }}
-                            </span>
-                        </td>
+                    <td class="mobile-padding md:p-6 font-bold text-slate-800 uppercase text-left mobile-truncate tracking-wide pl-5 md:pl-8">
+                        {{ $rekap->nama_lengkap }}
+                    </td>
 
-                        <td class="mobile-padding md:p-6 text-center">
-                            <span class="text-rose-600 font-black font-mono text-[11px] md:text-sm">
-                                {{ $rekap->total_sakit }}
-                            </span>
-                        </td>
+                    <td class="mobile-padding md:p-6 text-center">
+                        <span class="text-emerald-600 font-black font-mono text-[11px] md:text-sm">
+                            {{ $rekap->total_hadir }}
+                        </span>
+                    </td>
 
-                    </tr>
+                    <td class="mobile-padding md:p-6 text-center">
+                        <span class="text-blue-600 font-black font-mono text-[11px] md:text-sm">
+                            {{ $rekap->total_izin }}
+                        </span>
+                    </td>
 
-                    @endforeach
+                    <td class="mobile-padding md:p-6 text-center">
+                        <span class="text-rose-600 font-black font-mono text-[11px] md:text-sm">
+                            {{ $rekap->total_sakit }}
+                        </span>
+                    </td>
 
-                </tbody>
+                </tr>
 
-            </table>
+                @endforeach
 
-        </div>
+            </tbody>
+
+        </table>
+
     </div>
 
 </div>
+```
+
+</div>
 @endif
+
    {{-- MODAL ABSENSI --}}
 <div id="absensiModal" class="fixed inset-0 z-[999] hidden">
     <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAbsensiModal()"></div>
