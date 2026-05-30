@@ -358,10 +358,9 @@
 </div>
 @endif
 
-{{-- 5. TABEL UTAMA: LOG MINGGUAN (Dibuat agar sejajar dengan card di atas) --}}
-<div class="mt-8 w-full max-w-7xl mx-auto bg-white shadow-xl border border-indigo-100 rounded-[2.5rem] overflow-hidden">
+{{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
+<div class="mt-8 w-full max-w-7xl mx-auto bg-indigo-50 rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
 
-    {{-- HEADER CARD --}}
     <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
         <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
         <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
@@ -369,62 +368,106 @@
         </h3>
     </div>
 
-    {{-- TABLE WRAPPER: Dibuat agar pas di dalam card --}}
-    <div class="w-full">
-        <table class="w-full text-left border-collapse">
-            <thead class="bg-slate-900 text-white">
+    <div class="w-full overflow-x-auto">
+        <table class="w-full text-left md:text-sm">
+
+            {{-- PERUBAHAN DISINI: Warna kembali ke gelap (slate-900) dan ditambahkan radius atas --}}
+            <thead class="bg-slate-900 text-white rounded-t-[2.5rem]">
                 <tr>
-                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-left">
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left rounded-tl-[2.5rem]">
                         {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
                     </th>
-                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center">Jam Masuk</th>
-                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center">Jam Pulang</th>
-                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center">Status</th>
-                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center">Keterangan</th>
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Jam Masuk</th>
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Jam Pulang</th>
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Status</th>
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center rounded-tr-[2.5rem]">Keterangan</th>
                 </tr>
             </thead>
             
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-200/70">
+                {{-- Isi TBody tetap sama sesuai data Anda --}}
                 @if(Auth::user()->role == 'admin')
                     @forelse($absensiHariIni as $absen)
-                    <tr class="hover:bg-indigo-50/50 transition-colors">
-                        <td class="px-6 py-4 font-bold text-slate-800 text-sm">{{ $absen->karyawan->nama_lengkap ?? $absen->user->name }}</td>
-                        <td class="px-6 py-4 text-center font-mono font-bold text-blue-600 text-sm">{{ $absen->jam_masuk ?? '--:--' }}</td>
-                        <td class="px-6 py-4 text-center font-mono font-bold text-emerald-600 text-sm">{{ $absen->jam_keluar ?? '--:--' }}</td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase {{ in_array($absen->status,['Terlambat','Sakit']) ? 'bg-rose-100 text-rose-600' : ($absen->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600') }}">
+                    <tr class="odd:bg-slate-100/80 even:bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
+                        <td class="p-4 font-bold text-slate-800 text-[8px] md:text-sm">{{ $absen->karyawan->nama_lengkap ?? $absen->user->name }}</td>
+                        <td class="p-4 text-center font-mono font-bold text-blue-600 text-[7px] md:text-sm">{{ $absen->jam_masuk ?? '--:--' }}</td>
+                        <td class="p-4 text-center font-mono font-bold text-emerald-600 text-[7px] md:text-sm">{{ $absen->jam_keluar ?? '--:--' }}</td>
+                        <td class="p-4 text-center">
+                            <span class="px-2 py-1 rounded-full text-[6px] md:text-[9px] font-black uppercase {{ in_array($absen->status,['Terlambat','Sakit']) ? 'bg-rose-100 text-rose-600' : ($absen->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600') }}">
                                 {{ $absen->status }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center italic text-slate-500 text-sm">{{ $absen->keterangan ?? '-' }}</td>
+                        <td class="p-4 text-center italic text-gray-600 text-[7px] md:text-xs">{{ $absen->keterangan ?? '-' }}</td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas.</td></tr>
+                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas hari ini.</td></tr>
                     @endforelse
                 @else
+                
                     {{-- KARYAWAN --}}
                     @forelse($absensis as $log)
-                    <tr class="hover:bg-indigo-50/50 transition-colors">
-                        <td class="px-6 py-4">
-                            <div class="font-bold text-slate-800 text-sm">{{ \Carbon\Carbon::parse($log->tanggal)->locale('id')->translatedFormat('l') }}</div>
-                            <div class="text-xs text-slate-400">{{ \Carbon\Carbon::parse($log->tanggal)->translatedFormat('d F Y') }}</div>
+
+                    <tr class="odd:bg-slate-100/80 even:bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
+
+                        <td class="mobile-padding md:p-4 font-bold text-slate-800 text-[8px] md:text-sm break-words">
+
+                            {{-- HARI + TANGGAL --}}
+                            @php
+                                $tanggal = \Carbon\Carbon::parse($log->tanggal);
+                            @endphp
+
+                            <div class="font-bold">
+                                {{ $tanggal->locale('id')->translatedFormat('l') }}
+                            </div>
+
+                            <div class="text-gray-500 text-[7px] md:text-xs">
+                                {{ $tanggal->translatedFormat('d F Y') }}
+                            </div>
+
                         </td>
-                        <td class="px-6 py-4 text-center font-mono font-bold text-blue-600 text-sm">{{ $log->jam_masuk ?? '--:--' }}</td>
-                        <td class="px-6 py-4 text-center font-mono font-bold text-emerald-600 text-sm">{{ $log->jam_keluar ?? '--:--' }}</td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase {{ $log->status == 'Terlambat' ? 'bg-rose-100 text-rose-600' : ($log->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600') }}">
+
+                        <td class="mobile-padding md:p-4 text-center font-mono text-[7px] md:text-sm font-bold text-blue-600">
+                            {{ $log->jam_masuk ?? '--:--' }}
+                        </td>
+
+                        <td class="mobile-padding md:p-4 text-center font-mono text-[7px] md:text-sm font-bold text-emerald-600">
+                            {{ $log->jam_keluar ?? '--:--' }}
+                        </td>
+
+                        <td class="mobile-padding md:p-4 text-center">
+                            <span class="px-2 py-1 rounded-full text-[6px] md:text-[9px] font-black uppercase
+                            {{ $log->status == 'Terlambat'
+                                ? 'bg-rose-100 text-rose-600'
+                                : ($log->status == 'Hadir'
+                                    ? 'bg-emerald-100 text-emerald-600'
+                                    : 'bg-amber-100 text-amber-600') }}">
                                 {{ $log->status }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center italic text-slate-500 text-sm">{{ $log->keterangan ?? '-' }}</td>
+
+                        <td class="mobile-padding md:p-4 text-center text-[7px] md:text-xs italic text-gray-600 break-words">
+                            {{ $log->keterangan ?? '-' }}
+                        </td>
+
                     </tr>
+
                     @empty
-                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas minggu ini.</td></tr>
+
+                    <tr>
+                        <td colspan="5" class="p-8 text-center text-slate-400 italic">
+                            Belum ada aktivitas minggu ini.
+                        </td>
+                    </tr>
+
                     @endforelse
+
                 @endif
+
             </tbody>
+
         </table>
     </div>
+
 </div>
 
 {{-- 6. REKAPITULASI BULANAN --}}
