@@ -1132,8 +1132,6 @@
         // ... (kode goyang Anda)
         setAdminMood('happy');
     }
-</script>
-
-
+</script
 </x-app-layout>
 
