@@ -359,8 +359,8 @@
 @endif
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
-{{-- Tambahkan max-w-4xl dan mx-auto --}}
-<div class="mt-8 w-full max-w-4xl mx-auto bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
+{{-- UBAH 'max-w-4xl' MENJADI 'max-w-7xl' AGAR LEBARNYA SAMA DENGAN CARD LAIN --}}
+<div class="mt-8 w-full max-w-7xl mx-auto bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
 
     <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
         <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
@@ -369,13 +369,13 @@
         </h3>
     </div>
 
-    {{-- Gunakan overflow-x-auto agar aman di HP --}}
     <div class="w-full overflow-x-auto">
-        {{-- Hapus table-fixed, ganti jadi w-full saja --}}
+        {{-- Hapus 'table-fixed' agar tabel tidak kaku dan mengikuti lebar container --}}
         <table class="w-full text-left md:text-sm">
 
             <thead class="bg-slate-900 text-white">
                 <tr>
+                    {{-- Hapus class w-[...%] agar kolom menyesuaikan isi secara otomatis --}}
                     <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left">
                         {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
                     </th>
@@ -385,6 +385,7 @@
                     <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Keterangan</th>
                 </tr>
             </thead>
+            
             <tbody class="divide-y divide-slate-200/70">
 
                 @if(Auth::user()->role == 'admin')
