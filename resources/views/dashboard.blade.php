@@ -358,9 +358,10 @@
 </div>
 @endif
 
-{{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
+{{-- 5. TABEL UTAMA: LOG MINGGUAN (Dibuat agar sejajar dengan card di atas) --}}
 <div class="mt-8 w-full max-w-7xl mx-auto bg-white shadow-xl border border-indigo-100 rounded-[2.5rem] overflow-hidden">
 
+    {{-- HEADER CARD --}}
     <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
         <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
         <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
@@ -368,18 +369,18 @@
         </h3>
     </div>
 
-    <div class="w-full overflow-x-auto">
+    {{-- TABLE WRAPPER: Dibuat agar pas di dalam card --}}
+    <div class="w-full">
         <table class="w-full text-left border-collapse">
-            {{-- Header dengan warna slate-900 dan radius agar melengkung --}}
             <thead class="bg-slate-900 text-white">
                 <tr>
-                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-left rounded-tl-[2rem]">
+                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-left">
                         {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
                     </th>
                     <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center">Jam Masuk</th>
                     <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center">Jam Pulang</th>
                     <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center">Status</th>
-                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center rounded-tr-[2rem]">Keterangan</th>
+                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center">Keterangan</th>
                 </tr>
             </thead>
             
@@ -398,7 +399,7 @@
                         <td class="px-6 py-4 text-center italic text-slate-500 text-sm">{{ $absen->keterangan ?? '-' }}</td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas hari ini.</td></tr>
+                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas.</td></tr>
                     @endforelse
                 @else
                     {{-- KARYAWAN --}}
