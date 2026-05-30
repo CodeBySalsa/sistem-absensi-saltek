@@ -374,29 +374,37 @@
         </h3>
     </div>
 
-    <div class="overflow-x-hidden">
+    <div class="overflow-hidden w-full">
         <table class="w-full table-fixed text-left mobile-table-text md:text-sm">
+
+            <colgroup>
+                <col style="width:25%">
+                <col style="width:15%">
+                <col style="width:15%">
+                <col style="width:15%">
+                <col style="width:30%">
+            </colgroup>
 
             <thead class="bg-slate-900 text-white">
                 <tr>
 
-                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left w-[20%]">
+                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left">
                         {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
                     </th>
 
-                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-[15%]">
+                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
                         Masuk
                     </th>
 
-                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-[15%]">
+                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
                         Pulang
                     </th>
 
-                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-[15%]">
+                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
                         Status
                     </th>
 
-                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-[35%]">
+                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
                         Keterangan
                     </th>
 
@@ -407,7 +415,6 @@
 
                 @if(Auth::user()->role == 'admin')
 
-                    {{-- ADMIN --}}
                     @forelse($absensiHariIni as $absen)
 
                     <tr class="odd:bg-slate-100/80 even:bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
@@ -453,7 +460,6 @@
 
                 @else
 
-                    {{-- KARYAWAN --}}
                     @forelse($absensis as $log)
 
                     <tr class="odd:bg-slate-100/80 even:bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
