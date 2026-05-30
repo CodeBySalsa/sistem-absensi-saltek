@@ -370,7 +370,7 @@
 
     <div class="w-full overflow-x-auto">
         <table class="w-full text-left border-collapse">
-            {{-- Header dengan warna slate-900 (tetap) dan radius agar tidak kaku --}}
+            {{-- Header dengan warna slate-900 dan radius agar melengkung --}}
             <thead class="bg-slate-900 text-white">
                 <tr>
                     <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-left rounded-tl-[2rem]">
@@ -398,9 +398,10 @@
                         <td class="px-6 py-4 text-center italic text-slate-500 text-sm">{{ $absen->keterangan ?? '-' }}</td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas.</td></tr>
+                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas hari ini.</td></tr>
                     @endforelse
                 @else
+                    {{-- KARYAWAN --}}
                     @forelse($absensis as $log)
                     <tr class="hover:bg-indigo-50/50 transition-colors">
                         <td class="px-6 py-4">
@@ -417,73 +418,12 @@
                         <td class="px-6 py-4 text-center italic text-slate-500 text-sm">{{ $log->keterangan ?? '-' }}</td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas.</td></tr>
+                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas minggu ini.</td></tr>
                     @endforelse
-                @else
-                    {{-- KARYAWAN --}}
-                    @forelse($absensis as $log)
-
-                    <tr class="odd:bg-slate-100/80 even:bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
-
-                        <td class="mobile-padding md:p-4 font-bold text-slate-800 text-[8px] md:text-sm break-words">
-
-                            {{-- HARI + TANGGAL --}}
-                            @php
-                                $tanggal = \Carbon\Carbon::parse($log->tanggal);
-                            @endphp
-
-                            <div class="font-bold">
-                                {{ $tanggal->locale('id')->translatedFormat('l') }}
-                            </div>
-
-                            <div class="text-gray-500 text-[7px] md:text-xs">
-                                {{ $tanggal->translatedFormat('d F Y') }}
-                            </div>
-
-                        </td>
-
-                        <td class="mobile-padding md:p-4 text-center font-mono text-[7px] md:text-sm font-bold text-blue-600">
-                            {{ $log->jam_masuk ?? '--:--' }}
-                        </td>
-
-                        <td class="mobile-padding md:p-4 text-center font-mono text-[7px] md:text-sm font-bold text-emerald-600">
-                            {{ $log->jam_keluar ?? '--:--' }}
-                        </td>
-
-                        <td class="mobile-padding md:p-4 text-center">
-                            <span class="px-2 py-1 rounded-full text-[6px] md:text-[9px] font-black uppercase
-                            {{ $log->status == 'Terlambat'
-                                ? 'bg-rose-100 text-rose-600'
-                                : ($log->status == 'Hadir'
-                                    ? 'bg-emerald-100 text-emerald-600'
-                                    : 'bg-amber-100 text-amber-600') }}">
-                                {{ $log->status }}
-                            </span>
-                        </td>
-
-                        <td class="mobile-padding md:p-4 text-center text-[7px] md:text-xs italic text-gray-600 break-words">
-                            {{ $log->keterangan ?? '-' }}
-                        </td>
-
-                    </tr>
-
-                    @empty
-
-                    <tr>
-                        <td colspan="5" class="p-8 text-center text-slate-400 italic">
-                            Belum ada aktivitas minggu ini.
-                        </td>
-                    </tr>
-
-                    @endforelse
-
                 @endif
-
             </tbody>
-
         </table>
     </div>
-
 </div>
 
 {{-- 6. REKAPITULASI BULANAN --}}
