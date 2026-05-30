@@ -358,7 +358,7 @@
 @endif
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
-<div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden w-full">
+<div class="mt-8 w-full bg-indigo-50 rounded-3xl shadow-xl border border-indigo-100 overflow-hidden">
     <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
         <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
         <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
@@ -394,7 +394,7 @@
 
             </tr>
         </thead>
-
+        
             <tbody class="divide-y divide-slate-200/70">
                 {{-- Isi TBody tetap sama sesuai data Anda --}}
                 @if(Auth::user()->role == 'admin')
