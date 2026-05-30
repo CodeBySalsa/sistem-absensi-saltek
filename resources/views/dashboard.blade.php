@@ -368,19 +368,31 @@
 
     <div class="w-full overflow-hidden rounded-t-xl md:rounded-t-[2rem]">
     <table class="w-full table-fixed text-left md:text-sm border-collapse">
-            {{-- PERUBAHAN DISINI: Warna kembali ke gelap (slate-900) dan ditambahkan radius atas --}}
-            <thead class="bg-slate-900 text-white ">
-                <tr>
-                    <th class="w-[30%] p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left rounded-tl-[2.5rem]">
-                        {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
-                    </th>
-                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Jam Masuk</th>
-                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Jam Pulang</th>
-                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Status</th>
-                    <th class="w-[25%] p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center rounded-tr-[2.5rem]">Keterangan</th>
-                </tr>
-            </thead>
-            
+            <thead>
+    <tr class="bg-slate-900 text-white">
+
+        <th class="w-[30%] p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left rounded-tl-xl md:rounded-tl-[2rem]">
+            {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
+        </th>
+
+        <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
+            Jam Masuk
+        </th>
+
+        <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
+            Jam Pulang
+        </th>
+
+        <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
+            Status
+        </th>
+
+        <th class="w-[25%] p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center rounded-tr-xl md:rounded-tr-[2rem]">
+            Keterangan
+        </th>
+
+    </tr>
+</thead>
             <tbody class="divide-y divide-slate-200/70">
                 {{-- Isi TBody tetap sama sesuai data Anda --}}
                 @if(Auth::user()->role == 'admin')
