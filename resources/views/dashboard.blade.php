@@ -355,7 +355,6 @@
     </div>
 
 </div>
-</div>
 @endif
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
