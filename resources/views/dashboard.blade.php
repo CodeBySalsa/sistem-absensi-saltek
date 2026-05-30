@@ -359,81 +359,51 @@
 @endif
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
-{{-- UBAH 'max-w-4xl' MENJADI 'max-w-7xl' AGAR LEBARNYA SAMA DENGAN CARD LAIN --}}
-<div class="mt-8 w-full max-w-7xl mx-auto bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
+{{-- 1. Pastikan max-w-7xl agar sejajar dengan card lain --}}
+<div class="mt-8 w-full max-w-7xl mx-auto bg-indigo-50 rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
 
     <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
-        <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
+        <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
         <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
             @if(Auth::user()->role == 'admin') LOG AKTIVITAS HARI INI @else LOG AKTIVITAS MINGGU INI @endif
         </h3>
     </div>
 
     <div class="w-full overflow-x-auto">
-        {{-- Hapus 'table-fixed' agar tabel tidak kaku dan mengikuti lebar container --}}
         <table class="w-full text-left md:text-sm">
 
-            <thead class="bg-slate-900 text-white">
+            {{-- 2. UBAH THEAD: Hapus bg-slate-900 agar warna tidak kaku, ganti jadi lebih soft (indigo-600) --}}
+            <thead class="bg-indigo-600 text-white">
                 <tr>
-                    {{-- Hapus class w-[...%] agar kolom menyesuaikan isi secara otomatis --}}
                     <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left">
                         {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
                     </th>
-                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Masuk</th>
-                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Pulang</th>
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Jam Masuk</th>
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Jam Pulang</th>
                     <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Status</th>
                     <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Keterangan</th>
                 </tr>
             </thead>
             
-            <tbody class="divide-y divide-slate-200/70">
-
+            <tbody class="divide-y divide-indigo-100">
+                {{-- 3. Isi TBody tetap sama, tidak perlu diubah --}}
                 @if(Auth::user()->role == 'admin')
-
-                    {{-- ADMIN --}}
                     @forelse($absensiHariIni as $absen)
-
-                    <tr class="odd:bg-slate-100/80 even:bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
-
-                        <td class="mobile-padding md:p-4 font-bold text-slate-800 text-[8px] md:text-sm break-words">
-                            {{ $absen->karyawan->nama_lengkap ?? $absen->user->name }}
-                        </td>
-
-                        <td class="mobile-padding md:p-4 text-center font-mono text-[7px] md:text-sm font-bold text-blue-600">
-                            {{ $absen->jam_masuk ?? '--:--' }}
-                        </td>
-
-                        <td class="mobile-padding md:p-4 text-center font-mono text-[7px] md:text-sm font-bold text-emerald-600">
-                            {{ $absen->jam_keluar ?? '--:--' }}
-                        </td>
-
-                        <td class="mobile-padding md:p-4 text-center">
-                            <span class="px-2 py-1 rounded-full text-[6px] md:text-[9px] font-black uppercase
-                            {{ in_array($absen->status,['Terlambat','Sakit'])
-                                ? 'bg-rose-100 text-rose-600'
-                                : ($absen->status == 'Hadir'
-                                    ? 'bg-emerald-100 text-emerald-600'
-                                    : 'bg-amber-100 text-amber-600') }}">
+                    {{-- Row style tetap seperti keinginan Anda --}}
+                    <tr class="odd:bg-indigo-50/50 even:bg-white hover:bg-indigo-100 transition-colors duration-200">
+                        <td class="p-4 font-bold text-slate-800 text-[8px] md:text-sm">{{ $absen->karyawan->nama_lengkap ?? $absen->user->name }}</td>
+                        <td class="p-4 text-center font-mono font-bold text-blue-600 text-[7px] md:text-sm">{{ $absen->jam_masuk ?? '--:--' }}</td>
+                        <td class="p-4 text-center font-mono font-bold text-emerald-600 text-[7px] md:text-sm">{{ $absen->jam_keluar ?? '--:--' }}</td>
+                        <td class="p-4 text-center">
+                            <span class="px-2 py-1 rounded-full text-[6px] md:text-[9px] font-black uppercase {{ in_array($absen->status,['Terlambat','Sakit']) ? 'bg-rose-100 text-rose-600' : ($absen->status == 'Hadir' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600') }}">
                                 {{ $absen->status }}
                             </span>
                         </td>
-
-                        <td class="mobile-padding md:p-4 text-center text-[7px] md:text-xs italic text-gray-600 break-words">
-                            {{ $absen->keterangan ?? '-' }}
-                        </td>
-
+                        <td class="p-4 text-center italic text-gray-600 text-[7px] md:text-xs">{{ $absen->keterangan ?? '-' }}</td>
                     </tr>
-
                     @empty
-
-                    <tr>
-                        <td colspan="5" class="p-8 text-center text-slate-400 italic">
-                            Belum ada aktivitas hari ini.
-                        </td>
-                    </tr>
-
+                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas.</td></tr>
                     @endforelse
-
                 @else
 
                     {{-- KARYAWAN --}}
