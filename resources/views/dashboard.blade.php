@@ -359,7 +359,6 @@
 @endif
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
-{{-- 1. Pastikan max-w-7xl agar sejajar dengan card lain --}}
 <div class="mt-8 w-full max-w-7xl mx-auto bg-indigo-50 rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
 
     <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
@@ -372,25 +371,24 @@
     <div class="w-full overflow-x-auto">
         <table class="w-full text-left md:text-sm">
 
-            {{-- 2. UBAH THEAD: Hapus bg-slate-900 agar warna tidak kaku, ganti jadi lebih soft (indigo-600) --}}
-            <thead class="bg-indigo-600 text-white">
+            {{-- PERUBAHAN DISINI: Warna kembali ke gelap (slate-900) dan ditambahkan radius atas --}}
+            <thead class="bg-slate-900 text-white rounded-t-[2.5rem]">
                 <tr>
-                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left">
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left rounded-tl-[2.5rem]">
                         {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
                     </th>
                     <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Jam Masuk</th>
                     <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Jam Pulang</th>
                     <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Status</th>
-                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Keterangan</th>
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center rounded-tr-[2.5rem]">Keterangan</th>
                 </tr>
             </thead>
             
-            <tbody class="divide-y divide-indigo-100">
-                {{-- 3. Isi TBody tetap sama, tidak perlu diubah --}}
+            <tbody class="divide-y divide-slate-200/70">
+                {{-- Isi TBody tetap sama sesuai data Anda --}}
                 @if(Auth::user()->role == 'admin')
                     @forelse($absensiHariIni as $absen)
-                    {{-- Row style tetap seperti keinginan Anda --}}
-                    <tr class="odd:bg-indigo-50/50 even:bg-white hover:bg-indigo-100 transition-colors duration-200">
+                    <tr class="odd:bg-slate-100/80 even:bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
                         <td class="p-4 font-bold text-slate-800 text-[8px] md:text-sm">{{ $absen->karyawan->nama_lengkap ?? $absen->user->name }}</td>
                         <td class="p-4 text-center font-mono font-bold text-blue-600 text-[7px] md:text-sm">{{ $absen->jam_masuk ?? '--:--' }}</td>
                         <td class="p-4 text-center font-mono font-bold text-emerald-600 text-[7px] md:text-sm">{{ $absen->jam_keluar ?? '--:--' }}</td>
@@ -402,10 +400,9 @@
                         <td class="p-4 text-center italic text-gray-600 text-[7px] md:text-xs">{{ $absen->keterangan ?? '-' }}</td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas.</td></tr>
+                    <tr><td colspan="5" class="p-8 text-center text-slate-400 italic">Belum ada aktivitas hari ini.</td></tr>
                     @endforelse
                 @else
-
                     {{-- KARYAWAN --}}
                     @forelse($absensis as $log)
 
