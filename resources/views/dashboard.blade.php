@@ -366,8 +366,8 @@
         </h3>
     </div>
 
-    <div class="w-full overflow-x-auto">
-        <table class="w-full table-fixed text-left md:text-sm">
+    <div class="w-full overflow-hidden rounded-t-xl md:rounded-t-[2rem]">
+    <table class="w-full table-fixed text-left md:text-sm border-collapse">
             {{-- PERUBAHAN DISINI: Warna kembali ke gelap (slate-900) dan ditambahkan radius atas --}}
             <thead class="bg-slate-900 text-white ">
                 <tr>
