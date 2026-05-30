@@ -359,62 +359,37 @@
 @endif
 
 {{-- 5. TABEL UTAMA: LOG MINGGUAN --}}
-<div class="mt-8 w-full bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
-    <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
-        <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">
-            📋
-        </div>
+{{-- Tambahkan max-w-4xl dan mx-auto --}}
+<div class="mt-8 w-full max-w-4xl mx-auto bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden">
 
+    <div class="p-4 md:p-8 border-b border-indigo-100 flex items-center gap-2 md:gap-3">
+        <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">📋</div>
         <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
-            @if(Auth::user()->role == 'admin')
-                LOG AKTIVITAS HARI INI
-            @else
-                LOG AKTIVITAS MINGGU INI
-            @endif
+            @if(Auth::user()->role == 'admin') LOG AKTIVITAS HARI INI @else LOG AKTIVITAS MINGGU INI @endif
         </h3>
     </div>
 
-    <div class="overflow-hidden w-full">
-        <table class="w-full table-fixed text-left mobile-table-text md:text-sm">
-
-            <colgroup>
-                <col style="width:25%">
-                <col style="width:15%">
-                <col style="width:15%">
-                <col style="width:15%">
-                <col style="width:30%">
-            </colgroup>
+    {{-- Gunakan overflow-x-auto agar aman di HP --}}
+    <div class="w-full overflow-x-auto">
+        {{-- Hapus table-fixed, ganti jadi w-full saja --}}
+        <table class="w-full text-left md:text-sm">
 
             <thead class="bg-slate-900 text-white">
                 <tr>
-
-                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left">
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left">
                         {{ Auth::user()->role == 'admin' ? 'Nama Karyawan' : 'Hari / Tanggal' }}
                     </th>
-
-                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
-                        Masuk
-                    </th>
-
-                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
-                        Pulang
-                    </th>
-
-                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
-                        Status
-                    </th>
-
-                    <th class="mobile-padding md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">
-                        Keterangan
-                    </th>
-
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Masuk</th>
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Pulang</th>
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Status</th>
+                    <th class="p-3 md:p-4 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center">Keterangan</th>
                 </tr>
             </thead>
-
             <tbody class="divide-y divide-slate-200/70">
 
                 @if(Auth::user()->role == 'admin')
 
+                    {{-- ADMIN --}}
                     @forelse($absensiHariIni as $absen)
 
                     <tr class="odd:bg-slate-100/80 even:bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
@@ -460,22 +435,24 @@
 
                 @else
 
+                    {{-- KARYAWAN --}}
                     @forelse($absensis as $log)
 
                     <tr class="odd:bg-slate-100/80 even:bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
 
                         <td class="mobile-padding md:p-4 font-bold text-slate-800 text-[8px] md:text-sm break-words">
 
+                            {{-- HARI + TANGGAL --}}
                             @php
                                 $tanggal = \Carbon\Carbon::parse($log->tanggal);
                             @endphp
 
-                            <div class="font-bold text-[8px] md:text-sm leading-tight">
+                            <div class="font-bold">
                                 {{ $tanggal->locale('id')->translatedFormat('l') }}
                             </div>
 
-                            <div class="text-gray-500 text-[7px] md:text-xs leading-tight">
-                                {{ $tanggal->translatedFormat('d M Y') }}
+                            <div class="text-gray-500 text-[7px] md:text-xs">
+                                {{ $tanggal->translatedFormat('d F Y') }}
                             </div>
 
                         </td>
