@@ -402,7 +402,9 @@
                     {{-- JIKA KARYAWAN LOGIN --}}
                     @forelse($absensis as $log)
                     <tr class="odd:bg-slate-100/80 even:bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200">
-                        <td class="mobile-padding md:p-6 font-bold text-slate-800 text-[8px] md:text-sm">{{ \Carbon\Carbon::parse($log->tanggal)->translatedFormat('d M') }}</td>
+                        <td class="mobile-padding md:p-6 font-bold text-slate-800 text-[8px] md:text-sm">
+                        {{ \Carbon\Carbon::parse($log->tanggal)->locale('id')->translatedFormat('l, d M Y') }}
+                        </td>
                         <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-blue-600">{{ $log->jam_masuk ?? '--:--' }}</td>
                         <td class="mobile-padding md:p-6 text-center font-mono text-[7px] md:text-sm font-bold text-emerald-600">{{ $log->jam_keluar ?? '--:--' }}</td>
                         <td class="mobile-padding md:p-6 text-center">
