@@ -41,12 +41,13 @@ use Illuminate\Support\Facades\Mail;
 
 Route::get('/test-mail', function () {
 
-    Mail::raw('Tes email dari Railway dan Brevo', function ($message) {
-        $message->to('salsa22bil@gmail.com')
-                ->subject('Test SMTP Brevo');
-    });
-
-    return 'Email berhasil dikirim';
+    return [
+        'mailer' => config('mail.default'),
+        'host' => config('mail.mailers.smtp.host'),
+        'port' => config('mail.mailers.smtp.port'),
+        'username' => config('mail.mailers.smtp.username'),
+        'from' => config('mail.from.address'),
+    ];
 });
 
 require __DIR__.'/auth.php';
