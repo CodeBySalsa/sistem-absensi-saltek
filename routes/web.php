@@ -37,4 +37,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('karyawan', KaryawanController::class);
 });
 
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/test-mail', function () {
+
+    Mail::raw('Tes email dari Railway dan Brevo', function ($message) {
+        $message->to('salsa22bil@gmail.com')
+                ->subject('Test SMTP Brevo');
+    });
+
+    return 'Email berhasil dikirim';
+});
+
 require __DIR__.'/auth.php';
