@@ -40,12 +40,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
 use Illuminate\Support\Facades\Mail;
 
 Route::get('/test-mail', function () {
-    Mail::raw('Tes email dari Railway', function ($message) {
-        $message->to('salsa22bil@gmail.com')
-                ->subject('Tes Railway');
-    });
-
-    return 'Email terkirim';
+    return response()->json([
+        'mailer' => config('mail.default'),
+        'host' => config('mail.mailers.smtp.host'),
+        'port' => config('mail.mailers.smtp.port'),
+        'username' => config('mail.mailers.smtp.username'),
+        'password_exists' => !empty(config('mail.mailers.smtp.password')),
+        'encryption' => env('MAIL_ENCRYPTION'),
+    ]);
 });
 
 require __DIR__.'/auth.php';
