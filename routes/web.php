@@ -40,14 +40,22 @@ Route::middleware(['auth', 'admin'])->group(function () {
 use Illuminate\Support\Facades\Mail;
 
 Route::get('/test-mail', function () {
-    return response()->json([
-        'mailer' => config('mail.default'),
-        'host' => config('mail.mailers.smtp.host'),
-        'port' => config('mail.mailers.smtp.port'),
-        'username' => config('mail.mailers.smtp.username'),
-        'password_exists' => !empty(config('mail.mailers.smtp.password')),
-        'encryption' => env('MAIL_ENCRYPTION'),
-    ]);
+    try {
+
+        Mail::raw('Tes email Railway', function ($message) {
+            $message->to('emailkamu@gmail.com')
+                    ->subject('Tes SMTP Brevo');
+        });
+
+        return 'BERHASIL';
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'error' => $e->getMessage()
+        ]);
+
+    }
 });
 
 require __DIR__.'/auth.php';
