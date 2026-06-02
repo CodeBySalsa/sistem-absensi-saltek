@@ -40,14 +40,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
 use Illuminate\Support\Facades\Mail;
 
 Route::get('/test-mail', function () {
+
     try {
 
-        Mail::raw('Tes email Railway', function ($message) {
+        Mail::raw('Tes email', function ($message) {
             $message->to('emailkamu@gmail.com')
-                    ->subject('Tes SMTP Brevo');
+                    ->subject('Test SMTP');
         });
 
-        return 'BERHASIL';
+        return 'EMAIL BERHASIL';
 
     } catch (\Exception $e) {
 
@@ -56,6 +57,6 @@ Route::get('/test-mail', function () {
         ]);
 
     }
-});
 
+});
 require __DIR__.'/auth.php';
