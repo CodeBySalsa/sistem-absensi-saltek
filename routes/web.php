@@ -41,20 +41,11 @@ use Illuminate\Support\Facades\Mail;
 
 Route::get('/test-mail', function () {
 
-    try {
+    Mail::raw('Tes SMTP Railway', function ($message) {
+        $message->to('salsa22bil@gmail.com')
+                ->subject('Test SMTP');
+    });
 
-        Mail::raw('Tes email', function ($message) {
-            $message->to('saa22bila@gmail.com')
-                    ->subject('Test SMTP');
-        });
-
-        return 'EMAIL BERHASIL';
-
-    } catch (\Exception $e) {
-
-        return response()->json([
-            'error' => $e->getMessage()
-        ]);
-    }
+    return 'EMAIL BERHASIL';
 });
 require __DIR__.'/auth.php';
