@@ -44,7 +44,7 @@ Route::get('/test-mail', function () {
     try {
 
         Mail::raw('Tes email', function ($message) {
-            $message->to('emailkamu@gmail.com')
+            $message->to('saa22bila@gmail.com')
                     ->subject('Test SMTP');
         });
 
@@ -55,8 +55,6 @@ Route::get('/test-mail', function () {
         return response()->json([
             'error' => $e->getMessage()
         ]);
-
     }
-
 });
 require __DIR__.'/auth.php';
