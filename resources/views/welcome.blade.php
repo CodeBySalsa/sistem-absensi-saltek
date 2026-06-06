@@ -18,16 +18,17 @@
             box-sizing:border-box;
         }
 
-        body{
-            font-family:'Plus Jakarta Sans',sans-serif;
-            overflow-x:hidden;
-
-            background:
-            linear-gradient(135deg,#eef4ff,#f8fbff);
-
-            min-height:100vh;
-            position:relative;
-        }
+        body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto; /* Izinkan scroll jika benar-benar tidak muat */
+    background: linear-gradient(135deg, #eef4ff, #f8fbff);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
 
         /* ===================================== */
         /* AURORA BACKGROUND */
@@ -371,6 +372,7 @@
         }
 
         .login-card{
+        
             position:relative;
 
             overflow:hidden;
@@ -391,6 +393,20 @@
 
             animation:cardFloat 6s ease-in-out infinite;
         }
+        /* Tambahkan ini di bawah CSS .login-card */
+            @media (max-height: 700px) {
+                .login-card {
+                    padding: 20px !important; /* Perkecil padding jika layar pendek */
+                }
+                .logo-box {
+                    width: 100px !important;
+                    height: 100px !important;
+                    margin-bottom: 20px !important;
+                }
+                h1 { font-size: 24px !important; }
+                .desc { margin-top: 10px !important; font-size: 12px !important; }
+                .mt-10 { margin-top: 20px !important; }
+            }
 
         @keyframes cardFloat{
 
