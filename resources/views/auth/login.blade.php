@@ -552,40 +552,26 @@ form{
 /* LOGO & TEXT */
 /* ===================================== */
 
+/* Update CSS untuk logo agar mengikuti bentuk asli (seperti landing page) */
 .logo-box {
-    width: 120px;            /* Sedikit lebih besar agar detail logo terlihat jelas */
-    height: 120px;
-    margin: 0 auto 15px;
+    width: 100px; /* Sesuaikan ukuran dengan landing page */
+    height: 100px;
+    margin: 0 auto 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden; 
-    
-    /* Hapus border-radius jika ingin bentuk asli dari filenya (persegi/asli) */
-    /* Atau gunakan radius yang sangat kecil agar tidak terlihat seperti lingkaran */
-    border-radius: 0px; 
-    
-    /* Ubah background menjadi transparan total agar menyatu dengan efek kaca */
-    background: transparent !important; 
-    
-    /* Hilangkan border putih yang mencolok */
-    border: none !important;
-    box-shadow: none !important;
+    /* Gunakan border-radius yang lebih kecil agar bentuknya tetap persegi dengan sudut melengkung */
+    border-radius: 12px; 
+    background: transparent; /* Hilangkan background putih jika tidak perlu */
 }
 
 .logo-box img {
     width: 100%;
     height: 100%;
-    /* Gunakan contain agar logo tidak terpotong sama sekali */
+    /* Gunakan contain agar proporsi logo asli tetap terjaga */
     object-fit: contain; 
-    transition: 1s ease;
-    /* Memberi sedikit filter agar warna logo lebih "pop" di atas background */
-    filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
-}
-
-/* Tambahkan efek hover agar interaktif */
-.logo-box:hover img {
-    transform: scale(1.05);
+     transition:1s ease;
 }
 
 .login-card h1{
