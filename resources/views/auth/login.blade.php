@@ -552,18 +552,25 @@ form{
 /* LOGO & TEXT */
 /* ===================================== */
 
-.logo-box{
-    width:70px;
-    height:70px;
-    margin:0 auto 10px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+/* Update CSS untuk logo agar mengikuti bentuk asli (seperti landing page) */
+.logo-box {
+    width: 100px; /* Sesuaikan ukuran dengan landing page */
+    height: 100px;
+    margin: 0 auto 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+    /* Gunakan border-radius yang lebih kecil agar bentuknya tetap persegi dengan sudut melengkung */
+    border-radius: 12px; 
+    background: transparent; /* Hilangkan background putih jika tidak perlu */
 }
 
-.logo-box img{
-    width:100%;
-    object-fit:contain;
+.logo-box img {
+    width: 100%;
+    height: 100%;
+    /* Gunakan contain agar proporsi logo asli tetap terjaga */
+    object-fit: contain; 
 }
 
 .login-card h1{
