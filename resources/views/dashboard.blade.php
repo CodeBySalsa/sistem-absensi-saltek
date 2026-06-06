@@ -232,17 +232,23 @@
 
                 <div class="grid grid-cols-2 gap-2">
 
-                    <button type="button"
-                        onclick="event.stopPropagation(); konfirmasiStatus('Izin')"
-                        class="bg-amber-400 text-white font-black py-2 rounded-xl text-[10px] hover:bg-amber-500 transition-all duration-300 active:scale-95 flex items-center justify-center gap-1 shadow-md">
-                        <span>📅</span> IZIN
-                    </button>
-
-                    <button type="button"
-                        onclick="event.stopPropagation(); konfirmasiStatus('Sakit')"
-                        class="bg-rose-500 text-white font-black py-2 rounded-xl text-[10px] hover:bg-rose-600 transition-all duration-300 active:scale-95 flex items-center justify-center gap-1 shadow-md">
-                        <span>🌡️</span> SAKIT
-                    </button>
+                    {{-- TOMBOL IZIN --}}
+                <button type="button" 
+                    {{ $isMinggu ? 'disabled' : '' }}
+                    onclick="event.stopPropagation(); konfirmasiStatus('Izin')"
+                    class="bg-amber-400 text-white font-black py-2 rounded-xl text-[10px] hover:bg-amber-500 transition-all duration-300 active:scale-95 flex items-center justify-center gap-1 shadow-md 
+                    {{ $isMinggu ? 'opacity-50 cursor-not-allowed' : '' }}">
+                    <span>📅</span> IZIN
+                </button>
+                
+                    {{-- TOMBOL SAKIT --}}
+                <button type="button" 
+                    {{ $isMinggu ? 'disabled' : '' }}
+                    onclick="event.stopPropagation(); konfirmasiStatus('Sakit')"
+                    class="bg-rose-500 text-white font-black py-2 rounded-xl text-[10px] hover:bg-rose-600 transition-all duration-300 active:scale-95 flex items-center justify-center gap-1 shadow-md 
+                    {{ $isMinggu ? 'opacity-50 cursor-not-allowed' : '' }}">
+                    <span>🌡️</span> SAKIT
+                </button>
 
                 </div>
             </form>

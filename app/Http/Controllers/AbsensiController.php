@@ -16,7 +16,7 @@ class AbsensiController extends Controller
      */
     // Di dalam AbsensiController.php
 private $officeLat = 3.506926236674939; 
-private $officeLng =  98.66095682422633;
+private $officeLng = 98.66095682422633;
 private $radiusLimit = 20;
     /**
      * Menampilkan halaman riwayat absensi
@@ -151,6 +151,13 @@ private $radiusLimit = 20;
      */
     public function izinSakit(Request $request)
     {
+        // --- TAMBAHKAN KODE INI ---
+        // Cek jika hari ini adalah hari Minggu (dayOfWeek 0 = Minggu)
+        if (Carbon::now('Asia/Jakarta')->dayOfWeek == Carbon::SUNDAY) {
+            return back()->with('error', 'Gagal! Tidak dapat mengajukan Izin/Sakit pada hari Minggu.');
+        }
+        // ---------------------------
+
         $user = Auth::user();
 
         if (!$user->karyawan) {
