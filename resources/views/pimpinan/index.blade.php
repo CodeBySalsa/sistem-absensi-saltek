@@ -78,12 +78,12 @@
     </div>
 
     {{-- Tanggal (Satu-satunya elemen tanggal di banner) --}}
-    <div class="relative z-10 w-5/12 md:w-auto bg-white/5 backdrop-blur-md px-2 py-1.5 md:px-6 md:py-4 rounded-xl border border-white/10 text-right shrink-0">
-        <p class="text-[6px] md:text-[9px] font-black text-indigo-300 uppercase tracking-widest mb-0.5 whitespace-nowrap">Hari & Tanggal</p>
-        <p class="font-bold text-[8px] md:text-base text-white mobile-sub whitespace-nowrap">
-            {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
-        </p>
-    </div>
+<div class="relative z-10 w-5/12 md:w-auto bg-white/5 backdrop-blur-md px-2 py-1.5 md:px-6 md:py-4 rounded-xl border border-white/10 text-right shrink-0">
+    <p class="text-[6px] md:text-[9px] font-black text-indigo-300 uppercase tracking-widest mb-0.5 whitespace-nowrap">Hari & Tanggal</p>
+    <p class="font-bold text-[8px] md:text-base text-white mobile-sub whitespace-nowrap">
+        {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
+    </p>
+</div>
 </div>
 
 
