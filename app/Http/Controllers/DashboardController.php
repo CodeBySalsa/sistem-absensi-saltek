@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
 
@@ -20,9 +20,13 @@ class DashboardController extends Controller
         }
 
         $hariIni = Carbon::now('Asia/Jakarta')->toDateString();
-        $bulanIni = Carbon::now('Asia/Jakarta')->month;
         $tahunIni = Carbon::now('Asia/Jakarta')->year;
-        $namaBulan = Carbon::now('Asia/Jakarta')->translatedFormat('F');
+
+        // Ambil bulan & tahun dari dropdown, default bulan ini
+        $bulanDipilih = $request->input('bulan', Carbon::now('Asia/Jakarta')->month);
+        $tahunDipilih = $request->input('tahun', $tahunIni);
+
+        $namaBulan = Carbon::createFromDate($tahunDipilih, $bulanDipilih, 1)->translatedFormat('F');
 
         // Inisialisasi variabel default agar tidak error di view
         $absensis = collect();
@@ -30,7 +34,7 @@ class DashboardController extends Controller
         $hadirHariIni = 0;
         $totalIzin = 0;
         $totalSakit = 0;
-        $absensiHariIni = collect(); // Untuk tabel harian admin
+        $absensiHariIni = collect();
         $recentActivities = collect();
         $rekapBulanan = collect();
         $cekAbsensi = null;
@@ -39,7 +43,7 @@ class DashboardController extends Controller
         // 1. LOGIKA MINGGU INI (Hanya untuk Karyawan)
         if ($user->karyawan) {
             // Ambil range minggu ini (Senin - Sabtu)
-            $startOfWeek = Carbon::now('Asia/Jakarta')->startOfWeek(); 
+            $startOfWeek = Carbon::now('Asia/Jakarta')->startOfWeek();
             $endOfWeek = Carbon::now('Asia/Jakarta')->startOfWeek()->addDays(5);
 
             $queryAbsensi = Absensi::where('karyawan_id', $user->karyawan->id)
@@ -53,14 +57,15 @@ class DashboardController extends Controller
             } else {
                 $absensis = $queryAbsensi;
             }
-            
+
             $cekAbsensi = Absensi::where('karyawan_id', $user->karyawan->id)
                                  ->where('tanggal', $hariIni)
                                  ->first();
-            
+
             $totalHadir = Absensi::where('karyawan_id', $user->karyawan->id)
                                  ->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
-                                 ->whereMonth('tanggal', $bulanIni) 
+                                 ->whereMonth('tanggal', $bulanDipilih)
+                                 ->whereYear('tanggal', $tahunDipilih)
                                  ->count();
         }
 
@@ -91,28 +96,28 @@ class DashboardController extends Controller
                                     ->latest()
                                     ->get();
 
-            // REKAPITULASI BULANAN (Data Kumulatif Seluruh Karyawan)
+            // REKAPITULASI BULANAN — sesuai bulan & tahun yang dipilih dropdown
             $rekapBulanan = Karyawan::withCount([
-                'absensi as total_hadir' => function ($query) use ($bulanIni, $tahunIni) {
+                'absensi as total_hadir' => function ($query) use ($bulanDipilih, $tahunDipilih) {
                     $query->whereIn('status', ['Hadir', 'Selesai', 'Terlambat'])
-                          ->whereMonth('tanggal', $bulanIni)
-                          ->whereYear('tanggal', $tahunIni);
+                          ->whereMonth('tanggal', $bulanDipilih)
+                          ->whereYear('tanggal', $tahunDipilih);
                 },
-                'absensi as total_izin' => function ($query) use ($bulanIni, $tahunIni) {
+                'absensi as total_izin' => function ($query) use ($bulanDipilih, $tahunDipilih) {
                     $query->where('status', 'Izin')
-                          ->whereMonth('tanggal', $bulanIni)
-                          ->whereYear('tanggal', $tahunIni);
+                          ->whereMonth('tanggal', $bulanDipilih)
+                          ->whereYear('tanggal', $tahunDipilih);
                 },
-                'absensi as total_sakit' => function ($query) use ($bulanIni, $tahunIni) {
+                'absensi as total_sakit' => function ($query) use ($bulanDipilih, $tahunDipilih) {
                     $query->where('status', 'Sakit')
-                          ->whereMonth('tanggal', $bulanIni)
-                          ->whereYear('tanggal', $tahunIni);
+                          ->whereMonth('tanggal', $bulanDipilih)
+                          ->whereYear('tanggal', $tahunDipilih);
                 }
             ])->get();
         }
 
         // Statistik Ringkasan Pribadi (Box di Banner Biru Karyawan)
-        // Diperbaiki menggunakan karyawan_id agar sinkron dengan data pemindahan ID baru
+        $bulanIni = Carbon::now('Asia/Jakarta')->month;
         $ringkasanStatistik = (object) [
             'total_hadir' => Absensi::where('karyawan_id', $user->karyawan->id ?? 0)
                                     ->whereMonth('tanggal', $bulanIni)
@@ -132,9 +137,9 @@ class DashboardController extends Controller
         ];
 
         return view('dashboard', compact(
-            'absensis', 'totalHadir', 'totalKaryawan', 'hadirHariIni', 'totalIzin', 'totalSakit', 
+            'absensis', 'totalHadir', 'totalKaryawan', 'hadirHariIni', 'totalIzin', 'totalSakit',
             'recentActivities', 'rekapBulanan', 'ringkasanStatistik', 'absensiHariIni',
-            'namaBulan', 'cekAbsensi'
+            'namaBulan', 'cekAbsensi', 'bulanDipilih', 'tahunDipilih'
         ));
     }
 
@@ -162,7 +167,7 @@ class DashboardController extends Controller
 
             $absensi->update([
                 'jam_keluar' => $jamSekarang,
-                'status'     => 'Selesai' 
+                'status'     => 'Selesai'
             ]);
 
             return redirect()->route('dashboard')->with('success', 'Berhasil Absen Pulang! Hati-hati di jalan.');
@@ -203,11 +208,11 @@ class DashboardController extends Controller
 
         Absensi::create([
             'karyawan_id' => $user->karyawan->id,
-            'user_id'     => $user->id, 
+            'user_id'     => $user->id,
             'tanggal'     => $hariIni,
             'status'      => $request->status,
             'keterangan'  => $request->keterangan,
-            'jam_masuk'   => Carbon::now('Asia/Jakarta')->format('H:i:s'), 
+            'jam_masuk'   => Carbon::now('Asia/Jakarta')->format('H:i:s'),
         ]);
 
         return back()->with('success', 'Berhasil mengirimkan status ' . $request->status);

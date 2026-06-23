@@ -232,23 +232,25 @@
 
                 <div class="grid grid-cols-2 gap-2">
 
-                    {{-- TOMBOL IZIN --}}
-                <button type="button" 
-                    {{ $isMinggu ? 'disabled' : '' }}
-                    onclick="event.stopPropagation(); konfirmasiStatus('Izin')"
-                    class="bg-amber-400 text-white font-black py-2 rounded-xl text-[10px] hover:bg-amber-500 transition-all duration-300 active:scale-95 flex items-center justify-center gap-1 shadow-md 
-                    {{ $isMinggu ? 'opacity-50 cursor-not-allowed' : '' }}">
-                    <span>📅</span> IZIN
-                </button>
-                
+                   {{-- TOMBOL IZIN --}}
+                    <button type="button" 
+                        {{ $isMinggu ? 'disabled' : '' }}
+                        onclick="event.stopPropagation(); konfirmasiStatus('Izin')"
+                        class="bg-amber-400 text-white font-black py-2 rounded-xl text-[10px] hover:bg-amber-500 transition-all duration-300 active:scale-95 flex items-center justify-center gap-1 shadow-md 
+                        {{ $isMinggu ? 'opacity-50 cursor-not-allowed' : '' }} 
+                        disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50">
+                        <span>📅</span> IZIN
+                    </button>
+
                     {{-- TOMBOL SAKIT --}}
-                <button type="button" 
-                    {{ $isMinggu ? 'disabled' : '' }}
-                    onclick="event.stopPropagation(); konfirmasiStatus('Sakit')"
-                    class="bg-rose-500 text-white font-black py-2 rounded-xl text-[10px] hover:bg-rose-600 transition-all duration-300 active:scale-95 flex items-center justify-center gap-1 shadow-md 
-                    {{ $isMinggu ? 'opacity-50 cursor-not-allowed' : '' }}">
-                    <span>🌡️</span> SAKIT
-                </button>
+                    <button type="button" 
+                        {{ $isMinggu ? 'disabled' : '' }}
+                        onclick="event.stopPropagation(); konfirmasiStatus('Sakit')"
+                        class="bg-rose-500 text-white font-black py-2 rounded-xl text-[10px] hover:bg-rose-600 transition-all duration-300 active:scale-95 flex items-center justify-center gap-1 shadow-md 
+                        {{ $isMinggu ? 'opacity-50 cursor-not-allowed' : '' }} 
+                        disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50">
+                        <span>🌡️</span> SAKIT
+                    </button>
 
                 </div>
             </form>
@@ -490,83 +492,95 @@
 
 <div class="mt-8 bg-indigo-50 rounded-xl md:rounded-[2.5rem] shadow-xl border border-indigo-100 overflow-hidden w-full">
 
+    <div class="p-4 md:p-8 border-b border-indigo-100/70 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
+        <div class="flex items-center gap-2 md:gap-3 flex-1">
+            <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-950 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">
+                📊
+            </div>
+            <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
+                REKAPITULASI ABSENSI KARYAWAN — {{ strtoupper($namaBulan ?? '') }} {{ $tahunDipilih ?? date('Y') }}
+            </h3>
+        </div>
 
-<div class="p-4 md:p-8 border-b border-indigo-100/70 flex items-center gap-2 md:gap-3">
-    <div class="w-6 h-6 md:w-10 md:h-10 bg-indigo-950 text-white rounded-lg flex items-center justify-center shadow-lg text-xs md:text-base">
-        📊
-    </div>
-
-    <h3 class="font-black text-slate-800 uppercase tracking-tight text-xs md:text-lg">
-        REKAPITULASI ABSENSI KARYAWAN - {{ strtoupper($namaBulan ?? '') }} {{ date('Y') }}
-    </h3>
-</div>
-
-<div class="w-full px-2 md:px-0 pb-2 md:pb-0">
-
-    <div class="overflow-hidden rounded-xl md:rounded-[2rem]">
-
-        <table class="w-full text-left mobile-table-text md:text-sm">
-
-            <thead>
-                <tr class="bg-slate-900 text-white">
-                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left w-4/12 md:w-3/12 pl-5 md:pl-8">
-                        Nama Karyawan
-                    </th>
-
-                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-emerald-400">
-                        Hadir
-                    </th>
-
-                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-blue-400">
-                        Izin
-                    </th>
-
-                    <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-rose-400">
-                        Sakit
-                    </th>
-                </tr>
-            </thead>
-
-            <tbody class="divide-y divide-slate-200/70 bg-white">
-
-                @foreach($rekapBulanan ?? [] as $rekap)
-
-                <tr class="odd:bg-slate-100 even:bg-white hover:bg-indigo-100 transition-all duration-300">
-
-                    <td class="mobile-padding md:p-6 font-bold text-slate-800 uppercase text-left mobile-truncate tracking-wide pl-5 md:pl-8">
-                        {{ $rekap->nama_lengkap }}
-                    </td>
-
-                    <td class="mobile-padding md:p-6 text-center">
-                        <span class="text-emerald-600 font-black font-mono text-[11px] md:text-sm">
-                            {{ $rekap->total_hadir }}
-                        </span>
-                    </td>
-
-                    <td class="mobile-padding md:p-6 text-center">
-                        <span class="text-blue-600 font-black font-mono text-[11px] md:text-sm">
-                            {{ $rekap->total_izin }}
-                        </span>
-                    </td>
-
-                    <td class="mobile-padding md:p-6 text-center">
-                        <span class="text-rose-600 font-black font-mono text-[11px] md:text-sm">
-                            {{ $rekap->total_sakit }}
-                        </span>
-                    </td>
-
-                </tr>
-
+        {{-- DROPDOWN FILTER BULAN --}}
+        <form method="GET" action="{{ route('dashboard') }}" class="flex items-center gap-2">
+            <select name="bulan"
+                class="text-xs md:text-sm border border-indigo-200 rounded-lg px-3 py-2 bg-white text-slate-700 font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 cursor-pointer">
+                @foreach(range(1, 12) as $b)
+                    <option value="{{ $b }}" {{ (int)($bulanDipilih ?? date('n')) == $b ? 'selected' : '' }}>
+                        {{ \Carbon\Carbon::createFromDate(null, $b, 1)->translatedFormat('F') }}
+                    </option>
                 @endforeach
+            </select>
 
-            </tbody>
+            <select name="tahun"
+                class="text-xs md:text-sm border border-indigo-200 rounded-lg px-3 py-2 bg-white text-slate-700 font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 cursor-pointer">
+                @foreach(range(date('Y'), date('Y') - 2) as $t)
+                    <option value="{{ $t }}" {{ (int)($tahunDipilih ?? date('Y')) == $t ? 'selected' : '' }}>
+                        {{ $t }}
+                    </option>
+                @endforeach
+            </select>
 
-        </table>
-
+            <button type="submit"
+                class="bg-indigo-950 text-white text-xs md:text-sm px-4 py-2 rounded-lg font-bold shadow hover:bg-indigo-800 transition-all duration-200">
+                Lihat
+            </button>
+        </form>
     </div>
 
-</div>
-
+    <div class="w-full px-2 md:px-0 pb-2 md:pb-0">
+        <div class="overflow-hidden rounded-xl md:rounded-[2rem]">
+            <table class="w-full text-left mobile-table-text md:text-sm">
+                <thead>
+                    <tr class="bg-slate-900 text-white">
+                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-left w-4/12 md:w-3/12 pl-5 md:pl-8">
+                            Nama Karyawan
+                        </th>
+                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-emerald-400">
+                            Hadir
+                        </th>
+                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-blue-400">
+                            Izin
+                        </th>
+                        <th class="mobile-padding md:p-6 text-[7px] md:text-[10px] font-black uppercase tracking-widest text-center w-2/12 md:w-3/12 text-rose-400">
+                            Sakit
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200/70 bg-white">
+                    @forelse($rekapBulanan ?? [] as $rekap)
+                    <tr class="odd:bg-slate-100 even:bg-white hover:bg-indigo-100 transition-all duration-300">
+                        <td class="mobile-padding md:p-6 font-bold text-slate-800 uppercase text-left mobile-truncate tracking-wide pl-5 md:pl-8">
+                            {{ $rekap->nama_lengkap }}
+                        </td>
+                        <td class="mobile-padding md:p-6 text-center">
+                            <span class="text-emerald-600 font-black font-mono text-[11px] md:text-sm">
+                                {{ $rekap->total_hadir }}
+                            </span>
+                        </td>
+                        <td class="mobile-padding md:p-6 text-center">
+                            <span class="text-blue-600 font-black font-mono text-[11px] md:text-sm">
+                                {{ $rekap->total_izin }}
+                            </span>
+                        </td>
+                        <td class="mobile-padding md:p-6 text-center">
+                            <span class="text-rose-600 font-black font-mono text-[11px] md:text-sm">
+                                {{ $rekap->total_sakit }}
+                            </span>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="text-center py-8 text-slate-400 font-semibold text-sm">
+                            Tidak ada data absensi untuk bulan ini.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 </div>
 @endif
