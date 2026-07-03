@@ -501,32 +501,6 @@
                 REKAPITULASI ABSENSI KARYAWAN — {{ strtoupper($namaBulan ?? '') }} {{ $tahunDipilih ?? date('Y') }}
             </h3>
         </div>
-
-        {{-- DROPDOWN FILTER BULAN --}}
-        <form method="GET" action="{{ route('dashboard') }}" class="flex items-center gap-2">
-            <select name="bulan"
-                class="text-xs md:text-sm border border-indigo-200 rounded-lg px-3 py-2 bg-white text-slate-700 font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 cursor-pointer">
-                @foreach(range(1, 12) as $b)
-                    <option value="{{ $b }}" {{ (int)($bulanDipilih ?? date('n')) == $b ? 'selected' : '' }}>
-                        {{ \Carbon\Carbon::createFromDate(null, $b, 1)->translatedFormat('F') }}
-                    </option>
-                @endforeach
-            </select>
-
-            <select name="tahun"
-                class="text-xs md:text-sm border border-indigo-200 rounded-lg px-3 py-2 bg-white text-slate-700 font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 cursor-pointer">
-                @foreach(range(date('Y'), date('Y') - 2) as $t)
-                    <option value="{{ $t }}" {{ (int)($tahunDipilih ?? date('Y')) == $t ? 'selected' : '' }}>
-                        {{ $t }}
-                    </option>
-                @endforeach
-            </select>
-
-            <button type="submit"
-                class="bg-indigo-950 text-white text-xs md:text-sm px-4 py-2 rounded-lg font-bold shadow hover:bg-indigo-800 transition-all duration-200">
-                Lihat
-            </button>
-        </form>
     </div>
 
     <div class="w-full px-2 md:px-0 pb-2 md:pb-0">
